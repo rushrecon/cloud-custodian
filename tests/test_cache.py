@@ -19,6 +19,7 @@ from argparse import Namespace
 from six.moves import cPickle as pickle
 import tempfile
 import mock
+import os
 
 
 class TestCache(TestCase):
@@ -61,9 +62,29 @@ class FileCacheManagerTest(TestCase):
         self.bad_key = "bad"
         self.test_value = [1, 2, 3]
 
+    def _new_tempfile(self):
+        """
+        If the current os is other than 'nt', returns a normal tempfile.NamedTemporaryFile()
+        with t.close cleanup added to the test.
+        Otherwise, calls tempfile.NamedTemporaryFile(delete=False), closes the file and adds
+        os.remove cleanup for the file to the test.
+        Unless such behavior branching is done, tests fail in NT systems as the file stays
+        in the blocked state thus inaccessible. See issue #14243 and the documentation:
+        https://docs.python.org/3/library/tempfile.html#tempfile.NamedTemporaryFile
+        """
+        t = None
+        nt = os.name == 'nt'
+        if nt:
+            t = tempfile.NamedTemporaryFile(delete=False)
+            t.close()
+            self.addCleanup(os.remove, t.name)
+        else:
+            t = tempfile.NamedTemporaryFile()
+            self.addCleanup(t.close)
+        return t
+
     def test_get_set(self):
-        t = tempfile.NamedTemporaryFile()
-        self.addCleanup(t.close)
+        t = self._new_tempfile()
         c = cache.FileCacheManager(Namespace(cache_period=60, cache=t.name))
         self.assertFalse(c.load())
         k1 = {"account": "12345678901234", "region": "us-west-2", "resource": "ec2"}
@@ -106,7 +127,7 @@ class FileCacheManagerTest(TestCase):
         # path exists then we dont need to create the folder
         mock_exists.return_value = True
         # tempfile to hold the pickle
-        temp_cache_file = tempfile.NamedTemporaryFile()
+        temp_cache_file = self._new_tempfile()
         self.test_cache.cache_path = temp_cache_file.name
         # make the call
         self.test_cache.save(self.test_key, self.test_value)
@@ -126,7 +147,7 @@ class FileCacheManagerTest(TestCase):
     @mock.patch.object(cache.pickle, "dump")
     @mock.patch.object(cache.pickle, "dumps")
     def test_save_doesnt_exists(self, mock_dumps, mock_dump, mock_exists, mock_mkdir):
-        temp_cache_file = tempfile.NamedTemporaryFile()
+        temp_cache_file = self._new_tempfile()
         self.test_cache.cache_path = temp_cache_file.name
 
         # path doesnt exists then we will create the folder

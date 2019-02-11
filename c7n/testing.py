@@ -59,21 +59,33 @@ class TestUtils(unittest.TestCase):
         # Clear out thread local session cache
         reset_session_cache()
 
-    def write_policy_file(self, policy, format="yaml"):
-        """ Write a policy file to disk in the specified format.
-
-        Input a dictionary and a format. Valid formats are `yaml` and `json`
-        Returns the file path.
-        """
-        fh = tempfile.NamedTemporaryFile(mode="w+b", suffix="." + format)
+    def win_friendly_write_policy_file(self, policy, fh, format="yaml"):
         if format == "json":
             fh.write(json.dumps(policy).encode("utf8"))
         else:
             fh.write(yaml.dump(policy, encoding="utf8", Dumper=yaml.SafeDumper))
 
         fh.flush()
-        self.addCleanup(fh.close)
         return fh.name
+
+    def write_policy_file(self, policy, format="yaml"):
+        """ Write a policy file to disk in the specified format.
+
+        Input a dictionary and a format. Valid formats are `yaml` and `json`
+        Returns the file path.
+        """
+        fh = None
+        nt = os.name == 'nt'
+        if nt:
+            fh = tempfile.NamedTemporaryFile(mode="w+b", suffix="." + format, delete=False)
+            self.addCleanup(os.remove, fh.name)
+        else:
+            fh = tempfile.NamedTemporaryFile()
+            self.addCleanup(fh.close)
+        result = self.win_friendly_write_policy_file(policy, fh, format)
+        if nt:
+            fh.close()
+        return result
 
     def get_temp_dir(self):
         """ Return a temporary directory that will get cleaned up. """
