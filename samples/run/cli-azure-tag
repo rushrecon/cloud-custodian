@@ -1,0 +1,1 @@
+run --output-dir=../tmp ../samples/policy/custodian-azure-tag.yml --cache-period=0

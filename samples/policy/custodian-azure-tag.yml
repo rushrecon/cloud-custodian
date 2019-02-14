@@ -1,0 +1,10 @@
+policies:
+  - name: my-first-policy
+    resource: azure.vm
+    filters:
+      - "tag:Custodian": present
+    actions:
+      - type: tag
+        tag: Hello
+        value: World
+
