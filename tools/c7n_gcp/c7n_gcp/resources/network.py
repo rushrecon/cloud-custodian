@@ -138,3 +138,32 @@ class Route(QueryResourceManager):
         version = 'v1'
         component = 'routes'
         scope_template = "projects/{}/global/routes"
+
+
+@resources.register('managed-zone')
+class ManagedZone(QueryResourceManager):
+    # roles/dns.admin
+    class resource_type(TypeInfo):
+        service = 'dns'
+        version = 'v1'
+        component = 'managedZones'
+        enum_spec = ('list', 'items.*.managedZones[]', None)
+        scope_template = ""
+
+
+class ManagedZoneAction(MethodAction):
+    path_param_re = re.compile(
+        '.*?/projects/(.*?)/regions/(.*?)')
+
+    def get_resource_params(self, model, resource):
+        project, region = self.path_param_re.match(
+            resource['selfLink']).groups()
+        return {'project': project, 'region': region}
+
+
+@ManagedZone.action_registry.register('delete')
+class DeleteManagedZone(ManagedZoneAction):
+    schema = type_schema(
+        'delete',
+        state={})
+    method_spec = {'op': 'delete'}
