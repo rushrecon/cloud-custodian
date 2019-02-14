@@ -85,6 +85,14 @@ class Stop(InstanceAction):
         '.*?/projects/(.*?)/zones/(.*?)/instances/(.*)')
     attr_filter = ('status', ('RUNNING',))
 
+@Instance.action_registry.register('stopcopy')
+class Stop(InstanceAction):
+
+    schema = type_schema('stopcopy')
+    method_spec = {'op': 'stop'}
+    path_param_re = re.compile(
+        '.*?/projects/(.*?)/zones/(.*?)/instances/(.*)')
+    attr_filter = ('status', ('RUNNING',))
 
 @Instance.action_registry.register('delete')
 class Delete(InstanceAction):
