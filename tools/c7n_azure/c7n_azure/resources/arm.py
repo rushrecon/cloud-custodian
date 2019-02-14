@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import six
-from c7n_azure.actions import Tag, AutoTagUser, RemoveTag, TagTrim, TagDelayedAction, DeleteAction
+from c7n_azure.actions import Tag, TagCopy, AutoTagUser, RemoveTag, TagTrim, TagDelayedAction, DeleteAction
 from c7n_azure.filters import (MetricFilter, TagActionFilter,
                                DiagnosticSettingsFilter, PolicyCompliantFilter)
 from c7n_azure.provider import resources
@@ -61,6 +61,7 @@ class ArmResourceManager(QueryResourceManager):
             klass = registry.get(resource)
             if issubclass(klass, ArmResourceManager):
                 klass.action_registry.register('tag', Tag)
+                klass.action_registry.register('tagcopy', TagCopy)
                 klass.action_registry.register('untag', RemoveTag)
                 klass.action_registry.register('auto-tag-user', AutoTagUser)
                 klass.action_registry.register('tag-trim', TagTrim)

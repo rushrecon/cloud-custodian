@@ -1,0 +1,1 @@
+run --output-dir=../tmp ../samples/policy/custodian-azure-tagcopy.yml --cache-period=0

@@ -158,6 +158,52 @@ class Tag(AzureBaseAction):
     def _process_resource(self, resource):
         TagHelper.add_tags(self, resource, self.new_tags)
 
+#@actions.register('tagcopy')
+class TagCopy(AzureBaseAction):
+    """Adds tags to Azure resources
+
+        .. code-block:: yaml
+
+          policies:
+            - name: azure-tag-resourcegroups
+              resource: azure.resourcegroup
+              description: |
+                Tag all existing resource groups with a value such as Environment
+              actions:
+               - type: tag
+                 tag: Environment
+                 value: Test
+    """
+
+    schema = utils.type_schema(
+        'tagcopy',
+        **{
+            'tag': {'type': 'string'},
+            'value': {'type': 'string'},
+            'tags': {'type': 'object'}
+        }
+    )
+
+    def __init__(self, data=None, manager=None, log_dir=None):
+        super(TagCopy, self).__init__(data, manager, log_dir)
+
+    def validate(self):
+        if not self.data.get('tags') and not (self.data.get('tag') and self.data.get('value')):
+            raise FilterValidationError(
+                "Must specify either tags or a tag and value")
+
+        if self.data.get('tags') and self.data.get('tag'):
+            raise FilterValidationError(
+                "Can't specify both tags and tag, choose one")
+
+        return self
+
+    def _prepare_processing(self,):
+        self.new_tags = self.data.get('tags') or {self.data.get('tag'): self.data.get('value')}
+
+    def _process_resource(self, resource):
+        TagHelper.add_tags(self, resource, self.new_tags)
+
 
 class RemoveTag(AzureBaseAction):
     """Removes tags from Azure resources
