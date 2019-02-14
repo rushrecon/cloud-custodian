@@ -463,7 +463,11 @@ class ValueFilter(Filter):
             # as labels without values.
             # Azure schema: 'tags': {'key': 'value'}
             elif 'tags' in i:
-                r = tk if (tk in i.get('tags', {}).get('items', {})) else None
+                r = i.get('tags', {}).get(tk, None)
+                if not r:
+                    # GCP instance objects have tags listed under items key
+                    # which should be checked unless labels are used
+                    r = tk if (tk in i.get('tags', {}).get('items', {})) else None
         elif k in i:
             r = i.get(k)
         elif k not in self.expr:
