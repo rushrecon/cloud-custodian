@@ -463,7 +463,7 @@ class ValueFilter(Filter):
             # as labels without values.
             # Azure schema: 'tags': {'key': 'value'}
             elif 'tags' in i:
-                r = i.get('tags', {}).get(tk, None)
+                r = tk if (tk in i.get('tags', {}).get('items', {})) else None
         elif k in i:
             r = i.get(k)
         elif k not in self.expr:
