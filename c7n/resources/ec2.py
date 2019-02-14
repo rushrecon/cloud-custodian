@@ -1114,6 +1114,74 @@ class Stop(BaseAction, StateTransitionFilter):
                     continue
                 raise
 
+@actions.register('stopcopy')
+class StopCopy(BaseAction, StateTransitionFilter):
+    """Stops a running EC2 instances
+
+    :Example:
+
+    .. code-block:: yaml
+
+        policies:
+          - name: ec2-stop-running-instances
+            resource: ec2
+            query:
+              - instance-state-name: running
+            actions:
+              - stop
+    """
+    valid_origin_states = ('running',)
+
+    schema = type_schema('stop', **{'terminate-ephemeral': {'type': 'boolean'}})
+
+    def get_permissions(self):
+        perms = ('ec2:StopInstances',)
+        if self.data.get('terminate-ephemeral', False):
+            perms += ('ec2:TerminateInstances',)
+        return perms
+
+    def split_on_storage(self, instances):
+        ephemeral = []
+        persistent = []
+        for i in instances:
+            if EphemeralInstanceFilter.is_ephemeral(i):
+                ephemeral.append(i)
+            else:
+                persistent.append(i)
+        return ephemeral, persistent
+
+    def process(self, instances):
+        instances = self.filter_instance_state(instances)
+        if not len(instances):
+            return
+        client = utils.local_session(
+            self.manager.session_factory).client('ec2')
+        # Ephemeral instance can't be stopped.
+        ephemeral, persistent = self.split_on_storage(instances)
+        if self.data.get('terminate-ephemeral', False) and ephemeral:
+            self._run_instances_op(
+                client.terminate_instances,
+                [i['InstanceId'] for i in ephemeral])
+        if persistent:
+            self._run_instances_op(
+                client.stop_instances,
+                [i['InstanceId'] for i in persistent])
+        return instances
+
+    def _run_instances_op(self, op, instance_ids):
+        while True:
+            try:
+                return self.manager.retry(op, InstanceIds=instance_ids)
+            except ClientError as e:
+                if e.response['Error']['Code'] == 'IncorrectInstanceState':
+                    msg = e.response['Error']['Message']
+                    e_instance_id = msg[msg.find("'") + 1:msg.rfind("'")]
+                    instance_ids.remove(e_instance_id)
+                    if not instance_ids:
+                        return
+                    continue
+                raise
+
 
 @actions.register('reboot')
 class Reboot(BaseAction, StateTransitionFilter):
