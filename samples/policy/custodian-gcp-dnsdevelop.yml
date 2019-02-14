@@ -2,6 +2,9 @@ policies:
   - name: my-first-policy
     resource: gcp.managed-zone
     filters:
-      - "tag:custodian": present
+      - type: value
+        key: name
+        op: regex
+        value: .*custodian.*
     actions:
       - delete

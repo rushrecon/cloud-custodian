@@ -147,7 +147,7 @@ class ManagedZone(QueryResourceManager):
         service = 'dns'
         version = 'v1'
         component = 'managedZones'
-        enum_spec = ('list', 'items.*.managedZones[]', None)
+        enum_spec = ('list', 'managedZones[]', None)
         scope_template = ""
 
 
