@@ -158,7 +158,85 @@ class ManagedZoneAction(MethodAction):
 
 @ManagedZone.action_registry.register('delete')
 class DeleteManagedZone(ManagedZoneAction):
+    """https://cloud.google.com/dns/docs/reference/v1/managedZones/delete"""
     schema = type_schema(
         'delete',
         state={})
     method_spec = {'op': 'delete'}
+
+
+@ManagedZone.action_registry.register('patch')
+class PatchManagedZone(ManagedZoneAction):
+    """https://cloud.google.com/dns/docs/reference/v1/managedZones/patch"""
+    schema = type_schema(
+        'patch',
+        state={})
+    method_spec = {'op': 'patch'}
+
+    def get_resource_params(self, model, resource):
+        params = ManagedZoneAction.get_resource_params(self, model, resource)
+        #https://cloud.google.com/dns/docs/reference/v1/managedZones#resource
+        params['body'] = {
+            #CANNOT be modified:
+            #'kind'
+            #'name'
+            #'dnsName'
+            #'id'
+            #'nameServers'
+            #'nameServerSet'
+            #'creationTime'
+            #EDIBLE:
+            #private zones: ONLY empty:
+            'dnssecConfig' : {},
+            #public zones: error code 503
+            # 'dnssecConfig' : {
+            #     "kind": "dns#managedZoneDnsSecConfig",
+            #     "state": 'on',
+            #     "defaultKeySpecs": [
+            #         {#there must be records both for key and zone signing
+            #             "kind": "dns#dnsKeySpec",
+            #             "keyType": 'zoneSigning',
+            #             "algorithm": 'rsasha512',
+            #             "keyLength": 2048 #512, 1024 won't work
+            #         },
+            #         {
+            #             "kind": "dns#dnsKeySpec",
+            #             "keyType": 'keySigning',
+            #             "algorithm": 'rsasha512',
+            #             "keyLength": 2048
+            #         }
+            #     ],
+            #     "nonExistence": 'nsec'
+            # },
+            'description': 'patched-' + resource['description'],
+            'labels': {'custodian':'patched'} #replaces the existing ones
+        }
+        return params
+
+
+@ManagedZone.action_registry.register('update')
+class UpdateManagedZone(ManagedZoneAction):
+    """https://cloud.google.com/dns/docs/reference/v1/managedZones/update"""
+    schema = type_schema(
+        'update',
+        state={})
+    method_spec = {'op': 'update'}
+
+    def get_resource_params(self, model, resource):
+        params = ManagedZoneAction.get_resource_params(self, model, resource)
+        #
+        params['body'] = {
+            #required, cannot be modified: START
+            'id': resource['id'],
+            'name': resource['name'],
+            'dnsName': resource['dnsName'],
+            'nameServers': resource['nameServers'],
+            'creationTime': resource['creationTime'],
+            #required, cannot be modified: END
+            #??? The 'entity.managedZone.visibility' parameter is required but was missing
+            #regardless of the specified type (though there is no 'visibility' mentined in the docs)
+            'visibility': 'private', #https://cloud.google.com/dns/zones/?hl=en_US
+            #required, potentially updateable according to 'patch' method:
+            'description': 'updated-' + resource['description']
+        }
+        return params

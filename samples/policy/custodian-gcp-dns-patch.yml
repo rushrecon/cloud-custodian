@@ -1,0 +1,10 @@
+policies:
+  - name: my-first-policy
+    resource: gcp.managed-zone
+    filters:
+      - type: value
+        key: name
+        op: regex
+        value: .*custodian.*
+    actions:
+      - patch

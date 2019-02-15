@@ -1,0 +1,1 @@
+run --output-dir=../tmp ../samples/policy/custodian-gcp-dns-patch.yml --cache-period=0 --region=us-east1-b
