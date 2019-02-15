@@ -148,17 +148,12 @@ class ManagedZone(QueryResourceManager):
         version = 'v1'
         component = 'managedZones'
         enum_spec = ('list', 'managedZones[]', None)
-        scope_template = ""
+        scope = 'project'
 
 
 class ManagedZoneAction(MethodAction):
-    path_param_re = re.compile(
-        '.*?/projects/(.*?)/regions/(.*?)')
-
     def get_resource_params(self, model, resource):
-        project, region = self.path_param_re.match(
-            resource['selfLink']).groups()
-        return {'project': project, 'region': region}
+        return {'managedZone': resource['name'], 'project': resource['default_project']}
 
 
 @ManagedZone.action_registry.register('delete')
