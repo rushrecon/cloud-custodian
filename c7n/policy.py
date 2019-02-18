@@ -333,6 +333,48 @@ class PullMode(PolicyExecutionMode):
         return True
 
 
+@execution.register('create')
+class CreateMode(PullMode):
+    """'Create' policy execution mode.
+
+    Though extends PullMode, nothing but logs and existing is_runnable is used from there.
+    Actually, TODO: create a class with methods shared between CreateMode and PullMode.
+    Unlike PullMode, does not interact with Cloud to retrieve the existing resources
+    but provides a list with an empty dictionary to the actions.
+    CreateManagedZone in c7n.gcp is an example when this mode is actually used.
+    """
+    schema = utils.type_schema('create')
+
+    def run(self, *args, **kw):
+        if not self.is_runnable():
+            return
+
+        with self.policy.ctx:
+            self.policy.log.debug(
+                "Running policy %s resource: %s region:%s c7n:%s",
+                self.policy.name, self.policy.resource_type,
+                self.policy.options.region or 'default',
+                version)
+
+            resources = [{}]
+            at = time.time()
+            for a in self.policy.resource_manager.actions:
+                s = time.time()
+                with self.policy.ctx.tracer.subsegment('action:%s' % a.type):
+                    results = a.process(resources)
+                self.policy.log.info(
+                    "policy: %s action: %s"
+                    " execution_time: %0.2f" % (
+                        self.policy.name, a.name,
+                        time.time() - s))
+                if results:
+                    self.policy._write_file(
+                        "action-%s" % a.name, utils.dumps(results))
+            self.policy.ctx.metrics.put_metric(
+                "ActionTime", time.time() - at, "Seconds", Scope="Policy")
+            return resources
+
+
 class LambdaMode(ServerlessExecutionMode):
     """A policy that runs/executes in lambda."""
 
