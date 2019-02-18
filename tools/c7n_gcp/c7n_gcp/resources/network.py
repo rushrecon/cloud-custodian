@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import time
 import re
 
 from c7n_gcp.actions import MethodAction
@@ -240,3 +241,28 @@ class UpdateManagedZone(ManagedZoneAction):
             'description': 'updated-' + resource['description']
         }
         return params
+
+
+@ManagedZone.action_registry.register('create')
+class CreateManagedZone(ManagedZoneAction):
+    """https://cloud.google.com/dns/docs/reference/v1/managedZones/create"""
+    schema = type_schema(
+        'create',
+        state={})
+    method_spec = {'op': 'create'}
+
+    def get_resource_params(self, model, resource):
+        suffix = str(int(round(time.time() * 1000)))
+        params = {
+            'project': resource['default_project'],
+            'body': {
+                'name': 'custodian' + suffix,
+                'dnsName': 'custodian%s.ns-gcp-private.googledomains.' % suffix,
+                'description': 'custodian' + suffix,
+                'visibility': 'private',
+                'privateVisibilityConfig': {'networks': []}
+            }}
+        return params
+
+    def filter_resources(self, resources):
+        return {}
