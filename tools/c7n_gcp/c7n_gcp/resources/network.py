@@ -188,25 +188,25 @@ class PatchManagedZone(ManagedZoneAction):
             #EDIBLE:
             #private zones: ONLY empty:
             'dnssecConfig' : {},
-            #public zones: error code 503
+            #public zones: error code 503 (though used 'Equivalent REST request')
             # 'dnssecConfig' : {
             #     "kind": "dns#managedZoneDnsSecConfig",
-            #     "state": 'on',
+            #     "state": 'off',
             #     "defaultKeySpecs": [
             #         {#there must be records both for key and zone signing
             #             "kind": "dns#dnsKeySpec",
-            #             "keyType": 'zoneSigning',
-            #             "algorithm": 'rsasha512',
+            #             "keyType": 'keySigning',
+            #             "algorithm": 'rsasha256',
             #             "keyLength": 2048 #512, 1024 won't work
             #         },
             #         {
             #             "kind": "dns#dnsKeySpec",
-            #             "keyType": 'keySigning',
-            #             "algorithm": 'rsasha512',
-            #             "keyLength": 2048
+            #             "keyType": 'zoneSigning',
+            #             "algorithm": 'rsasha256',
+            #             "keyLength": 1024
             #         }
             #     ],
-            #     "nonExistence": 'nsec'
+            #     "nonExistence": 'nsec3'
             # },
             'description': 'patched-' + resource['description'],
             'labels': {'custodian':'patched'} #replaces the existing ones
