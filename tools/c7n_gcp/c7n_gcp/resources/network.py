@@ -257,7 +257,7 @@ class CreateManagedZone(ManagedZoneAction):
             'project': resource['default_project'],
             'body': {
                 'name': 'custodian' + suffix,
-                'dnsName': 'custodian%s.ns-gcp-private.googledomains.' % suffix,
+                'dnsName': '%s.custodian.' % suffix,
                 'description': 'custodian' + suffix,
                 'visibility': 'private',
                 'privateVisibilityConfig': {'networks': []}
@@ -266,3 +266,28 @@ class CreateManagedZone(ManagedZoneAction):
 
     def filter_resources(self, resources):
         return {}
+
+
+@resources.register('managed-zone-change')
+class ManagedZoneChange(QueryResourceManager):
+    # roles/dns.admin
+    class resource_type(TypeInfo):
+        service = 'dns'
+        version = 'v1'
+        component = 'changes'
+        enum_spec = ('list', 'changes[]', None)
+        scope = 'project'
+
+
+class ManagedZoneChangeAction(MethodAction):
+    def get_resource_params(self, model, resource):
+        return {'project': resource['default_project']}
+
+
+@ManagedZoneChange.action_registry.register('create')
+class CreateManagedZoneChange(ManagedZoneChangeAction):
+    """https://cloud.google.com/dns/docs/reference/v1/managedZones/delete"""
+    schema = type_schema(
+        'create',
+        state={})
+    method_spec = {'op': 'create'}
