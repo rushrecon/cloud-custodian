@@ -337,7 +337,7 @@ class PullMode(PolicyExecutionMode):
 class CreateMode(PullMode):
     """'Create' policy execution mode.
 
-    Though extends PullMode, nothing but logs and existing is_runnable is used from there.
+    Though extends PullMode, uses nothing but get_logs and is_runnable from there.
     Actually, TODO: create a class with methods shared between CreateMode and PullMode.
     Unlike PullMode, does not interact with Cloud to retrieve the existing resources
     but provides a list with an empty dictionary to the actions.
