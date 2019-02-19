@@ -1,0 +1,1 @@
+run --output-dir=../tmp ../samples/policy/custodian-gcp-dns-mzchange-create.yml --cache-period=0 --region=us-east1-b

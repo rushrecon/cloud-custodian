@@ -11,4 +11,9 @@ policies:
 #    mode:
 #      type: create
     actions:
-      - create
+      - type: create
+        name: hello custodian
+        isServing: false
+        status: pending
+        startTime: now
+

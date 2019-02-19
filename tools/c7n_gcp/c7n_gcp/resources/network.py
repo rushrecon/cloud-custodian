@@ -306,7 +306,13 @@ class CreateManagedZoneChange(ManagedZoneChangeAction):
     """
     schema = type_schema(
         'create',
-        state={})
+        name={'type': 'string'},
+        isServing={'type': 'boolean'},
+        status={'type': 'string', 'enum': [
+            'pending', 'done']},
+        startTime={'type': 'string'}
+
+    )
     method_spec = {'op': 'create'}
 
     def get_resource_params(self, model, resource):
@@ -340,8 +346,8 @@ class CreateManagedZoneChange(ManagedZoneChangeAction):
             #         '9.9.9.9'
             #     ]
             # },
-            'isServing': 'true',
-            'startTime': 'whatever',
-            'status': 'pending'
+            'isServing': self.data['isServing'],
+            'startTime': self.data['startTime'],
+            'status': self.data['status']
         }
         return params
