@@ -287,10 +287,9 @@ class ManagedZoneChange(QueryResourceManager):
 
     resource_type = get_resource_type
 
-    # Looks to be a bit risky, however, allows to implement the desired logic: get a resource with one model
+    # Looks a bit risky, however, allows to implement the desired logic: get a resource with one model
     # and post the changes with the other one.
     def get_model(self):
-        self.log.info("hey")
         return self.post_resource_type
 
 
@@ -314,6 +313,35 @@ class CreateManagedZoneChange(ManagedZoneChangeAction):
         params = ManagedZoneChangeAction.get_resource_params(self, model, resource)
         params['managedZone'] = resource['name']
         params['body'] = {
-            'kind': 'dns#change'
+            # https://cloud.google.com/dns/docs/reference/v1/changes#resource
+            # though technically any parameter could be specified, but only standard ones are reflected
+            'kind': 'dns#change',
+            # 'additions': {
+            #     # https://cloud.google.com/dns/docs/reference/v1/resourceRecordSets#resource
+            #     'kind': 'dns#resourceRecordSet',
+            #     'name': 'example.com.',
+            #     'type': 'A',
+            #     'ttl': 86400,
+            #     'rrdatas': [
+            #         '0.0.0.0'
+            #     ],
+            #     'signatureRrdatas': [
+            #         '0.0.0.0'
+            #     ]
+            # },
+            # 'deletions': {
+            #     'name': 'whatever.custodian.',
+            #     'type': 'A',
+            #     'ttl': 999,
+            #     'rrdatas': [
+            #         '9.9.9.9'
+            #     ],
+            #     'signatureRrdatas': [
+            #         '9.9.9.9'
+            #     ]
+            # },
+            'isServing': 'true',
+            'startTime': 'whatever',
+            'status': 'pending'
         }
         return params
