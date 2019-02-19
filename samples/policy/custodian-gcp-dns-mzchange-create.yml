@@ -1,0 +1,14 @@
+policies:
+  - name: my-first-policy
+    resource: gcp.managed-zone-change
+    filters:
+      - type: value
+        key: name
+        op: regex
+        value: .*custodian.*
+#        value: ^custodian$
+# A managed-zone is needed for a new change, thus mode type create is not suitable.
+#    mode:
+#      type: create
+    actions:
+      - create

@@ -271,12 +271,27 @@ class CreateManagedZone(ManagedZoneAction):
 @resources.register('managed-zone-change')
 class ManagedZoneChange(QueryResourceManager):
     # roles/dns.admin
-    class resource_type(TypeInfo):
+    class get_resource_type(TypeInfo):
         service = 'dns'
         version = 'v1'
-        component = 'changes'
+        component = 'managedZones' # Changes are bound to a managed-zone and do not exist on their own.
+        enum_spec = ('list', 'managedZones[]', None)
+        scope = 'project'
+
+    class post_resource_type(TypeInfo):
+        service = 'dns'
+        version = 'v1'
+        component = 'changes' # Changes are bound to a managed-zone and do not exist on their own.
         enum_spec = ('list', 'changes[]', None)
         scope = 'project'
+
+    resource_type = get_resource_type
+
+    # Looks to be a bit risky, however, allows to implement the desired logic: get a resource with one model
+    # and post the changes with the other one.
+    def get_model(self):
+        self.log.info("hey")
+        return self.post_resource_type
 
 
 class ManagedZoneChangeAction(MethodAction):
@@ -286,8 +301,19 @@ class ManagedZoneChangeAction(MethodAction):
 
 @ManagedZoneChange.action_registry.register('create')
 class CreateManagedZoneChange(ManagedZoneChangeAction):
-    """https://cloud.google.com/dns/docs/reference/v1/managedZones/delete"""
+    """https://cloud.google.com/dns/docs/reference/v1/changes/create
+    gcloud dns record-sets changes list --zone=custodian
+    gcloud dns record-sets changes describe 0 --zone=custodian
+    """
     schema = type_schema(
         'create',
         state={})
     method_spec = {'op': 'create'}
+
+    def get_resource_params(self, model, resource):
+        params = ManagedZoneChangeAction.get_resource_params(self, model, resource)
+        params['managedZone'] = resource['name']
+        params['body'] = {
+            'kind': 'dns#change'
+        }
+        return params
