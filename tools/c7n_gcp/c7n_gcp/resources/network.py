@@ -161,8 +161,7 @@ class ManagedZoneAction(MethodAction):
 class DeleteManagedZone(ManagedZoneAction):
     """https://cloud.google.com/dns/docs/reference/v1/managedZones/delete"""
     schema = type_schema(
-        'delete',
-        state={})
+        'delete')
     method_spec = {'op': 'delete'}
 
 
@@ -170,8 +169,9 @@ class DeleteManagedZone(ManagedZoneAction):
 class PatchManagedZone(ManagedZoneAction):
     """https://cloud.google.com/dns/docs/reference/v1/managedZones/patch"""
     schema = type_schema(
-        'patch',
-        state={})
+        'patch'
+        #TODO: specify dnssecConfig, description, labels
+    )
     method_spec = {'op': 'patch'}
 
     def get_resource_params(self, model, resource):
@@ -219,8 +219,9 @@ class PatchManagedZone(ManagedZoneAction):
 class UpdateManagedZone(ManagedZoneAction):
     """https://cloud.google.com/dns/docs/reference/v1/managedZones/update"""
     schema = type_schema(
-        'update',
-        state={})
+        'update'
+        #TODO: figure out the working parameters and specify them there
+    )
     method_spec = {'op': 'update'}
 
     def get_resource_params(self, model, resource):
@@ -247,12 +248,13 @@ class UpdateManagedZone(ManagedZoneAction):
 class CreateManagedZone(ManagedZoneAction):
     """https://cloud.google.com/dns/docs/reference/v1/managedZones/create"""
     schema = type_schema(
-        'create',
-        state={})
+        'create'
+        #TODO: specify name, dnsName, description, visibility, privateVisibilityConfig
+    )
     method_spec = {'op': 'create'}
 
     def get_resource_params(self, model, resource):
-        suffix = str(int(round(time.time() * 1000)))
+        suffix = str(int(round(time.time() * 1000))) #TODO: remove and use the values from policies
         params = {
             'project': resource['default_project'],
             'body': {
