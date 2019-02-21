@@ -1,0 +1,9 @@
+policies:
+  - name: my-first-policy
+    resource: gcp.sql-instance-database
+    mode:
+       type: push
+    actions:
+      - type: delete
+        instance: custodian
+        database: custodian

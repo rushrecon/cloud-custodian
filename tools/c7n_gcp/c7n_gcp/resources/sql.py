@@ -67,3 +67,34 @@ class SqlInstanceStop(MethodAction):
         return {'project': project,
                 'instance': instance,
                 'body': {'settings': {'activationPolicy': 'NEVER'}}}
+
+
+@resources.register('sql-instance-database')
+class SqlInstanceDatabase(QueryResourceManager):
+    class resource_type(TypeInfo):
+        service = 'sqladmin'
+        version = 'v1beta4'
+        component = 'databases'
+        enum_spec = ('list', "items[]", None)
+        scope = 'project'
+
+
+class SqlInstanceDatabaseAction(MethodAction):
+    def get_resource_params(self, model, resource):
+        return {'project': resource['default_project']}
+
+
+@SqlInstanceDatabase.action_registry.register('delete')
+class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
+    schema = type_schema(
+        'delete',
+        instance={'type': 'string'},
+        database={'type': 'string'}
+    )
+    method_spec = {'op': 'delete'}
+
+    def get_resource_params(self, model, resource):
+        params = SqlInstanceDatabaseAction.get_resource_params(self, model, resource)
+        params['instance'] = self.data['instance']
+        params['database'] = self.data['database']
+        return params
