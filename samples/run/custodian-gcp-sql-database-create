@@ -1,0 +1,1 @@
+run --output-dir=../tmp ../samples/policy/custodian-gcp-sql-database-create.yml --cache-period=0 --region=us-central1

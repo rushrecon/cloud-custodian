@@ -81,7 +81,11 @@ class SqlInstanceDatabase(QueryResourceManager):
 
 class SqlInstanceDatabaseAction(MethodAction):
     def get_resource_params(self, model, resource):
-        return {'project': resource['default_project']}
+        return {
+            'project': resource['default_project'],
+            'instance': self.data['instance'],
+            'database': self.data['database']
+        }
 
 
 @SqlInstanceDatabase.action_registry.register('delete')
@@ -93,8 +97,22 @@ class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
     )
     method_spec = {'op': 'delete'}
 
+
+@SqlInstanceDatabase.action_registry.register('create')
+class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
+    schema = type_schema(
+        'create',
+        instance={'type': 'string'},
+        database={'type': 'string'}
+    )
+    method_spec = {'op': 'insert'}
+
     def get_resource_params(self, model, resource):
         params = SqlInstanceDatabaseAction.get_resource_params(self, model, resource)
-        params['instance'] = self.data['instance']
-        params['database'] = self.data['database']
+        params['body'] = {
+            'instance': params['instance'],
+            'name' : params['database'],
+            'project': params['project']
+        }
+        del params['database']
         return params
