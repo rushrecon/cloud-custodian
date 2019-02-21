@@ -95,7 +95,11 @@ class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
         instance={'type': 'string'},
         database={'type': 'string'}
     )
-    method_spec = {'op': 'delete'}
+    method_spec = {
+        'op': 'delete',
+        'annotation_key': 'c7n.gcp:sql-instance-database-create',
+        'result_key': 'status'
+    }
 
 
 @SqlInstanceDatabase.action_registry.register('create')
@@ -105,7 +109,11 @@ class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
         instance={'type': 'string'},
         database={'type': 'string'}
     )
-    method_spec = {'op': 'insert'}
+    method_spec = {
+        'op': 'insert',
+        'annotation_key': 'c7n.gcp:sql-instance-database-create',
+        'result_key': 'status'
+    }
 
     def get_resource_params(self, model, resource):
         params = SqlInstanceDatabaseAction.get_resource_params(self, model, resource)
