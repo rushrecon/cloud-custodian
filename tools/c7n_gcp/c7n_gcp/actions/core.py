@@ -77,8 +77,12 @@ class MethodAction(Action):
         session = local_session(self.manager.session_factory)
         client = self.get_client(session, m)
         resources = self.include_default_project(resources, session)
+        results = []
         for resource_set in chunks(resources, self.chunk_size):
-            self.process_resource_set(client, m, resource_set)
+            result = self.process_resource_set(client, m, resource_set)
+            if result:
+                results.append(result)
+        return None if len(results) == 0 else results
 
     def process_resource_set(self, client, model, resources):
         op_name = self.method_spec['op']
@@ -89,6 +93,9 @@ class MethodAction(Action):
             result = self.invoke_api(client, op_name, params)
             if result_key and annotation_key:
                 r[annotation_key] = result.get(result_key)
+            else: # The results are ignored unless keys are defined.
+                result = None
+            return result
 
     def invoke_api(self, client, op_name, params):
         try:
