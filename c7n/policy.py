@@ -333,17 +333,17 @@ class PullMode(PolicyExecutionMode):
         return True
 
 
-@execution.register('create')
-class CreateMode(PullMode):
-    """'Create' policy execution mode.
+@execution.register('push')
+class PushMode(PullMode):
+    """'Push' policy execution mode.
 
     Though extends PullMode, nothing but logs and existing is_runnable is used from there.
-    Actually, TODO: create a class with methods shared between CreateMode and PullMode.
-    Unlike PullMode, does not interact with Cloud to retrieve the existing resources
-    but provides a list with an empty dictionary to the actions.
-    CreateManagedZone in c7n.gcp is an example when this mode is actually used.
+    Actually, TODO: create a class with methods shared between PushMode and PullMode.
+    Unlike PullMode, does not interact with a Cloud to retrieve the existing resources
+    but provides a list with a single empty dictionary to the actions.
+    SqlInstanceDatabaseDelete in c7n.gcp is an example when this mode is actually used.
     """
-    schema = utils.type_schema('create')
+    schema = utils.type_schema('push')
 
     def run(self, *args, **kw):
         if not self.is_runnable():
