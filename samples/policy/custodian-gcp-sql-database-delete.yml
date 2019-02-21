@@ -5,5 +5,5 @@ policies:
        type: push
     actions:
       - type: delete
-        instance: custodian
+        instance: custodian-sql
         database: custodian
