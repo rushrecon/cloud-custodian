@@ -82,3 +82,31 @@ class SqlInstanceTest(BaseTest):
             self.fail('found deleted instance: %s' % result)
         except HttpError as e:
             self.assertTrue("does not exist" in str(e))
+
+    def test_delete_instance_database(self):
+        project_id = 'cloud-custodian'
+        instance_name = 'custodian-sql'
+        database_name = 'custodian'
+        factory = self.replay_flight_data('sqlinstancedatabase-delete', project_id=project_id)
+
+        p = self.load_policy(
+            {'name': 'sql-instance-database-delete',
+             'resource': 'gcp.sql-instance-database',
+             'mode': {'type': 'push'},
+             'actions': [{'type':'delete',
+                          'instance': instance_name,
+                          'database': database_name}]},
+            session_factory=factory)
+        resources = p.run()
+        self.assertEqual(len(resources), 1)
+        if self.recording:
+            time.sleep(1)
+        client = p.resource_manager.get_client()
+        try:
+            result = client.execute_query(
+                'get', {'project': project_id,
+                        'instance': instance_name,
+                        'database': database_name})
+            self.fail('found deleted instance: %s' % result)
+        except HttpError as e:
+            self.assertTrue("does not exist" in str(e))
