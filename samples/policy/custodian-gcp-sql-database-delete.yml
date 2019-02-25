@@ -1,9 +1,12 @@
 policies:
   - name: my-first-policy
     resource: gcp.sql-instance-database
-    mode:
-       type: push
+    query:
+      - instance: custodian-sql
+    filters:
+      - type: value
+        key: name
+        op: regex
+        value: ^custodian$
     actions:
       - type: delete
-        instance: custodian-sql
-        database: custodian

@@ -78,37 +78,45 @@ class SqlInstanceDatabase(QueryResourceManager):
         enum_spec = ('list', "items[]", None)
         scope = 'project'
 
+    def get_resource_query(self):
+        if 'query' in self.data:
+            return self.data.get('query')[0]
+
 
 class SqlInstanceDatabaseAction(MethodAction):
     def get_resource_params(self, model, resource):
         return {
-            'project': resource['default_project'],
-            'instance': self.data['instance'],
-            'database': self.data['database']
+            'project': resource['default_project']
         }
 
 
 @SqlInstanceDatabase.action_registry.register('delete')
 class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
     schema = type_schema(
-        'delete',
-        instance={'type': 'string'},
-        database={'type': 'string'}
+        'delete'
     )
+
     method_spec = {
         'op': 'delete',
         'annotation_key': 'c7n.gcp:sql-instance-database-create',
         'result_key': 'status'
     }
 
+    def get_resource_params(self, model, resource):
+        params = SqlInstanceDatabaseAction.get_resource_params(self, model, resource)
+        params['instance'] = resource['instance']
+        params['database'] = resource['name']
+        return params
+
 
 @SqlInstanceDatabase.action_registry.register('create')
-class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
+class SqlInstanceDatabaseCreate(SqlInstanceDatabaseAction):
     schema = type_schema(
         'create',
         instance={'type': 'string'},
         database={'type': 'string'}
     )
+
     method_spec = {
         'op': 'insert',
         'annotation_key': 'c7n.gcp:sql-instance-database-create',
@@ -117,6 +125,8 @@ class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
 
     def get_resource_params(self, model, resource):
         params = SqlInstanceDatabaseAction.get_resource_params(self, model, resource)
+        params['instance'] = self.data['instance']
+        params['database'] = self.data['database']
         params['body'] = {
             'instance': params['instance'],
             'name' : params['database'],
