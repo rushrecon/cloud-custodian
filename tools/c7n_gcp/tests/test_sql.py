@@ -92,21 +92,17 @@ class SqlInstanceTest(BaseTest):
         p = self.load_policy(
             {'name': 'sql-instance-database-delete',
              'resource': 'gcp.sql-instance-database',
-             'mode': {'type': 'push'},
-             'actions': [{'type':'delete',
-                          'instance': instance_name,
-                          'database': database_name}]},
+             'query': [{'instance': instance_name}],
+             'filters': [{'type': 'value', 'key': 'name', 'op': 'regex', 'value': '^%s$' % database_name}],
+             'actions': [{'type':'delete'}]},
             session_factory=factory)
         resources = p.run()
         self.assertEqual(len(resources), 1)
         if self.recording:
             time.sleep(1)
         client = p.resource_manager.get_client()
-        try:
-            result = client.execute_query(
-                'get', {'project': project_id,
-                        'instance': instance_name,
-                        'database': database_name})
-            self.fail('found deleted instance: %s' % result)
-        except HttpError as e:
-            self.assertTrue("does not exist" in str(e))
+        result = client.execute_query(
+            'list', {'project': project_id,
+                     'instance': instance_name})
+        remaining_database_names = list(map(lambda item: item['name'], result['items']))
+        self.assertFalse(instance_name in remaining_database_names)
