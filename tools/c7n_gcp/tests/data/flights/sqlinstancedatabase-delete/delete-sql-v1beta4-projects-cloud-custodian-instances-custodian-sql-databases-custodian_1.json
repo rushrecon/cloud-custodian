@@ -13,10 +13,10 @@
   },
   "body": {
     "kind": "sql#operation",
-    "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian-190204/operations/fb26651b-f7d2-4c16-9e80-81665729303e",
-    "targetProject": "cloud-custodian-190204",
+    "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian/operations/fb26651b-f7d2-4c16-9e80-81665729303e",
+    "targetProject": "cloud-custodian",
     "targetId": "custodian-sql",
-    "targetLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian-190204/instances/custodian-sql",
+    "targetLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian/instances/custodian-sql",
     "name": "fb26651b-f7d2-4c16-9e80-81665729303e",
     "operationType": "DELETE_DATABASE",
     "status": "DONE",

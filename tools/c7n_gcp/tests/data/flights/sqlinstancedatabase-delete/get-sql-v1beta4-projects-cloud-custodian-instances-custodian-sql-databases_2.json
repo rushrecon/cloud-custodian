@@ -15,40 +15,40 @@
     "items": [
       {
         "kind": "sql#database",
-        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian-190204/instances/custodian-sql/databases/information_schema",
+        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian/instances/custodian-sql/databases/information_schema",
         "name": "information_schema",
         "etag": "ac7f263ab756a10c2a9f3ee7c492404d5f4647d76313e71bb1654d426d015eab",
-        "project": "cloud-custodian-190204",
+        "project": "cloud-custodian",
         "instance": "custodian-sql",
         "charset": "utf8",
         "collation": "utf8_general_ci"
       },
       {
         "kind": "sql#database",
-        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian-190204/instances/custodian-sql/databases/mysql",
+        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian/instances/custodian-sql/databases/mysql",
         "name": "mysql",
         "etag": "816fdf2516b4d08c7eab51594775e718149cf063a1b271166017e3cb0758ab47",
-        "project": "cloud-custodian-190204",
+        "project": "cloud-custodian",
         "instance": "custodian-sql",
         "charset": "utf8",
         "collation": "utf8_general_ci"
       },
       {
         "kind": "sql#database",
-        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian-190204/instances/custodian-sql/databases/performance_schema",
+        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian/instances/custodian-sql/databases/performance_schema",
         "name": "performance_schema",
         "etag": "8307f90e4fbae334e58fb4aefd83099492d88b395bf47118827ebf140406cd12",
-        "project": "cloud-custodian-190204",
+        "project": "cloud-custodian",
         "instance": "custodian-sql",
         "charset": "utf8",
         "collation": "utf8_general_ci"
       },
       {
         "kind": "sql#database",
-        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian-190204/instances/custodian-sql/databases/sys",
+        "selfLink": "https://www.googleapis.com/sql/v1beta4/projects/cloud-custodian/instances/custodian-sql/databases/sys",
         "name": "sys",
         "etag": "de067111490142a07d3dd6b67e0d4fbfd86002e48590a72eba238eb3ca32d395",
-        "project": "cloud-custodian-190204",
+        "project": "cloud-custodian",
         "instance": "custodian-sql",
         "charset": "utf8",
         "collation": "utf8_general_ci"

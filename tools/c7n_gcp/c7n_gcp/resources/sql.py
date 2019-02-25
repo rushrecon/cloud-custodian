@@ -102,11 +102,16 @@ class SqlInstanceDatabaseDelete(SqlInstanceDatabaseAction):
         'result_key': 'status'
     }
 
+    path_param_re = re.compile('.*?/projects/(.*?)/instances/(.*)/databases/(.*)')
+
     def get_resource_params(self, model, resource):
-        params = SqlInstanceDatabaseAction.get_resource_params(self, model, resource)
-        params['instance'] = resource['instance']
-        params['database'] = resource['name']
-        return params
+        project, instance, database = self.path_param_re.match(
+            resource['selfLink']).groups()
+        return {
+            'project': project,
+            'instance': instance,
+            'database': database
+        }
 
 
 @SqlInstanceDatabase.action_registry.register('create')
