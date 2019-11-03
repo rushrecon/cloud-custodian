@@ -16,7 +16,7 @@ py_library(
     deps = [":c7n_gcp_tests"],
 ) for test_file in glob(["test_*.py"])]
 
-## bazel test --test_env=GOOGLE_APPLICATION_CREDENTIALS=external/c7n_gcp_tests/data/credentials.json --test_env=CLOUDSDK_CORE_PROJECT=custodian-1291 --test_output=all @c7n_gcp_tests//:run_all_tests
+# bazel test --test_env=GOOGLE_APPLICATION_CREDENTIALS=external/c7n_gcp_tests/data/credentials.json --test_env=CLOUDSDK_CORE_PROJECT=whatever @c7n_gcp_tests//:run_all_tests
 test_suite(
     name = "run_all_tests",
     tags = ["c7n_gcp_test"],
