@@ -100,3 +100,7 @@ class PubSubSnapshotTest(BaseTest):
 
         pubsub_snapshot_resources = policy.run()
         self.assertEqual(pubsub_snapshot_resources[0]['name'], pubsub_snapshot_name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

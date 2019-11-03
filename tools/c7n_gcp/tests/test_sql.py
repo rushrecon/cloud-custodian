@@ -214,3 +214,7 @@ class SqlSslCertTest(BaseTest):
 
         self.assertEqual(resources[0]['sha1Fingerprint'], ssl_cert_sha)
         self.assertEqual(resources[0][parent_annotation_key]['name'], instance_name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

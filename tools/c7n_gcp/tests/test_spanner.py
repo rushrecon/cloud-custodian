@@ -348,3 +348,7 @@ class SpannerDatabaseInstanceTest(BaseTest):
                               'members': ['user:dkhanas@gmail.com']}]
 
         self.assertEqual(test_method(existing_bindings, bindings_to_remove), expected_bindings)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

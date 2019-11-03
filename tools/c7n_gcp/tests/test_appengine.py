@@ -185,3 +185,7 @@ class AppEngineFirewallIngressRuleTest(BaseTest):
             {'resourceName': rule_priority_full})
         self.assertEqual(resource['priority'], rule_priority)
         self.assertEqual(resource[parent_annotation_key]['name'], app_name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

@@ -87,3 +87,7 @@ class DnsPolicyTest(BaseTest):
         resources = exec_mode.run(event, None)
 
         self.assertEqual(resources[0]['name'], policy_name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

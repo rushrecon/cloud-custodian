@@ -189,3 +189,7 @@ class RouteTest(BaseTest):
 
         self.assertEqual(len(routes), 1)
         self.assertEqual(routes[0]['destRange'], '10.0.0.0/24')
+
+
+if __name__ == "__main__":
+    BaseTest.main()

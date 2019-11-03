@@ -138,3 +138,7 @@ class LogExclusionTest(BaseTest):
         event = event_data('log-create-project-exclusion.json')
         resource = exec_mode.run(event, None)
         self.assertEqual(resource[0]['name'], exclusion_name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

@@ -88,3 +88,7 @@ class KubernetesClusterNodePoolTest(BaseTest):
         pools = exec_mode.run(event, None)
 
         self.assertEqual(pools[0]['name'], name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

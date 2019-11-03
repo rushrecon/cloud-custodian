@@ -348,3 +348,7 @@ class AutoscalerTest(BaseTest):
         self.assertEqual(result_policy['loadBalancingUtilization']['utilizationTarget'], 0.7)
         self.assertEqual(result_policy['minNumReplicas'], 1)
         self.assertEqual(result_policy['maxNumReplicas'], 4)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

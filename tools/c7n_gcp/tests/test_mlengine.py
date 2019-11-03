@@ -87,3 +87,7 @@ class MLJobTest(BaseTest):
         event = event_data('ml-job-create.json')
         jobs = exec_mode.run(event, None)
         self.assertIn(name, jobs[0]['jobId'])
+
+
+if __name__ == "__main__":
+    BaseTest.main()

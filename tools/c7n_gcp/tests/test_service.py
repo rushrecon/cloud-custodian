@@ -53,3 +53,7 @@ class ServiceTest(BaseTest):
         self.assertEqual(
             service, {
                 'serviceName': 'deploymentmanager.googleapis.com'})
+
+
+if __name__ == "__main__":
+    BaseTest.main()

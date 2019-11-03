@@ -49,3 +49,7 @@ class CloudBillingAccountTest(BaseTest):
 
         resources = exec_mode.run(event, None)
         self.assertEqual(resources[0]['name'], billingaccount_resource_name)
+
+
+if __name__ == "__main__":
+    BaseTest.main()

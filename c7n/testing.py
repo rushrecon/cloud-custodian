@@ -223,6 +223,10 @@ class PyTestUtils(CustodianTestCore):
 
 class TestUtils(unittest.TestCase, CustodianTestCore):
 
+    @classmethod
+    def main(cls):
+        unittest.main()
+
     def tearDown(self):
         self.cleanUp()
 

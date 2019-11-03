@@ -111,3 +111,7 @@ class BigQueryTableTest(BaseTest):
         event = event_data('bq-table-create.json')
         job = exec_mode.run(event, None)
         self.assertIn('tableReference', job[0].keys())
+
+
+if __name__ == "__main__":
+    BaseTest.main()

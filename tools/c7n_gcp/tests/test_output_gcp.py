@@ -81,3 +81,7 @@ class MetricsOutputTest(BaseTest):
         metrics = StackDriverMetrics(ctx, conf)
         metrics.put_metric('ResourceCount', 43, 'Count', Scope='Policy')
         metrics.flush()
+
+
+if __name__ == "__main__":
+    BaseTest.main()

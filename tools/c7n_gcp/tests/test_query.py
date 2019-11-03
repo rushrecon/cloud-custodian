@@ -86,3 +86,7 @@ class GcpLocationTest(BaseTest):
         actual_locations_set = set(GcpLocation.get_service_locations(service_name))
         self.assertTrue(locations_set.issubset(actual_locations_set))
         self.assertTrue(actual_locations_set.issubset(locations_set))
+
+
+if __name__ == "__main__":
+    BaseTest.main()
