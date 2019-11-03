@@ -22,7 +22,8 @@ import sys
 class NotifyTest(BaseTest):
 
     def test_pubsub_notify(self):
-        factory = self.replay_flight_data("notify-action")
+        project_id = 'custodian-1291'
+        factory = self.replay_flight_data('notify-action', project_id=project_id)
 
         orig_client = Session.client
         stub_client = mock.MagicMock()

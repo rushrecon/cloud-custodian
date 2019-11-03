@@ -43,7 +43,8 @@ class LimitsTest(BaseTest):
             p.ctx.metrics.buf[0]['MetricName'], 'ResourceLimitExceeded')
 
     def test_policy_resource_limits_count(self):
-        session_factory = self.replay_flight_data('disk-query')
+        project_id = 'custodian-1291'
+        session_factory = self.replay_flight_data('disk-query', project_id=project_id)
         p = self.load_policy(
             {'name': 'limits',
              'resource': 'gcp.disk',

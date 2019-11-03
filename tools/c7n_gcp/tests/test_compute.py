@@ -22,7 +22,8 @@ from googleapiclient.errors import HttpError
 class InstanceTest(BaseTest):
 
     def test_instance_query(self):
-        factory = self.replay_flight_data('instance-query')
+        project_id = 'custodian-1291'
+        factory = self.replay_flight_data('instance-query', project_id=project_id)
         p = self.load_policy(
             {'name': 'all-instances',
              'resource': 'gcp.instance'},

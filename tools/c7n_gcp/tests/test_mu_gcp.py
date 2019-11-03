@@ -51,7 +51,8 @@ class FunctionTest(BaseTest):
         return mu.CloudFunction(config, archive)
 
     def test_deploy_function(self):
-        factory = self.replay_flight_data('mu-deploy')
+        project_id = 'custodian-1291'
+        factory = self.replay_flight_data('mu-deploy', project_id=project_id)
         manager = mu.CloudFunctionManager(factory, 'us-central1')
         func = self.get_function(factory=factory)
         manager.publish(func)
@@ -199,8 +200,8 @@ class FunctionTest(BaseTest):
     @functional
     def test_api_subscriber(self):
         # integration styled..
-
-        factory = self.replay_flight_data('mu-api-subscriber')
+        project_id = 'custodian-1291'
+        factory = self.replay_flight_data('mu-api-subscriber', project_id=project_id)
         p = self.load_policy(
             {'name': 'topic-created',
              'resource': 'gcp.pubsub-topic',
