@@ -8,17 +8,16 @@ py_library(
     deps = ["@c7n_gcp"],
 )
 
-# bazel test --test_env GOOGLE_APPLICATION_CREDENTIALS=external/c7n_gcp_tests/data/credentials.json @c7n_gcp_tests//:test_appengine
-py_test(
-    name = "test_appengine",
-    srcs = ["test_appengine.py"],
+[py_test(
+    name = test_file[:-3],
+    srcs = [test_file],
     data = ["data/credentials.json"],
-    main = "test_appengine.py",
     tags = ["c7n_gcp_test"],
     deps = [":c7n_gcp_tests"],
-)
+) for test_file in glob(["test_*.py"])]
 
+## bazel test --test_env=GOOGLE_APPLICATION_CREDENTIALS=external/c7n_gcp_tests/data/credentials.json --test_env=CLOUDSDK_CORE_PROJECT=custodian-1291 --test_output=all @c7n_gcp_tests//:run_all_tests
 test_suite(
-    name = "test_everything",
+    name = "run_all_tests",
     tags = ["c7n_gcp_test"],
 )
