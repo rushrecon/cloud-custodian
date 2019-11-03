@@ -22,3 +22,31 @@ pip_import(
     name = "my_deps",
     requirements = "//:requirements.txt",
 )
+
+pip_import(
+    name = "my_deps_gcp",
+    requirements = "//tools/c7n_gcp:requirements.txt",
+)
+
+load("@my_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
+load("@my_deps_gcp//:requirements.bzl", "pip_install")
+
+pip_install()
+
+local_repository(
+    name = "c7n",
+    path = "c7n",
+)
+
+local_repository(
+    name = "c7n_gcp",
+    path = "tools/c7n_gcp/c7n_gcp",
+)
+
+local_repository(
+    name = "c7n_gcp_tests",
+    path = "tools/c7n_gcp/tests",
+)
