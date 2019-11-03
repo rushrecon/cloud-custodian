@@ -8,9 +8,17 @@ py_library(
     deps = ["@c7n_gcp"],
 )
 
+# bazel test --test_env GOOGLE_APPLICATION_CREDENTIALS=external/c7n_gcp_tests/data/credentials.json @c7n_gcp_tests//:test_appengine
 py_test(
     name = "test_appengine",
     srcs = ["test_appengine.py"],
+    data = ["data/credentials.json"],
     main = "test_appengine.py",
+    tags = ["c7n_gcp_test"],
     deps = [":c7n_gcp_tests"],
+)
+
+test_suite(
+    name = "test_everything",
+    tags = ["c7n_gcp_test"],
 )
