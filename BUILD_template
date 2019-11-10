@@ -1,0 +1,47 @@
+# A BUILD file is required to run bazel from the root workspace. Please make a copy from this template.
+
+load("@com_github_atlassian_bazel_tools//:multirun/def.bzl", "command", "multirun")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+
+py_binary(
+    name = "c7n_cli",
+    srcs = ["@c7n//:cli.py"],
+    data = glob(["env/*"]),
+    main = "@c7n//:cli.py",
+    deps = [
+        "@c7n", # custodian core, mandatory
+        # "@c7n_gcp", # uncomment if need to connect to GCP
+    ],
+)
+
+# Update and use if need to connect to AWS, remove otherwise.
+# bazel run :c7n_aws_cli env/aws-sample.yml
+command(
+    name = "c7n_aws_cli",
+    environment = {
+        "AWS_ACCESS_KEY_ID": "<please specify a string>",
+        "AWS_SECRET_ACCESS_KEY": "<please specify a string>",
+    },
+    command = ":c7n_cli",
+    arguments = [
+        "run",
+        "--cache-period=0",
+        "--output-dir=whatever",
+    ],
+)
+
+# Update and use if need to connect to GCP, remove otherwise.
+# bazel run :c7n_gcp_cli env/gcp-sample.yml
+command(
+    name = "c7n_gcp_cli",
+    environment = {
+        "CLOUDSDK_CORE_PROJECT": "<please specify a string>",
+        "GOOGLE_APPLICATION_CREDENTIALS": "<please sepcify a file location, relative to project root>",
+    },
+    command = ":c7n_cli",
+    arguments = [
+        "run",
+        "--cache-period=0",
+        "--output-dir=whatever",
+    ],
+)
