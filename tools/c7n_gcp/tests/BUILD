@@ -16,7 +16,7 @@ py_library(
     deps = [":c7n_gcp_tests"],
 ) for test_file in glob(["test_*.py"])]
 
-# bazel test @c7n_gcp_tests//:run_all_tests
+# bazel test //tools/c7n_gcp/tests:run_all_tests
 test_suite(
     name = "run_all_tests",
     tags = ["c7n_gcp_test"],

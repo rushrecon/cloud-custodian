@@ -56,8 +56,3 @@ local_repository(
     name = "c7n_gcp",
     path = "tools/c7n_gcp/c7n_gcp",
 )
-
-local_repository(
-    name = "c7n_gcp_tests",
-    path = "tools/c7n_gcp/tests",
-)

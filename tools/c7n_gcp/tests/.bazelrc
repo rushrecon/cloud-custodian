@@ -1,2 +1,2 @@
-test --test_env=GOOGLE_APPLICATION_CREDENTIALS=external/c7n_gcp_tests/data/credentials.json
+test --test_env=GOOGLE_APPLICATION_CREDENTIALS=tools/c7n_gcp/tests/data/credentials.json
 test --test_env=CLOUDSDK_CORE_PROJECT=whatever
