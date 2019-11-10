@@ -45,4 +45,4 @@ bazel-cloud-custodian/
 bazel-out/
 bazel-testlogs/
 env/
-BUILD
+/BUILD

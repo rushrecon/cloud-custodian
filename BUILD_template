@@ -18,30 +18,44 @@ py_binary(
 # bazel run :c7n_aws_cli env/aws-sample.yml
 command(
     name = "c7n_aws_cli",
-    environment = {
-        "AWS_ACCESS_KEY_ID": "<please specify a string>",
-        "AWS_SECRET_ACCESS_KEY": "<please specify a string>",
-    },
-    command = ":c7n_cli",
     arguments = [
         "run",
         "--cache-period=0",
         "--output-dir=whatever",
     ],
+    command = ":c7n_cli",
+    environment = {
+        "AWS_ACCESS_KEY_ID": "<please specify a string>",
+        "AWS_DEFAULT_REGION": "<please specify a string>",
+        "AWS_SECRET_ACCESS_KEY": "<please specify a string>",
+    },
 )
 
 # Update and use if need to connect to GCP, remove otherwise.
 # bazel run :c7n_gcp_cli env/gcp-sample.yml
 command(
     name = "c7n_gcp_cli",
-    environment = {
-        "CLOUDSDK_CORE_PROJECT": "<please specify a string>",
-        "GOOGLE_APPLICATION_CREDENTIALS": "<please sepcify a file location, relative to project root>",
-    },
-    command = ":c7n_cli",
     arguments = [
         "run",
         "--cache-period=0",
         "--output-dir=whatever",
     ],
+    command = ":c7n_cli",
+    environment = {
+        "CLOUDSDK_CORE_PROJECT": "<please specify a string>",
+        "GOOGLE_APPLICATION_CREDENTIALS": "<please sepcify a file location, relative to project root>",
+    },
 )
+
+#Do we need that to run tests against PY2?
+#https://github.com/bazelbuild/rules_python/blob/master/proposals/2019-02-12-design-for-a-python-toolchain.md
+#py_runtime(
+#    name = "python-2.7.12",
+#    files = glob(["python-2.7.12/**"]),
+#    interpreter = "python-2.7.12/bin/python",
+#)
+#
+#py_runtime(
+#    name = "python-3.6.0",
+#    interpreter_path = "/opt/pyenv/versions/3.6.0/bin/python",
+#)
