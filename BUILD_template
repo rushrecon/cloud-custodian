@@ -47,6 +47,17 @@ command(
     },
 )
 
+# TODO: WIP
+# bazel test :test_account
+py_test(
+    name = "test_account",
+    srcs = ["_generated_tests_runner.py"],
+    args = ["--module=tests.test_account"],
+    main = "_generated_tests_runner.py",
+    deps = ["//tests:c7n_tests"],
+)
+# TODO: /WIP
+
 #Do we need that to run tests against PY2?
 #https://github.com/bazelbuild/rules_python/blob/master/proposals/2019-02-12-design-for-a-python-toolchain.md
 #py_runtime(

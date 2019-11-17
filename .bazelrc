@@ -1,1 +1,7 @@
 import tools/c7n_gcp/tests/.bazelrc
+
+test --test_env=AWS_DEFAULT_REGION=us-east-1
+test --test_env=AWS_ACCESS_KEY_ID=foo
+test --test_env=AWS_SECRET_ACCESS_KEY=bar
+test --test_env=AWS_SESSION_TOKEN=fake
+test --test_env=C7N_TEST_RUN=true
