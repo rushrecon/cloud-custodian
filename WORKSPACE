@@ -31,7 +31,7 @@ load("@rules_python//python:pip.bzl", "pip_import")
 
 pip_import(
     name = "my_deps",
-    requirements = "//:requirements.txt",
+    requirements = "//:requirements-bazel-dev.txt",
 )
 
 pip_import(

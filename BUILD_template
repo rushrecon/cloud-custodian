@@ -2,6 +2,7 @@
 
 load("@com_github_atlassian_bazel_tools//:multirun/def.bzl", "command", "multirun")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@my_deps//:requirements.bzl", "requirement")
 
 py_binary(
     name = "c7n_cli",
@@ -51,7 +52,23 @@ command(
 py_library(
     name = "c7n_tests",
     srcs = glob(["tests/*.py"]),
-    deps = ["@c7n"],
+    data = glob(["tests/data/**/*"]),
+    deps = [
+        "@c7n",
+        requirement("coverage"),
+        requirement("mock"),
+        requirement("placebo"),
+        requirement("flake8"),
+        requirement("pytest"),
+        requirement("pytest-xdist"),
+        requirement("pytest-cov"),
+        requirement("twine"),
+        requirement("tox"),
+        requirement("six"),
+        requirement("psutil"),
+        requirement("aws_xray_sdk"),
+        requirement("fakeredis"),
+    ],
 )
 
 [py_test(
