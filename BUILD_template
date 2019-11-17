@@ -48,13 +48,25 @@ command(
 )
 
 # TODO: WIP
-# bazel test :test_account
-py_test(
-    name = "test_account",
+py_library(
+    name = "c7n_tests",
+    srcs = glob(["tests/*.py"]),
+    deps = ["@c7n"],
+)
+
+[py_test(
+    name = test_file[:-3].replace("tests/", ""),
     srcs = ["_generated_tests_runner.py"],
-    args = ["--module=tests.test_account"],
+    args = ["--module=" + test_file[:-3].replace("/", ".")],
     main = "_generated_tests_runner.py",
-    deps = ["//tests:c7n_tests"],
+    tags = ["c7n_test"],
+    deps = ["c7n_tests"],
+) for test_file in glob(["tests/test_*.py"])]
+
+# bazel test :c7n_tests_run
+test_suite(
+    name = "c7n_tests_run",
+    tags = ["c7n_test"],
 )
 # TODO: /WIP
 
