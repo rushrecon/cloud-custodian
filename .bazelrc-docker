@@ -1,0 +1,6 @@
+test --experimental_enable_docker_sandbox
+test --experimental_docker_verbose
+test --spawn_strategy=docker
+test --experimental_docker_image=python:3
+test --verbose_failures
+test --cache_test_results=no

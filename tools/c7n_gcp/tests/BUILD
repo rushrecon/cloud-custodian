@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("@my_deps_gcp//:requirements.bzl", "all_requirements", "requirement")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -15,7 +16,21 @@ py_library(
     data = ["data/credentials.json"],
     srcs_version = "PY2AND3",
     tags = ["c7n_gcp_test"],
-    deps = [":c7n_gcp_tests"],
+    deps = [
+        ":c7n_gcp_tests",
+        requirement("pytest"),
+        requirement("atomicwrites"),
+        requirement("py"),
+        requirement("attrs"),
+        requirement("pluggy"),
+        requirement("importlib_metadata"),
+        requirement("zipp"),
+        requirement("more_itertools"),
+        requirement("packaging"),
+        requirement("mock"),
+        requirement("pyrsistent"),
+    ]
+    # + all_requirements,
 ) for test_file in glob(["test_*.py"])]
 
 # bazel test //tools/c7n_gcp/tests:c7n_gcp_tests_run
