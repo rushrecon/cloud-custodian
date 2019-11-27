@@ -12,8 +12,7 @@ google-auth-httplib2>=0.0.3
 google-cloud-logging>=1.6.0
 google-cloud-monitoring>=0.3.0
 
-pytest
-atomicwrites
+# Test dependencies (gcp specific):
 py
 attrs
 pluggy
@@ -21,5 +20,4 @@ importlib_metadata
 zipp
 more_itertools
 packaging
-mock
 pyrsistent

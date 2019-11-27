@@ -2,17 +2,6 @@
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
-# https://github.com/atlassian/bazel-tools/tree/master/multirun
-http_archive(
-    name = "com_github_atlassian_bazel_tools",
-    strip_prefix = "bazel-tools-b69e7d9844d1aa4908c5cb445fdba78a8932e4c6",
-    urls = ["https://github.com/atlassian/bazel-tools/archive/b69e7d9844d1aa4908c5cb445fdba78a8932e4c6.tar.gz"],
-)
-
-load("@com_github_atlassian_bazel_tools//:multirun/deps.bzl", "multirun_dependencies")
-
-multirun_dependencies()
-
 # https://github.com/bazelbuild/rules_python
 git_repository(
     name = "rules_python",
@@ -30,25 +19,16 @@ load("@rules_python//python:pip.bzl", "pip_repositories")
 
 pip_repositories()
 
-load("@rules_python//python:pip.bzl", "pip_import", "pip3_import")
+load("@rules_python//python:pip.bzl", "pip3_import")
 
 pip3_import(
-    name = "my_deps",
+    name = "pip_deps",
     requirements = "//:requirements-bazel-dev.txt",
 )
 
-pip3_import(
-    name = "my_deps_gcp",
-    requirements = "//tools/c7n_gcp:requirements.txt",
-)
+load("@pip_deps//:requirements.bzl", "pip_install")
 
-load("@my_deps//:requirements.bzl", pip_install_base = "pip_install")
-
-pip_install_base()
-
-load("@my_deps_gcp//:requirements.bzl", pip_install_gcp = "pip_install")
-
-pip_install_gcp()
+pip_install()
 
 local_repository(
     name = "c7n",

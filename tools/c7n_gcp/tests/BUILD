@@ -1,13 +1,31 @@
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
-load("@my_deps_gcp//:requirements.bzl", "all_requirements", "requirement")
+load("@pip_deps//:requirements.bzl", "requirement")
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//visibility:private"])
 
 py_library(
-    name = "c7n_gcp_tests",
-    srcs = glob(["**/*.py"]),
+    name = "gcp_common",
+    srcs = [
+        "gcp_common.py",
+        "recorder.py"
+    ],
     srcs_version = "PY2AND3",
-    deps = ["@c7n_gcp"],
+    deps = [
+        "@c7n_gcp",
+        # c7n/testing.py
+        requirement("mock"),
+        requirement("pytest"),
+        # c7n/testing.py -> py_test
+        requirement("attrs"),
+        requirement("importlib_metadata"),
+        requirement("more_itertools"),
+        requirement("packaging"),
+        requirement("pluggy"),
+        requirement("py"),
+        requirement("zipp"),
+        # c7n/testing.py -> c7n/schema.py -> jsonschema
+        requirement("pyrsistent"),
+    ],
 )
 
 [py_test(
@@ -15,26 +33,11 @@ py_library(
     srcs = [test_file],
     data = ["data/credentials.json"],
     srcs_version = "PY2AND3",
-    tags = ["c7n_gcp_test"],
     deps = [
-        ":c7n_gcp_tests",
-        requirement("pytest"),
-        requirement("atomicwrites"),
-        requirement("py"),
-        requirement("attrs"),
-        requirement("pluggy"),
-        requirement("importlib_metadata"),
-        requirement("zipp"),
-        requirement("more_itertools"),
-        requirement("packaging"),
-        requirement("mock"),
-        requirement("pyrsistent"),
-    ]
-    # + all_requirements,
+        ":gcp_common",
+    ],
 ) for test_file in glob(["test_*.py"])]
 
-# bazel test //tools/c7n_gcp/tests:c7n_gcp_tests_run
 test_suite(
-    name = "c7n_gcp_tests_run",
-    tags = ["c7n_gcp_test"],
+    name = "tests",
 )
