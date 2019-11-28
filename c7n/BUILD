@@ -20,3 +20,241 @@ py_library(
         requirement("certifi"),
     ],
 )
+
+py_library(
+    name = "exceptions",
+    srcs = [
+        "exceptions.py",
+    ],
+)
+
+py_library(
+    name = "actions",
+    srcs = glob(["actions/*.py"]),
+)
+
+py_library(
+    name = "resources",
+    srcs = glob(["resources/*.py"]),
+    deps = [
+        ":actions",
+        ":query",
+        ":credentials",
+        ":log",
+    ]
+)
+
+py_library(
+    name = "log",
+    srcs = ["log.py"],
+)
+
+py_library(
+    name = "tags",
+    srcs = ["tags.py"],
+)
+
+py_library(
+    name = "credentials",
+    srcs = ["credentials.py"],
+)
+
+py_library(
+    name = "query",
+    srcs = ["query.py"],
+    deps = [
+        ":tags",
+    ]
+)
+
+py_library(
+    name = "filters",
+    srcs = glob(["filters/*.py"]),
+    deps = [
+        ":executor",
+        ":manager",
+    ]
+)
+
+py_library(
+    name = "manager",
+    srcs = [
+        "manager.py",
+    ],
+    deps = [
+        ":cache",
+    ],
+)
+
+py_library(
+    name = "cache",
+    srcs = [
+        "cache.py",
+    ],
+)
+
+py_library(
+    name = "utils",
+    srcs = [
+        "utils.py",
+    ],
+    deps = [
+        ":ipaddress",
+        ":config",
+    ],
+)
+
+py_library(
+    name = "registry",
+    srcs = [
+        "registry.py",
+    ],
+)
+
+py_library(
+    name = "ipaddress",
+    srcs = [
+        "ipaddress.py",
+    ],
+)
+
+py_library(
+    name = "config",
+    srcs = [
+        "config.py",
+    ],
+)
+
+py_library(
+    name = "output",
+    srcs = [
+        "output.py",
+    ],
+    deps = [
+        ":exceptions",
+        ":registry",
+        ":utils",
+    ],
+)
+
+py_library(
+    name = "version",
+    srcs = [
+        "version.py",
+    ],
+)
+
+py_library(
+    name = "ctx",
+    srcs = [
+        "ctx.py",
+    ],
+    deps = [
+        ":output",
+        ":version",
+        ":utils",
+    ],
+)
+
+py_library(
+    name = "cwe",
+    srcs = [
+        "cwe.py",
+    ],
+    deps = [
+        ":ctx",
+    ],
+)
+
+py_library(
+    name = "provider",
+    srcs = [
+        "provider.py",
+    ],
+)
+
+py_library(
+    name = "policy",
+    srcs = [
+        "policy.py",
+    ],
+    deps = [
+        ":resources",
+        ":cwe",
+        ":provider",
+    ],
+)
+
+py_library(
+    name = "logs_support",
+    srcs = [
+        "logs_support.py",
+    ],
+)
+
+py_library(
+    name = "mu",
+    srcs = [
+        "mu.py",
+    ],
+    deps = [
+        ":logs_support",
+    ]
+)
+
+py_library(
+    name = "executor",
+    srcs = [
+        "executor.py",
+    ],
+)
+
+py_library(
+    name = "lookup",
+    srcs = [
+        "lookup.py",
+    ],
+)
+
+py_library(
+    name = "schema",
+    srcs = [
+        "schema.py",
+    ],
+    deps = [
+        ":resolver",
+        ":filters",
+        ":structure",
+    ],
+)
+
+py_library(
+    name = "resolver",
+    srcs = [
+        "resolver.py",
+    ],
+)
+
+py_library(
+    name = "structure",
+    srcs = [
+        "structure.py",
+    ],
+)
+
+py_library(
+    name = "testing",
+    srcs = [
+        "testing.py",
+    ],
+    deps = [
+        ":policy",
+        ":schema",
+        requirement("mock"),
+        requirement("pytest"),
+        # transitive: py_test
+        requirement("packaging"),
+        requirement("pluggy"),
+        requirement("py"),
+    ],
+)

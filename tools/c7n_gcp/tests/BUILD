@@ -7,24 +7,13 @@ py_library(
     name = "gcp_common",
     srcs = [
         "gcp_common.py",
-        "recorder.py"
+        "recorder.py",
     ],
     srcs_version = "PY2AND3",
     deps = [
-        "@c7n_gcp",
-        # c7n/testing.py
-        requirement("mock"),
-        requirement("pytest"),
-        # c7n/testing.py -> py_test
-        requirement("attrs"),
-        requirement("importlib_metadata"),
-        requirement("more_itertools"),
-        requirement("packaging"),
-        requirement("pluggy"),
-        requirement("py"),
-        requirement("zipp"),
-        # c7n/testing.py -> c7n/schema.py -> jsonschema
-        requirement("pyrsistent"),
+        "@c7n//:testing",
+        "@c7n_gcp//:client",
+        "@c7n_gcp//:handler", # for test_mu_gcp.py only
     ],
 )
 
@@ -33,9 +22,7 @@ py_library(
     srcs = [test_file],
     data = ["data/credentials.json"],
     srcs_version = "PY2AND3",
-    deps = [
-        ":gcp_common",
-    ],
+    deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 
 test_suite(

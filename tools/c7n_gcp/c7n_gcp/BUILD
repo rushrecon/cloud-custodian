@@ -23,3 +23,108 @@ py_library(
         requirement("google-cloud-monitoring"),
     ],
 )
+
+py_library(
+    name = "provider",
+    srcs = ["provider.py"],
+    deps = [
+        "@c7n//:registry",
+        "@c7n//:provider",
+        ":client",
+    ],
+)
+
+py_library(
+    name = "handler",
+    srcs = [
+        "handler.py",
+    ],
+    deps = [
+        ":entry",
+    ]
+)
+
+py_library(
+    name = "query",
+    srcs = [
+        "query.py",
+    ],
+)
+
+py_library(
+    name = "resources",
+    srcs = glob(["resources/*.py"]),
+    deps = [
+        ":query",
+    ]
+)
+
+py_library(
+    name = "filters",
+    srcs = glob(["filters/*.py"]),
+)
+
+py_library(
+    name = "actions",
+    srcs = glob(["actions/*.py"]),
+    deps = [
+        ":provider",
+        ":filters",
+        "@c7n//:lookup"
+    ]
+)
+
+py_library(
+    name = "output",
+    srcs = ["output.py"],
+    deps = [
+        "@c7n//:output"
+    ],
+)
+
+py_library(
+    name = "mu",
+    srcs = ["mu.py"],
+    deps = [
+        "@c7n//:mu",
+    ]
+)
+
+py_library(
+    name = "policy",
+    srcs = ["policy.py"],
+    deps = [
+        ":mu"
+    ],
+)
+
+py_library(
+    name = "entry",
+    srcs = ["entry.py"],
+    deps = [
+        ":resources",
+        ":actions",
+        ":output",
+        ":policy",
+        "@c7n//:lookup"
+    ],
+)
+
+py_library(
+    name = "client",
+    srcs = ["client.py"],
+    deps = [
+        requirement("cachetools"),
+        requirement("pyasn1"),
+        requirement("pyasn1_modules"),
+        requirement("rsa"),
+
+        requirement("retrying"),
+        requirement("google-api-python-client"),
+        requirement("ratelimiter"),
+        requirement("google-auth"),
+        requirement("google-auth-httplib2"),
+        requirement("google-cloud-logging"),
+        requirement("google-cloud-monitoring"),
+    ],
+)
