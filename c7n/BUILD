@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 
 py_library(
@@ -38,10 +38,10 @@ py_library(
     srcs = glob(["resources/*.py"]),
     deps = [
         ":actions",
-        ":query",
         ":credentials",
         ":log",
-    ]
+        ":query",
+    ],
 )
 
 py_library(
@@ -64,7 +64,7 @@ py_library(
     srcs = ["query.py"],
     deps = [
         ":tags",
-    ]
+    ],
 )
 
 py_library(
@@ -73,7 +73,7 @@ py_library(
     deps = [
         ":executor",
         ":manager",
-    ]
+    ],
 )
 
 py_library(
@@ -99,8 +99,8 @@ py_library(
         "utils.py",
     ],
     deps = [
-        ":ipaddress",
         ":config",
+        ":ipaddress",
     ],
 )
 
@@ -151,8 +151,8 @@ py_library(
     ],
     deps = [
         ":output",
-        ":version",
         ":utils",
+        ":version",
     ],
 )
 
@@ -179,9 +179,9 @@ py_library(
         "policy.py",
     ],
     deps = [
-        ":resources",
         ":cwe",
         ":provider",
+        ":resources",
     ],
 )
 
@@ -199,7 +199,7 @@ py_library(
     ],
     deps = [
         ":logs_support",
-    ]
+    ],
 )
 
 py_library(
@@ -222,8 +222,8 @@ py_library(
         "schema.py",
     ],
     deps = [
-        ":resolver",
         ":filters",
+        ":resolver",
         ":structure",
     ],
 )

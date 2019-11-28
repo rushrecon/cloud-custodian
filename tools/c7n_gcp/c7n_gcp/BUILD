@@ -1,6 +1,6 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 
 py_library(
@@ -28,9 +28,9 @@ py_library(
     name = "provider",
     srcs = ["provider.py"],
     deps = [
-        "@c7n//:registry",
-        "@c7n//:provider",
         ":client",
+        "@c7n//:provider",
+        "@c7n//:registry",
     ],
 )
 
@@ -41,7 +41,7 @@ py_library(
     ],
     deps = [
         ":entry",
-    ]
+    ],
 )
 
 py_library(
@@ -56,7 +56,7 @@ py_library(
     srcs = glob(["resources/*.py"]),
     deps = [
         ":query",
-    ]
+    ],
 )
 
 py_library(
@@ -68,17 +68,17 @@ py_library(
     name = "actions",
     srcs = glob(["actions/*.py"]),
     deps = [
-        ":provider",
         ":filters",
-        "@c7n//:lookup"
-    ]
+        ":provider",
+        "@c7n//:lookup",
+    ],
 )
 
 py_library(
     name = "output",
     srcs = ["output.py"],
     deps = [
-        "@c7n//:output"
+        "@c7n//:output",
     ],
 )
 
@@ -87,14 +87,14 @@ py_library(
     srcs = ["mu.py"],
     deps = [
         "@c7n//:mu",
-    ]
+    ],
 )
 
 py_library(
     name = "policy",
     srcs = ["policy.py"],
     deps = [
-        ":mu"
+        ":mu",
     ],
 )
 
@@ -102,11 +102,11 @@ py_library(
     name = "entry",
     srcs = ["entry.py"],
     deps = [
-        ":resources",
         ":actions",
         ":output",
         ":policy",
-        "@c7n//:lookup"
+        ":resources",
+        "@c7n//:lookup",
     ],
 )
 
@@ -118,7 +118,6 @@ py_library(
         requirement("pyasn1"),
         requirement("pyasn1_modules"),
         requirement("rsa"),
-
         requirement("retrying"),
         requirement("google-api-python-client"),
         requirement("ratelimiter"),

@@ -1,5 +1,4 @@
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
-load("@pip_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -13,7 +12,7 @@ py_library(
     deps = [
         "@c7n//:testing",
         "@c7n_gcp//:client",
-        "@c7n_gcp//:handler", # for test_mu_gcp.py only
+        "@c7n_gcp//:handler",  # for test_mu_gcp.py only
     ],
 )
 
