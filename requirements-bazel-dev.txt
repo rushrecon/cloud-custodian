@@ -17,6 +17,9 @@ pluggy
 packaging
 attrs
 more_itertools
+importlib_metadata
+zipp
+uritemplate
 
 # Optional feature testing in c7n
 psutil==5.6.3

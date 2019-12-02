@@ -267,5 +267,8 @@ py_library(
         requirement("py"),
         requirement("attrs"),
         requirement("more_itertools"),
+        requirement("importlib_metadata"),
+        requirement("zipp"),
+        requirement("uritemplate"),
     ],
 )
