@@ -1,4 +1,16 @@
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+
+# https://github.com/atlassian/bazel-tools/tree/master/multirun
+http_archive(
+    name = "com_github_atlassian_bazel_tools",
+    strip_prefix = "bazel-tools-b69e7d9844d1aa4908c5cb445fdba78a8932e4c6",
+    urls = ["https://github.com/atlassian/bazel-tools/archive/b69e7d9844d1aa4908c5cb445fdba78a8932e4c6.tar.gz"],
+)
+
+load("@com_github_atlassian_bazel_tools//:multirun/deps.bzl", "multirun_dependencies")
+
+multirun_dependencies()
 
 # https://github.com/bazelbuild/rules_python
 git_repository(
