@@ -8,6 +8,7 @@ py_library(
         "gcp_common.py",
         "recorder.py",
     ],
+    testonly = True,
     srcs_version = "PY2AND3",
     deps = [
         "@c7n//:testing",
@@ -16,10 +17,11 @@ py_library(
     ],
 )
 
+
 [py_test(
     name = test_file[:-3],
     srcs = [test_file],
-    data = ["data/credentials.json"],
+    data = glob(["data/**"]),
     srcs_version = "PY2AND3",
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]

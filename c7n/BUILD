@@ -253,6 +253,7 @@ py_library(
     srcs = [
         "testing.py",
     ],
+    testonly = True,
     deps = [
         ":policy",
         ":schema",
