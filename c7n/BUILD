@@ -41,6 +41,8 @@ py_library(
         ":credentials",
         ":log",
         ":query",
+        requirement("botocore"),
+        requirement("boto3"),
     ],
 )
 
@@ -182,6 +184,7 @@ py_library(
         ":cwe",
         ":provider",
         ":resources",
+        requirement("python-dateutil"),
     ],
 )
 
@@ -225,6 +228,9 @@ py_library(
         ":filters",
         ":resolver",
         ":structure",
+        requirement("jsonschema"),
+        # transitive: jsonschema
+        requirement("pyrsistent"),
     ],
 )
 
@@ -252,9 +258,13 @@ py_library(
         ":schema",
         requirement("mock"),
         requirement("pytest"),
+        requirement("jmespath"),
+        requirement("pyyaml"),
         # transitive: py_test
         requirement("packaging"),
         requirement("pluggy"),
         requirement("py"),
+        requirement("attrs"),
+        requirement("more_itertools"),
     ],
 )
