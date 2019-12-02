@@ -256,11 +256,27 @@ class RestStage(query.ChildResourceManager):
         date = 'createdDate'
         universal_taggable = True
         config_type = "AWS::ApiGateway::Stage"
+        arn_type = 'stages'
 
     def get_source(self, source_type):
         if source_type == 'describe-rest-stage':
             return DescribeRestStage(self)
         return super(RestStage, self).get_source(source_type)
+
+    @property
+    def generate_arn(self):
+        self._generate_arn = functools.partial(
+            generate_arn,
+            self.resource_type.service,
+            region=self.config.region)
+        return self._generate_arn
+
+    def get_arns(self, resources):
+        arns = []
+        for r in resources:
+            arns.append(self.generate_arn('/restapis/' + r['restApiId'] +
+             '/stages/' + r[self.get_model().id]))
+        return arns
 
 
 @query.sources.register('describe-rest-stage')

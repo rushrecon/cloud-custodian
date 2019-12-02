@@ -1,12 +1,19 @@
 load("@rules_python//python:defs.bzl", "py_library", "py_test")
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//visibility:private"])
 
 py_library(
-    name = "c7n_gcp_tests",
-    srcs = glob(["**/*.py"]),
+    name = "gcp_common",
+    srcs = [
+        "gcp_common.py",
+        "recorder.py",
+    ],
     srcs_version = "PY2AND3",
-    deps = ["@c7n_gcp"],
+    deps = [
+        "@c7n//:testing",
+        "@c7n_gcp//:client",
+        "@c7n_gcp//:handler",  # for test_mu_gcp.py only
+    ],
 )
 
 [py_test(
@@ -14,12 +21,9 @@ py_library(
     srcs = [test_file],
     data = ["data/credentials.json"],
     srcs_version = "PY2AND3",
-    tags = ["c7n_gcp_test"],
-    deps = [":c7n_gcp_tests"],
+    deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 
-# bazel test //tools/c7n_gcp/tests:c7n_gcp_tests_run
 test_suite(
-    name = "c7n_gcp_tests_run",
-    tags = ["c7n_gcp_test"],
+    name = "tests",
 )
