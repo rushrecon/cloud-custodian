@@ -42,3 +42,4 @@ docs/source/tools/c7n-policystream\.md
 docs/source/*/resources
 bazel-*
 env/
+secrets.sh

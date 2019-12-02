@@ -250,10 +250,10 @@ py_library(
 
 py_library(
     name = "testing",
+    testonly = True,
     srcs = [
         "testing.py",
     ],
-    testonly = True,
     deps = [
         ":policy",
         ":schema",
