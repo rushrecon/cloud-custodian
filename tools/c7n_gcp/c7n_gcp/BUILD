@@ -62,8 +62,8 @@ py_library(
         ":filters",
         ":output",
         ":policy",
-        ":resources",
         ":provider",
+        ":resources",
     ],
 )
 

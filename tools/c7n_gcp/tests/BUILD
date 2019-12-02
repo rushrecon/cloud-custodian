@@ -4,11 +4,11 @@ package(default_visibility = ["//visibility:private"])
 
 py_library(
     name = "gcp_common",
+    testonly = True,
     srcs = [
         "gcp_common.py",
         "recorder.py",
     ],
-    testonly = True,
     srcs_version = "PY2AND3",
     deps = [
         "@c7n//:testing",
@@ -16,7 +16,6 @@ py_library(
         "@c7n_gcp//:handler",  # for test_mu_gcp.py only
     ],
 )
-
 
 [py_test(
     name = test_file[:-3],
