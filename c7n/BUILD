@@ -43,6 +43,9 @@ py_library(
         ":query",
         requirement("botocore"),
         requirement("boto3"),
+        requirement("aws_xray_sdk"),
+        # transitive: aws_xray_sdk
+        requirement("jsonpickle"),
     ],
 )
 
