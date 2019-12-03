@@ -32,3 +32,9 @@ py_binary(
         "//tools/c7n_gcp/c7n_gcp:entry",
     ],
 )
+
+filegroup(
+    name = "generated_tests_runner",
+    srcs = ["_generated_tests_runner.py"],
+    visibility = ["//visibility:public"],
+)
