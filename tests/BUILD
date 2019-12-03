@@ -32,8 +32,8 @@ py_library(
     ),
     data = glob(["data/**/*"]),
     deps = [
-        "@c7n//:testing",
-        "@c7n_gcp//:entry",
+        "//c7n:testing",
+        "//tools/c7n_gcp/c7n_gcp:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),

@@ -9,6 +9,7 @@ py_library(
         "gcp_common.py",
         "recorder.py",
     ],
+    imports = [".."],
     srcs_version = "PY2AND3",
     deps = [
         "//c7n:testing",

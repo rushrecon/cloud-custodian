@@ -39,7 +39,6 @@ py_library(
 py_library(
     name = "client",
     srcs = ["client.py"],
-    imports = [".."],
     deps = [
         requirement("cachetools"),
         requirement("pyasn1"),
