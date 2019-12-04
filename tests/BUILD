@@ -17,12 +17,8 @@ EXCLUDED_TESTS = [
     #+ ['aws', 'azure', 'gcp', 'k8s']
     # Not all cloud modules registered
     "test_provider.py",
-    # ERROR: test_json_diff_pitr (tests.test_revisions.SGDiffLibTest)
-    #c7n.exceptions.PolicyValidationError: securitygroup.filters Invalid filter type {'type': 'json-diff', 'selector': 'date', 'selector_value': '2016/12/11 17:25Z'}
-    "test_revisions.py",
 ]
 
-# TODO: find a way to move section below into /tests package, relative import is major blocker now
 py_library(
     name = "c7n_tests",
     testonly = True,
