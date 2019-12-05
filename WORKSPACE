@@ -35,3 +35,8 @@ local_repository(
     name = "c7n_gcp",
     path = "tools/c7n_gcp/c7n_gcp",
 )
+
+local_repository(
+    name = "c7n_azure",
+    path = "tools/c7n_azure/c7n_azure",
+)

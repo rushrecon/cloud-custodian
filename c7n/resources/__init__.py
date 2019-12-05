@@ -17,6 +17,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import time
+import traceback
 import os
 
 LOADED = False
@@ -109,16 +110,22 @@ def load_resources():
         resources.load_plugins()
     else:
         try:
+            print('Start MAKAKA-azure')
             from c7n_azure.entry import initialize_azure
             initialize_azure()
-        except ImportError:
-            pass
+            print('End MAKAKA-azure')
+        except ImportError as e:
+            print('import error azure')
+            traceback.print_exc()
 
         try:
+            print('Start MAKAKA-gcp')
             from c7n_gcp.entry import initialize_gcp
             initialize_gcp()
+            print('End MAKAKA-gcp')
         except ImportError:
-            pass
+            print('import error gcp')
+            traceback.print_exc()
 
         try:
             from c7n_kube.entry import initialize_kube

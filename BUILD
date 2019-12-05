@@ -33,6 +33,23 @@ py_binary(
     ],
 )
 
+# bazel run :c7n_azure_cli env/azure-sample.yml
+py_binary(
+    name = "c7n_azure_cli",
+    srcs = ["@c7n//:cli.py"],
+    args = [
+        "run",
+        "--cache-period=0",
+        "--output-dir=whatever",
+    ],
+    data = glob(["env/*"]),
+    main = "@c7n//:cli.py",
+    deps = [
+        "@c7n",
+        "@c7n_azure//:entry",
+    ],
+)
+
 filegroup(
     name = "generated_tests_runner",
     srcs = ["_generated_tests_runner.py"],

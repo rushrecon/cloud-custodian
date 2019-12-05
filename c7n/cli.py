@@ -27,6 +27,10 @@ import traceback
 from datetime import datetime
 from dateutil.parser import parse as date_parse
 
+import os
+print('MAKAKA-PYTHON', sys.version)
+# help('modules')
+
 try:
     from setproctitle import setproctitle
 except ImportError:

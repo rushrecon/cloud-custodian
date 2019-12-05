@@ -4,3 +4,7 @@ backports.functools_lru_cache==1.5
 pywin32<226; sys_platform == 'win32'
 azure-functions; python_version >= '3.6'
 parameterized
+#added
+azure-common
+azure-keyvault
+azure-mgmt-resource==4.0.0

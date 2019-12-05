@@ -26,6 +26,7 @@ psutil==5.6.3
 aws_xray_sdk==2.4.2
 
 -r tools/c7n_mailer/requirements.txt
+#changed1234
 -r tools/c7n_azure/requirements.txt
 -r tools/c7n_gcp/requirements.txt
 -r tools/c7n_kube/requirements.txt
