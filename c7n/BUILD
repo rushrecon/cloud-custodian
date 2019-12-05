@@ -78,6 +78,8 @@ py_library(
     deps = [
         ":executor",
         ":manager",
+        # transitive: revisions.py
+        requirement("jsonpatch"),
     ],
 )
 
