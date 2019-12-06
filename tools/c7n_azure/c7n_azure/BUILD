@@ -6,7 +6,7 @@ load("@pip_deps//:requirements.bzl", "requirement")
 py_library(
     name = "c7n_azure_pip_deps",
     deps = [
-        requirement("azure-mgmt-resource"),
+        # requirement("azure-mgmt-resource"),
         requirement("vcrpy"),
         requirement("vcrpy_unittest"),
         requirement("backports.functools_lru_cache"),
@@ -21,8 +21,28 @@ py_library(
     name = "entry",
     srcs = ["entry.py"],
     deps = [
-        ":c7n_azure_pip_deps",
-        ":c7n_azure_rest"
+        requirement("azure-keyvault"),
+        requirement("azure-common"),
+        ":provider",
+        # ":c7n_azure_pip_deps",
+        # ":c7n_azure_rest"
+    ]
+)
+
+py_library(
+    name = "provider",
+    srcs = ["provider.py"],
+    deps = [
+        ":session",
+    ]
+)
+
+py_library(
+    name = "session",
+    srcs = ["session.py"],
+    deps = [
+        # ":c7n_azure_pip_deps",
+        # ":c7n_azure_rest"
     ]
 )
 
@@ -39,9 +59,7 @@ py_library(
         "handler.py",
         "output.py",
         "policy.py",
-        "provider.py",
         "query.py",
-        "session.py",
         "storage_utils.py",
         "tags.py",
         "utils.py"
