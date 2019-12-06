@@ -2,11 +2,11 @@
 #
 
 ifndef VIRTUALENV
-VIRTUALENV = docs
+VIRTUALENV = venv
 endif
 
 # You can set these variables from the command line.
-SPHINXBINS    ?= .tox/$(VIRTUALENV)/bin
+SPHINXBINS    ?= $(VIRTUALENV)/bin
 SRCDIR        ?= docs/source
 SPHINXOPTS    ?=
 SPHINXBUILD   ?= $(SPHINXBINS)/sphinx-build
