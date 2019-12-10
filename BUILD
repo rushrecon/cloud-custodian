@@ -38,3 +38,15 @@ filegroup(
     srcs = ["_generated_tests_runner.py"],
     visibility = ["//visibility:public"],
 )
+
+#START Sphinx WIP
+# bazel run :c7n_develop
+py_binary(
+    name = "c7n_develop",
+    srcs = ["setup.py"],
+    args = ["develop"],
+    data = ["README.md"],
+    main = "setup.py",
+)
+
+#END Sphinx
