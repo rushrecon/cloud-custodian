@@ -35,3 +35,26 @@ local_repository(
     name = "c7n_gcp",
     path = "tools/c7n_gcp/c7n_gcp",
 )
+
+pip3_import(
+    name = "my_docs_deps",
+    requirements = "//:requirements-dev-bzl.txt",
+)
+
+load("@my_docs_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
+pip3_import(
+    name = "my_sphinx_deps",
+    requirements = "//:requirements-docs-bzl.txt",
+)
+
+load("@my_sphinx_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
+local_repository(
+    name = "c7n_sphinxext",
+    path = "tools/c7n_sphinxext/c7n_sphinxext",
+)
