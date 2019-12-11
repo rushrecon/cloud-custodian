@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_library", "py_test")
 load("@pip_deps//:requirements.bzl", "requirement")
 
 # TODO: get rid of excluded tests
@@ -52,15 +52,13 @@ py_library(
     srcs = ["//:generated_tests_runner"],
     args = ["--module=tests." + test_file[:-3]],
     main = "_generated_tests_runner.py",
-    tags = ["c7n_test"],
     deps = [":c7n_tests"],
 ) for test_file in glob(
     ["test_*.py"],
     EXCLUDED_TESTS,
 )]
 
-# bazel test :c7n_tests_run
+# bazel test //tests
 test_suite(
-    name = "c7n_tests_run",
-    tags = ["c7n_test"],
+    name = "tests",
 )
