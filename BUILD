@@ -33,6 +33,21 @@ py_binary(
     ],
 )
 
+# bazel run :c7n_mailer_cli env/mailer-config.yml (? --update-lambda)
+py_binary(
+    name = "c7n_mailer_cli",
+    srcs = ["@c7n_mailer//:cli.py"],
+    args = [
+        "--run",
+    ],
+    data = glob(["env/*"]),
+    main = "@c7n_mailer//:cli.py",
+    deps = [
+        "@c7n",
+        "@c7n_mailer//:c7n_mailer_cli",
+    ],
+)
+
 filegroup(
     name = "generated_tests_runner",
     srcs = ["_generated_tests_runner.py"],
