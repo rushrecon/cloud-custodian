@@ -11,3 +11,6 @@ datadog==0.32.0
 sendgrid==6.1.0
 redis==3.3.11
 ldap3==2.6
+#added
+azure-common==1.1.23
+azure-keyvault==1.1.0

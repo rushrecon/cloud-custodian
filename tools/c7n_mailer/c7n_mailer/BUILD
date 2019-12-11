@@ -4,7 +4,7 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 
 py_library(
-    name = "c7n_mailer_deps",
+    name = "c7n_mailer_requirements",
     deps = [
         requirement("boto3"),
         requirement("botocore"),
@@ -19,26 +19,11 @@ py_library(
         requirement("sendgrid"),
         requirement("redis"),
         requirement("ldap3"),
-        ":c7n_mailer_azure",
-        ":c7n_mailer_other_srcs",
     ],
 )
 
 py_library(
-    name = "c7n_mailer_cli",
-    srcs = ["cli.py"],
-    deps = [
-        "@c7n_mailer//:c7n_mailer_deps",
-    ],
-)
-
-py_library(
-    name = "c7n_mailer_azure",
-    srcs = glob(["azure_mailer/**/*"]),
-)
-
-py_library(
-    name = "c7n_mailer_other_srcs",
+    name = "c7n_mailer_core_deps",
     srcs = [
         "__init__.py",
         "datadog_delivery.py",
@@ -54,5 +39,27 @@ py_library(
         "sqs_queue_processor.py",
         "utils.py",
         "utils_email.py",
+    ],
+    deps = [
+        ":c7n_mailer_requirements",
+    ],
+)
+
+py_library(
+    name = "c7n_mailer_azure",
+    srcs = glob(["azure_mailer/*.py"]),
+    deps = [
+        requirement("azure-common"),  # azure.profiles
+        requirement("azure-keyvault"),
+    ],
+)
+
+py_library(
+    name = "c7n_mailer_cli",
+    srcs = ["cli.py"],
+    data = glob(["msg-templates/*.j2"]),
+    deps = [
+        ":c7n_mailer_azure",
+        ":c7n_mailer_core_deps",
     ],
 )

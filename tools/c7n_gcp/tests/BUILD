@@ -17,12 +17,23 @@ py_library(
     ],
 )
 
+py_library(
+    name = "test_data",
+    data = glob(["data/**"]),
+)
+
 [py_test(
     name = test_file[:-3],
-    srcs = [test_file],
-    data = glob(["data/**"]),
-    srcs_version = "PY2AND3",
-    deps = [":gcp_common"],
+    srcs = [
+        "//:generated_tests_runner",
+        test_file,
+    ],
+    args = ["--module=tools.c7n_gcp.tests." + test_file[:-3]],
+    main = "_generated_tests_runner.py",
+    deps = [
+        ":gcp_common",
+        ":test_data",
+    ],
 ) for test_file in glob(["test_*.py"])]
 
 test_suite(

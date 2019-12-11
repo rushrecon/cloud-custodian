@@ -33,12 +33,14 @@ py_binary(
     ],
 )
 
-# bazel run :c7n_mailer_cli env/mailer-config.yml (? --update-lambda)
+# also there is --update-lambda, considering creating a separate rule or removing args
+# bazel run :c7n_mailer_cli env/mailer-config.yml
 py_binary(
     name = "c7n_mailer_cli",
     srcs = ["@c7n_mailer//:cli.py"],
     args = [
         "--run",
+        "-c",
     ],
     data = glob(["env/*"]),
     main = "@c7n_mailer//:cli.py",
