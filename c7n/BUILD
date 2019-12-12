@@ -22,6 +22,46 @@ py_library(
 )
 
 py_library(
+    name = "cli",
+    srcs = [
+        "cli.py",
+    ],
+    deps = [
+        ":commands",
+        ":config",
+        requirement("argcomplete"),
+    ]
+)
+
+py_library(
+    name = "commands",
+    srcs = [
+        "commands.py",
+    ],
+    deps = [
+        ":exceptions",
+        ":policy",
+        ":schema",
+        ":utils",
+        ":config",
+        ":provider",
+        ":resources",
+        requirement("six"),
+        requirement("PyYAML"),
+    ]
+)
+
+py_library(
+    name = "sqsexec",
+    srcs = [
+        "sqsexec.py",
+    ],
+    deps = [
+        ":utils",
+    ]
+)
+
+py_library(
     name = "exceptions",
     srcs = [
         "exceptions.py",
@@ -31,6 +71,30 @@ py_library(
 py_library(
     name = "actions",
     srcs = glob(["actions/*.py"]),
+)
+
+py_library(
+    name = "ufuncs",
+    srcs = glob(["ufuncs/*.py"]),
+)
+
+py_library(
+    name = "reports",
+    srcs = glob(["reports/*.py"]),
+)
+
+py_library(
+    name = "handler",
+    srcs = [
+        "handler.py"
+    ],
+    deps = [
+        ":policy",
+        ":resources",
+        ":utils",
+        ":config",
+        requirement("boto3"),
+    ],
 )
 
 py_library(

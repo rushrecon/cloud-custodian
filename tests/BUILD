@@ -1,14 +1,12 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
+load("//:c7n_py_test.bzl", "c7n_py_test")
 
 # TODO: get rid of excluded tests
 EXCLUDED_TESTS = [
     # AssertionError: 'azure.vm' not found in 'resources:
     # Not all cloud modules registered
     "test_cli.py",
-    #    os.rmdir(path)
-    #OSError: [Errno 30] Read-only file system: '/home/pavel/projects/cloud-custodian/tests/data/placebo/test_notify_resource_prep'
-    "test_notify.py",
     # self.assertTrue(content.endswith("hello world"))
     # AssertionError: False is not true
     "test_output.py",
@@ -20,15 +18,23 @@ EXCLUDED_TESTS = [
 ]
 
 py_library(
-    name = "c7n_tests",
+    name = "c7n_tests_common",
     testonly = True,
-    srcs = glob(
-        ["*.py"],
-        EXCLUDED_TESTS,
-    ),
-    data = glob(["data/**/*"]),
+    srcs = glob([
+        "common.py",
+        "zpill.py",
+        "test_offhours.py",
+        "test_s3.py"
+    ]),
+    data = glob(["data/**/*"]) + [":placebo_data.zip"],
     deps = [
         "//c7n:testing",
+        "//c7n:handler",
+        "//c7n:ufuncs",
+        "//c7n:reports",
+        "//c7n:commands",
+        "//c7n:cli",
+        "//c7n:sqsexec",
         "//tools/c7n_gcp/c7n_gcp:entry",
         requirement("coverage"),
         requirement("placebo"),
@@ -45,22 +51,18 @@ py_library(
         requirement("vcrpy"),
         requirement("wrapt"),
     ],
+    imports = ["../tools/c7n_gcp/."],
 )
 
-[py_test(
+[c7n_py_test(
     name = test_file[:-3],
-    srcs = ["//:generated_tests_runner"],
-    args = ["--module=tests." + test_file[:-3]],
-    main = "_generated_tests_runner.py",
-    tags = ["c7n_test"],
-    deps = [":c7n_tests"],
+    srcs = [test_file],
+    deps = [":c7n_tests_common"],
 ) for test_file in glob(
-    ["test_*.py"],
-    EXCLUDED_TESTS,
+    include = ["test_*.py"],
+    exclude = EXCLUDED_TESTS,
 )]
 
-# bazel test :c7n_tests_run
 test_suite(
     name = "c7n_tests_run",
-    tags = ["c7n_test"],
 )
