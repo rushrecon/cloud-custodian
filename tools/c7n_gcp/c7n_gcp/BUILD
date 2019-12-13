@@ -9,7 +9,7 @@ py_library(
     deps = [
         ":filters",
         ":provider",
-        "@c7n//:lookup",
+        "//c7n:lookup",
     ],
 )
 
@@ -23,8 +23,8 @@ py_library(
     srcs = ["provider.py"],
     deps = [
         ":client",
-        "@c7n//:provider",
-        "@c7n//:registry",
+        "//c7n:provider",
+        "//c7n:registry",
     ],
 )
 
@@ -81,7 +81,7 @@ py_library(
     name = "mu",
     srcs = ["mu.py"],
     deps = [
-        "@c7n//:mu",
+        "//c7n:mu",
     ],
 )
 
@@ -89,7 +89,7 @@ py_library(
     name = "output",
     srcs = ["output.py"],
     deps = [
-        "@c7n//:output",
+        "//c7n:output",
     ],
 )
 

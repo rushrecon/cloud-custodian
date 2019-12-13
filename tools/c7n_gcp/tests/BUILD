@@ -9,11 +9,12 @@ py_library(
         "gcp_common.py",
         "recorder.py",
     ],
+    imports = [".."],
     srcs_version = "PY2AND3",
     deps = [
-        "@c7n//:testing",
-        "@c7n_gcp//:client",
-        "@c7n_gcp//:handler",  # for test_mu_gcp.py only
+        "//c7n:testing",
+        "//tools/c7n_gcp/c7n_gcp:client",
+        "//tools/c7n_gcp/c7n_gcp:handler",  # for test_mu_gcp.py only
     ],
 )
 
