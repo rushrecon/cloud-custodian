@@ -13,6 +13,16 @@ py_library(
     data = glob(["test-templates/*.j2"]),
 )
 
+py_library(
+    name = "test_deps",
+    srcs = ["common.py"],
+    data = ["example.jinja"],
+    deps = [
+        ":azure_mailer",
+        ":test_data",
+    ],
+)
+
 [py_test(
     name = test_file[:-3],
     srcs = [
@@ -20,12 +30,12 @@ py_library(
         test_file,
     ],
     args = ["--module=tools.c7n_mailer.tests." + test_file[:-3]],
+    imports = ["."],
     main = "_generated_tests_runner.py",
     srcs_version = "PY2AND3",
     deps = [
-        ":azure_mailer",
-        ":test_data",
-        "@c7n_mailer//:c7n_mailer_core_deps",
+        ":test_deps",
+        "@c7n_mailer//:c7n_mailer_cli",  # used instead of c7n_mailer_core_deps for testing cli as well
     ],
 ) for test_file in glob(
     ["test_*.py"],
