@@ -26,6 +26,7 @@ py_library(
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 
+# bazel test //tools/c7n_gcp/tests
 test_suite(
     name = "tests",
 )

@@ -63,6 +63,7 @@ py_library(
     exclude = EXCLUDED_TESTS,
 )]
 
+# bazel test //tests
 test_suite(
-    name = "c7n_tests_run",
+    name = "tests",
 )
