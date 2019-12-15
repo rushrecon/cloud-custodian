@@ -33,19 +33,19 @@ py_binary(
     ],
 )
 
-# also there is --update-lambda, considering creating a separate rule or removing args
+# TODO: consider creating a separate rule for --update-lambda or removing args
 # bazel run :c7n_mailer_cli env/mailer-config.yml
 py_binary(
     name = "c7n_mailer_cli",
-    srcs = ["@c7n_mailer//:cli.py"],
+    srcs = ["//tools/c7n_mailer/c7n_mailer:cli.py"],
     args = [
         "--run",
         "-c",
     ],
     data = glob(["env/*"]),
-    main = "@c7n_mailer//:cli.py",
+    main = "//tools/c7n_mailer/c7n_mailer:cli.py",
     deps = [
-        "@c7n",
-        "@c7n_mailer//:c7n_mailer_cli",
+        "//c7n",
+        "//tools/c7n_mailer/c7n_mailer:c7n_mailer_cli",
     ],
 )

@@ -25,18 +25,3 @@ pip3_import(
 load("@pip_deps//:requirements.bzl", "pip_install")
 
 pip_install()
-
-local_repository(
-    name = "c7n",
-    path = "c7n",
-)
-
-local_repository(
-    name = "c7n_gcp",
-    path = "tools/c7n_gcp/c7n_gcp",
-)
-
-local_repository(
-    name = "c7n_mailer",
-    path = "tools/c7n_mailer/c7n_mailer",
-)
