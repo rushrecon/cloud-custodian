@@ -49,9 +49,3 @@ py_binary(
         "@c7n_mailer//:c7n_mailer_cli",
     ],
 )
-
-filegroup(
-    name = "generated_tests_runner",
-    srcs = ["_generated_tests_runner.py"],
-    visibility = ["//visibility:public"],
-)
