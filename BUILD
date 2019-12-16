@@ -36,14 +36,8 @@ py_binary(
     ],
 )
 
-#START Sphinx WIP
-# bazel run :c7n_develop
-py_binary(
-    name = "c7n_develop",
-    srcs = ["setup.py"],
-    args = ["develop"],
-    data = ["README.md"],
-    main = "setup.py",
+filegroup(
+    name = "ext_files",
+    data = glob(["docs/**/*"]),
+    visibility = ["//visibility:public"],
 )
-
-#END Sphinx
