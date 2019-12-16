@@ -33,6 +33,8 @@ _py_test = rule(
 
 def c7n_py_test(name, **kwargs):
     inner_test_name = name + ".inner"
-    kwargs.update(main = name + ".py", tags = ["manual"])
+    tags = kwargs.pop("tags", default = [])
+    main_name = kwargs.pop("name", default = name + ".py")
+    kwargs.update(main = main_name, tags = tags + ["manual"])
     py_test(name = inner_test_name, **kwargs)
-    _py_test(name = name, test = inner_test_name)
+    _py_test(name = name, tags = tags, test = inner_test_name)
