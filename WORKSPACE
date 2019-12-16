@@ -58,3 +58,8 @@ local_repository(
     name = "c7n_sphinxext",
     path = "tools/c7n_sphinxext/c7n_sphinxext",
 )
+
+local_repository(
+    name = "c7n_azure",
+    path = "tools/c7n_azure/c7n_azure",
+)

@@ -2,6 +2,22 @@ package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
+load("@my_docs_deps//:requirements.bzl", "requirement")
+
+py_library(
+    name = "c7n_gcp",
+    srcs = glob(["**/*.py"]),
+    deps = [
+        requirement("retrying"),
+        requirement("google-api-python-client"),
+        requirement("ratelimiter"),
+        requirement("google-auth"),
+        requirement("google-auth-httplib2"),
+        requirement("google-cloud-logging"),
+        requirement("google-cloud-monitoring"),
+        requirement("cachetools"),
+    ],
+)
 
 py_library(
     name = "actions",

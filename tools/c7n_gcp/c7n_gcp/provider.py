@@ -21,6 +21,7 @@ from functools import partial
 
 @clouds.register('gcp')
 class GoogleCloud(Provider):
+    print("DEBUG: in GoogleCloud")
 
     display_name = 'GCP'
     resource_prefix = 'gcp'
