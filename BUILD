@@ -31,4 +31,7 @@ py_binary(
         "//c7n",
         "//tools/c7n_gcp/c7n_gcp:entry",
     ],
+    imports = [
+        "tools/c7n_gcp"
+    ],
 )
