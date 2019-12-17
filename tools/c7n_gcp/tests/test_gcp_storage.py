@@ -43,7 +43,3 @@ class BucketTest(BaseTest):
         self.assertEqual(bucket['id'], "staging.cloud-custodian.appspot.com")
         self.assertEqual(bucket['storageClass'], "STANDARD")
         self.assertEqual(bucket['location'], "EU")
-
-
-if __name__ == "__main__":
-    BaseTest.main()

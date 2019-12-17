@@ -99,7 +99,3 @@ class NameResolver(BaseTest):
             "storage",
             {'name': 'c7n-org-devtest'},
             "//storage.googleapis.com/c7n-org-devtest")
-
-
-if __name__ == "__main__":
-    BaseTest.main()
