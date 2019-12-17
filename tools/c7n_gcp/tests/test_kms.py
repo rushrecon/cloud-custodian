@@ -220,7 +220,3 @@ class KmsCryptoKeyVersionTest(BaseTest):
 
         self.assertEqual(resources[0]['name'], resource_name)
         self.assertEqual(resources[0][parent_annotation_key]['name'], parent_resource_name)
-
-
-if __name__ == "__main__":
-    BaseTest.main()

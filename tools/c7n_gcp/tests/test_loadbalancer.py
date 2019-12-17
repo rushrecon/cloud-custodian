@@ -693,7 +693,3 @@ class LoadBalancingGlobalAddressTest(BaseTest):
         self.assertEqual(len(instances), 1)
         self.assertEqual(instances[0]['kind'], 'compute#address')
         self.assertEqual(instances[0]['name'], 'custodian-global-address-0')
-
-
-if __name__ == "__main__":
-    BaseTest.main()

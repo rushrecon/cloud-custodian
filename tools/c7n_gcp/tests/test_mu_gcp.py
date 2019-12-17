@@ -259,7 +259,3 @@ class FunctionTest(BaseTest):
             # function requirements building primarily.
             time.sleep(42)
         p.get_execution_mode().deprovision()
-
-
-if __name__ == "__main__":
-    BaseTest.main()

@@ -78,7 +78,3 @@ class NotifyTest(BaseTest):
                                  'nW6B2iHadon/69K5trguxb+b/OPWq9/6i+/JcvDoDq+'
                                  'K4Yz6ZfWVTbUcucwX+HoY5Q==')
                     }}})
-
-
-if __name__ == "__main__":
-    BaseTest.main()

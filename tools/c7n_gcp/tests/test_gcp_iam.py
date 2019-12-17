@@ -88,7 +88,3 @@ class IAMRoleTest(BaseTest):
         })
 
         self.assertEqual(resource['name'], 'roles/{}'.format(name))
-
-
-if __name__ == "__main__":
-    BaseTest.main()

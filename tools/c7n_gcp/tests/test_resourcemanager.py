@@ -171,7 +171,3 @@ class ProjectTest(BaseTest):
         actual_bindings = client.execute_query('getIamPolicy', get_iam_policy_params)
         expected_bindings[0]['members'].append('user:mediapills@gmail.com')
         self.assertEqual(actual_bindings['bindings'], expected_bindings)
-
-
-if __name__ == "__main__":
-    BaseTest.main()
