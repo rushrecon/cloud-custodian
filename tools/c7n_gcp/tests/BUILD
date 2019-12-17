@@ -1,4 +1,5 @@
-load("@rules_python//python:defs.bzl", "py_library", "py_test")
+load("@rules_python//python:defs.bzl", "py_library")
+load("//:c7n_py_test.bzl", "c7n_py_test")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -18,11 +19,12 @@ py_library(
     ],
 )
 
-[py_test(
+[c7n_py_test(
     name = test_file[:-3],
     srcs = [test_file],
     data = glob(["data/**"]),
     srcs_version = "PY2AND3",
+    imports = ["."],
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 
