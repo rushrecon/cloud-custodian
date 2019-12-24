@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
-load("@my_docs_deps//:requirements.bzl", "requirement")
+load("@my_sphinx_deps//:requirements.bzl", "requirement")
 
 py_library(
     name = "c7n_gcp",
