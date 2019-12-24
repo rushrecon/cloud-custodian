@@ -36,8 +36,6 @@ from c7n.provider import clouds
 
 log = logging.getLogger('c7nsphinx')
 
-# print("DEBUG: docgen - onload()")
-
 
 def template_underline(value, under="="):
     return len(value) * under
@@ -60,8 +58,6 @@ class SafeNoAliasDumper(yaml.SafeDumper):
 
 
 class CustodianDirective(Directive):
-    # print("DEBUG: entering CustodianDirective")
-
     has_content = True
     required_arguments = 1
 
@@ -92,7 +88,6 @@ class CustodianDirective(Directive):
 
 
 class CustodianResource(CustodianDirective):
-    # print("DEBUG: entering CustodianResource")
 
     @classmethod
     def render_resource(cls, resource_path):
@@ -136,7 +131,6 @@ INITIALIZED = False
 
 
 def init():
-    # print("DEBUG: entering __init__")
     global INITIALIZED
     if INITIALIZED:
         return
@@ -167,9 +161,6 @@ def setup(app):
 # @click.option('--output-dir', type=click.Path(), required=True)
 # @click.option('--group-by')
 def main(provider, output_dir, group_by):
-    # print("DEBUG: entering __main__")
-    # print(provider, output_dir, group_by)
-
     import sys
     print(sys.argv)
     try:
@@ -189,8 +180,6 @@ def _main(provider, output_dir, group_by):
     """Generate RST docs for a given cloud provider's resources
     """
     env = init()
-
-    # print("DEBUG: inside __main__")
 
     logging.basicConfig(level=logging.INFO)
     output_dir = os.path.abspath(output_dir)
@@ -214,7 +203,6 @@ def _main(provider, output_dir, group_by):
     # Create individual resources pages
     for r in provider_class.resources.values():
         rpath = resource_file_name(output_dir, r)
-        # print("DEBUG: inside __main__ rpath " + rpath)
 
         with open(rpath, 'w') as fh:
             t = env.get_template('provider-resource.rst')
@@ -287,5 +275,4 @@ def _main(provider, output_dir, group_by):
 if __name__ == '__main__':
     import sys
 
-    print(sys.argv)
     main(sys.argv[2], sys.argv[1], sys.argv[3])

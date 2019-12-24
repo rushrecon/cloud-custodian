@@ -1,3 +1,5 @@
+package(default_visibility = ["//visibility:public"])
+
 load("@rules_python//python:defs.bzl", "py_binary")
 
 # bazel run :c7n_aws_cli env/aws-sample.yml
@@ -39,8 +41,25 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-filegroup(
+load("//tools/c7n_sphinxext/c7n_sphinxext:foo.bzl", "foo_library")
+
+foo_library(
     name = "ext_files",
-    data = glob(["docs/**/*"]),
-    visibility = ["//visibility:public"],
+    srcs = glob(["docs/**/*"]),
+)
+
+foo_library(
+    name = "copy_from_tools",
+    srcs = [
+        "tools/c7n_guardian/readme.md",
+        "tools/c7n_logexporter/README.md",
+        "tools/c7n_mailer/README.md",
+        "tools/c7n_org/README.md",
+        "tools/c7n_policystream/README.md",
+        "tools/c7n_salactus/README.md",
+        "tools/c7n_trailcreator/readme.md",
+        "tools/cask/readme.md",
+        "tools/omnissm/README.md",
+        "tools/omnissm/assets/omnissm.svg",
+    ],
 )
