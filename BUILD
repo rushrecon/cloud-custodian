@@ -60,3 +60,26 @@ foo_library(
         "tools/omnissm/assets/omnissm.svg",
     ],
 )
+
+load("//tools/c7n_sphinxext/c7n_sphinxext:foo.bzl", "foo_library")
+
+foo_library(
+    name = "ext_files",
+    srcs = glob(["docs/**/*"]),
+)
+
+foo_library(
+    name = "copy_from_tools",
+    srcs = [
+        "tools/c7n_guardian/readme.md",
+        "tools/c7n_logexporter/README.md",
+        "tools/c7n_mailer/README.md",
+        "tools/c7n_org/README.md",
+        "tools/c7n_policystream/README.md",
+        "tools/c7n_salactus/README.md",
+        "tools/c7n_trailcreator/readme.md",
+        "tools/cask/readme.md",
+        "tools/omnissm/README.md",
+        "tools/omnissm/assets/omnissm.svg",
+    ],
+)
