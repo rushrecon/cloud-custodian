@@ -7,12 +7,10 @@ py_library(
     name = "kube_common_deps",
     testonly = True,
     deps = [
-        "//tools/c7n_kube/c7n_kube:client",
         "//tools/c7n_kube/c7n_kube:entry",
         "//tools/c7n_kube/c7n_kube:filters",
         "//tools/c7n_kube/c7n_kube:provider",
         "//tools/c7n_kube/c7n_kube:query",
-        "//tools/c7n_kube/c7n_kube/actions:actions_shared",
     ],
 )
 

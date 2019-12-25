@@ -4,6 +4,41 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 
 py_library(
+    name = "actions_core",
+    srcs = [
+        "actions/core.py",
+    ],
+    deps = [
+        "//c7n:actions",
+        "//c7n:exceptions",
+        "//c7n:utils",
+    ],
+)
+
+py_library(
+    name = "actions_labels",
+    srcs = [
+        "actions/labels.py",
+    ],
+    deps = [
+        ":actions_core",
+        "//c7n:utils",
+    ],
+)
+
+py_library(
+    name = "actions_shared",
+    srcs = [
+        "actions/shared.py",
+    ],
+    deps = [
+        ":actions_core",
+        ":actions_labels",
+        "//tools/c7n_kube/c7n_kube:provider",
+    ],
+)
+
+py_library(
     name = "resources_apps",
     srcs = [
         "resources/apps/daemonset.py",
@@ -59,10 +94,10 @@ py_library(
     name = "entry",
     srcs = ["entry.py"],
     deps = [
+        ":actions_shared",
         ":resources_apps",
         ":resources_core",
         ":resources_crd",
-        "//tools/c7n_kube/c7n_kube/actions:actions_shared",
     ],
 )
 
