@@ -1,5 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("//:c7n_py_test.bzl", "c7n_py_test")
+load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
+
 
 package(default_visibility = ["//visibility:private"])
 
@@ -16,6 +18,16 @@ py_library(
         "//c7n:testing",
         "//tools/c7n_gcp/c7n_gcp:client",
         "//tools/c7n_gcp/c7n_gcp:handler",  # for test_mu_gcp.py only
+    ],
+)
+
+# bazel build //:c7n_wheel
+py_wheel(
+    name = "c7n_wheel",
+    distribution = "c7n_wheel",
+    version = "0.0.1",
+    deps = [
+        "//c7n",
     ],
 )
 

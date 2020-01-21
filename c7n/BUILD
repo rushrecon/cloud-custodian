@@ -1,7 +1,31 @@
 package(default_visibility = ["//visibility:public"])
 
+CORE_PIP_DEPS_REP = "core_pip_deps"
+
 load("@rules_python//python:defs.bzl", "py_library")
-load("@pip_deps//:requirements.bzl", "requirement")
+load("@core_pip_deps//:requirements.bzl", "all_requirements", "requirement")
+load("@rules_python//experimental/python:wheel.bzl", "py_package")
+
+#c7n_core_requirements = [requirement(i) for i in c7n_core_requirements]
+
+c7n_core_requirements = [i for i in all_requirements]
+
+c7n_core_requirements = ["//c7n"] + c7n_core_requirements
+
+py_library(
+    name = "c7n_core_lib",
+    #    srcs = c7n_core_requirements,
+    deps = c7n_core_requirements,
+)
+
+py_package(
+    name = "core_pkg",
+    # Only include these Python packages.
+    deps = [
+        "c7n",
+        ":c7n_core_lib",
+    ],
+)
 
 py_library(
     name = "c7n",
@@ -30,7 +54,7 @@ py_library(
         ":commands",
         ":config",
         requirement("argcomplete"),
-    ]
+    ],
 )
 
 py_library(
@@ -39,16 +63,16 @@ py_library(
         "commands.py",
     ],
     deps = [
+        ":config",
         ":exceptions",
         ":policy",
-        ":schema",
-        ":utils",
-        ":config",
         ":provider",
         ":resources",
+        ":schema",
+        ":utils",
         requirement("six"),
         requirement("PyYAML"),
-    ]
+    ],
 )
 
 py_library(
@@ -58,7 +82,7 @@ py_library(
     ],
     deps = [
         ":utils",
-    ]
+    ],
 )
 
 py_library(
@@ -86,13 +110,13 @@ py_library(
 py_library(
     name = "handler",
     srcs = [
-        "handler.py"
+        "handler.py",
     ],
     deps = [
+        ":config",
         ":policy",
         ":resources",
         ":utils",
-        ":config",
         requirement("boto3"),
     ],
 )
