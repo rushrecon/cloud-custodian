@@ -31,20 +31,29 @@ py_wheel(
 )
 
 # bazel build //:c7n_gcp_wheel
-#py_wheel(
-#    name = "c7n_gcp_wheel",
-#    distribution = "c7n_gcp",
-#    version = "0.8.45.4",
-#    deps = [
-#        "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
-#    ],
-#)
+py_wheel(
+    name = "c7n_gcp_wheel",
+    distribution = "c7n_gcp",
+    entry_points = {
+        "custodian.resources": [
+            "gcp = c7n_gcp.entry:initialize_gcp",
+        ],
+    },
+    strip_path_prefixes = [
+        "tools/c7n_gcp/",
+    ],
+    version = "0.3.8",
+    deps = [
+        "//tools/c7n_gcp/c7n_gcp",
+        "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
+    ],
+)
 
 #sh_binary(
 #    name = "c7n_wheel",
 #    srcs = ["wheelmaker.sh ."],
 #)
-
+#
 #sh_binary(
 #    name = "c7n_gcp_wheel",
 #    srcs = ["wheelmaker.sh"],
@@ -62,13 +71,16 @@ py_wheel(
 #        ".",
 #    ],
 #)
-
+#
 #py_wheel(
 #    name = "c7n_gcp_wheel",
-#    distribution = "c7n",
-#    version = "0.0.2",
+#    distribution = "c7n_gcp",
+#    strip_path_prefixes = [
+#        "tools/c7n_gcp/",
+#    ],
+#    version = "0.3.8",
 #    deps = [
-#        ":c7n_wheel",
+#        #        ":c7n_wheel",
 #        "//tools/c7n_gcp/c7n_gcp",
 #    ],
 #)

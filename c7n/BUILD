@@ -10,7 +10,7 @@ load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
 c7n_core_requirements = [i for i in all_requirements]
 
-c7n_core_requirements = ["//c7n"] + c7n_core_requirements
+c7n_core_requirements = c7n_core_requirements
 
 py_library(
     name = "c7n_core_lib",
