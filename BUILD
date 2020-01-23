@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary")
+load("//:py_wheel_extension.bzl", "py_wheel_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 
 # bazel run :c7n_aws_cli env/aws-sample.yml
@@ -18,20 +19,20 @@ py_binary(
 )
 
 # bazel build //:c7n_wheel
-py_wheel(
-    name = "c7n_wheel",
-    console_scripts = {
-        "custodian": "c7n.cli:main",
-    },
-    distribution = "c7n",
-    version = "0.8.45.4",
-    deps = [
-        "//c7n:core_pkg",
-    ],
-)
+#py_wheel_ext(
+#    name = "c7n_wheel",
+#    console_scripts = {
+#        "custodian": "c7n.cli:main",
+#    },
+#    distribution = "c7n",
+#    version = "0.8.45.4",
+#    deps = [
+#        "//c7n:core_pkg",
+#    ],
+#)
 
 # bazel build //:c7n_gcp_wheel
-py_wheel(
+py_wheel_ext(
     name = "c7n_gcp_wheel",
     distribution = "c7n_gcp",
     entry_points = {

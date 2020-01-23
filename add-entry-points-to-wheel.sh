@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Add additional entry points into the entry-points.txt file
+
+DISTR_INFO_DIR=$1.dist-info
+WHL_FILE_PATH=$2
+ENTRY_POINTS_VALUES=$3
+
+ENTRY_POINTS_PATH=$DISTR_INFO_DIR/entry-points.txt
+
+mkdir $DISTR_INFO_DIR
+
+unzip -p $WHL_FILE_PATH/$ENTRY_POINTS_PATH >  $ENTRY_POINTS_PATH
+
+[ ! -s $ENTRY_POINTS_PATH ] || echo -e "\n" >> $ENTRY_POINTS_PATH
+
+echo $ENTRY_ENTRY_POINTS_VALUES >> $ENTRY_POINTS_PATH
+
+zip $WHL_FILE_PATH/$ENTRY_POINTS_PATH $ENTRY_POINTS_PATH
+
+rm -r $DISTR_INFO_DIR
