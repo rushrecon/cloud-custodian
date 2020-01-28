@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary")
-load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext" )
+load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 
 # bazel run :c7n_aws_cli env/aws-sample.yml
@@ -18,15 +18,10 @@ py_binary(
     ],
 )
 
-py_binary(
-    name = "file_hash",
-    srcs = ["file_hash.py"]
-)
-
 sh_binary(
     name = "run-add-ep-script",
     srcs = ["add-entry-points-to-wheel.sh"],
-    data = ["file_hash.py"]
+    data = ["file_hash.py"],
 )
 
 # bazel build //:c7n_wheel
@@ -42,7 +37,7 @@ py_wheel(
     ],
 )
 
-# sudo bazel build c7n_gcp_wheel
+# bazel build c7n_gcp_wheel
 py_wheel_entry_points_ext(
     name = "c7n_gcp_wheel",
     distribution = "c7n_gcp",
@@ -60,33 +55,6 @@ py_wheel_entry_points_ext(
         "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
     ],
 )
-
-#sh_binary(
-#    name = "c7n_wheel",
-#    srcs = ["wheelmaker.sh ."],
-#)
-
-
-#
-#sh_binary(
-#    name = "c7n_gcp_wheel",
-#    srcs = ["wheelmaker.sh"],
-#    args = [
-#        "/home/yan/PycharmProjects/cloud-custodian",
-#        "tools/c7n_gcp",
-#    ],
-#)
-
-#sh_binary(
-#    name = "c7n_wheel",
-#    srcs = ["wheelmaker.sh"],
-#    args = [
-#        "/home/yan/PycharmProjects/cloud-custodian",
-#        ".",
-#    ],
-#)
-#
-
 
 # bazel run :c7n_gcp_cli env/gcp-sample.yml
 py_binary(

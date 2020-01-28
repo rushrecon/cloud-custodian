@@ -27,6 +27,7 @@ py_library(
         "test_s3.py",
     ]),
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
+    imports = ["../tools/c7n_gcp/."],
     deps = [
         "//c7n:cli",
         "//c7n:commands",
@@ -51,7 +52,6 @@ py_library(
         requirement("vcrpy"),
         requirement("wrapt"),
     ],
-    #    imports = ["../tools/c7n_gcp/."],
 )
 
 [c7n_py_test(

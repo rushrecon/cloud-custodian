@@ -1,23 +1,12 @@
 #!/bin/bash
-
 # Add additional entry points into the entry-points.txt file
 
 DISTR_INFO_DIR=$1.dist-info
 WHL_FILE_PATH=$2
 ENTRY_POINTS_VALUES=$3
 
-
 ENTRY_POINTS_PATH="$DISTR_INFO_DIR/entry_points.txt"
 RECORD_PATH="$DISTR_INFO_DIR/RECORD"
-
-
-
-#cd $(dirname $0)
-
-echo `ls -a`
-
-echo `ls ../`
-
 
 mkdir $DISTR_INFO_DIR
 

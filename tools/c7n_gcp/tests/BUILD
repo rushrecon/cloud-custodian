@@ -1,7 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("//:c7n_py_test.bzl", "c7n_py_test")
-load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
-
 
 package(default_visibility = ["//visibility:private"])
 
@@ -21,22 +19,12 @@ py_library(
     ],
 )
 
-# bazel build //:c7n_wheel
-py_wheel(
-    name = "c7n_wheel",
-    distribution = "c7n_wheel",
-    version = "0.0.1",
-    deps = [
-        "//c7n",
-    ],
-)
-
 [c7n_py_test(
     name = test_file[:-3],
     srcs = [test_file],
     data = glob(["data/**"]),
-    srcs_version = "PY2AND3",
     imports = ["."],
+    srcs_version = "PY2AND3",
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 

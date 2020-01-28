@@ -1,45 +1,25 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
 load("@rules_python//experimental/python:wheel.bzl", "py_package")
-
-
-c7n_gcp_requirements = [i for i in all_requirements]  #+ ["//tools/c7n"]
-
+load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
 
 py_library(
     name = "c7n_gcp_lib",
-    #    srcs = ["entry.py"],
     deps = c7n_gcp_requirements,
 )
 
 py_package(
     name = "gcp_pkg",
-    # Only include these Python packages.
     deps = [
         "c7n_gcp",
         ":c7n_gcp_lib",
     ],
 )
 
-#
 py_library(
     name = "c7n_gcp",
     srcs = glob(["**/*.py"]),
-        deps = [
-            requirement("argcomplete"),
-            requirement("boto3"),
-            requirement("botocore"),
-            requirement("jsonschema"),
-            requirement("PyYAML"),
-            requirement("tabulate"),
-            requirement("jsonpatch"),
-            requirement("futures"),
-            requirement("python-dateutil"),
-            requirement("urllib3"),
-            requirement("certifi"),
-        ],
 )
 
 py_library(
