@@ -36,7 +36,7 @@ py_library(
         "//c7n:sqsexec",
         "//c7n:testing",
         "//c7n:ufuncs",
-        #        "//tools/c7n_gcp/c7n_gcp:entry",
+        "//tools/c7n_gcp/c7n_gcp:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),

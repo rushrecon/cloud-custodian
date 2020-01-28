@@ -5,14 +5,14 @@ def _impl(ctx):
     new_runner = ctx.actions.declare_file(ctx.attr.name)
 
     ctx.actions.run_shell(
-        progress_message = "Patching file content - %s" % old_runner.short_path,
+        progress_message = 'Patching file content - %s' % old_runner.short_path,
         # TODO: replace all *.inner mentions in file_to_run
-        command = "sed $'s/" +
-                  "  args = \[python_program, main_filename\] + args/" +  # search string
-                  "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +  # replacing strings
-                  "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +
-                  "  args = \[python_program, \"-m\", \"unittest\", module_name\] + args/g'" +
-                  " '%s' > '%s' " % (old_runner.path, new_runner.path),
+        command ="sed $'s/" +
+            "  args = \[python_program, main_filename\] + args/" + # search string
+            "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" + # replacing strings
+            "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +
+            "  args = \[python_program, \"-m\", \"unittest\", module_name\] + args/g'" +
+            " '%s' > '%s' " % (old_runner.path, new_runner.path),
         inputs = [old_runner],
         outputs = [new_runner],
     )

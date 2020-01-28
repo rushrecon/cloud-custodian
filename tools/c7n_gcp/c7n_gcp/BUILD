@@ -4,6 +4,8 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@rules_python//experimental/python:wheel.bzl", "py_package")
 load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
 
+c7n_gcp_requirements = [i for i in all_requirements]
+
 py_library(
     name = "c7n_gcp_lib",
     deps = c7n_gcp_requirements,

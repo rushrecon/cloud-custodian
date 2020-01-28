@@ -14,7 +14,7 @@ py_library(
 py_package(
     name = "core_pkg",
     deps = [
-        "c7n",
+        ":c7n",
         ":c7n_core_lib",
     ],
 )
