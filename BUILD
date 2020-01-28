@@ -18,6 +18,17 @@ py_binary(
     ],
 )
 
+py_binary(
+    name = "file_hash",
+    srcs = ["file_hash.py"]
+)
+
+sh_binary(
+    name = "run-add-ep-script",
+    srcs = ["add-entry-points-to-wheel.sh"],
+    data = ["file_hash.py"]
+)
+
 # bazel build //:c7n_wheel
 py_wheel(
     name = "c7n_wheel",
@@ -31,7 +42,7 @@ py_wheel(
     ],
 )
 
-# sudo bazel build c7n_gcp_wheel --define=path=$(pwd)
+# sudo bazel build c7n_gcp_wheel
 py_wheel_entry_points_ext(
     name = "c7n_gcp_wheel",
     distribution = "c7n_gcp",

@@ -12,8 +12,11 @@ RECORD_PATH="$DISTR_INFO_DIR/RECORD"
 
 
 
-cd $(dirname $0)
+#cd $(dirname $0)
 
+echo `ls -a`
+
+echo `ls ../`
 
 
 mkdir $DISTR_INFO_DIR

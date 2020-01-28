@@ -3,7 +3,9 @@ load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 
 def _impl_a(ctx):
     inputs = ctx.attr.whl_file.data_runfiles.files.to_list()
+    python_script_file = ctx.attr._add_ep_runner.data_runfiles.files.to_list()[2]
     out_file = ctx.outputs.output
+    inputs.append(python_script_file)
     contents = []
     args = ctx.actions.args()
     for k, v in ctx.attr.entry_points.items():
@@ -11,13 +13,12 @@ def _impl_a(ctx):
         for p in v:
             contents.append(p)
     contents = "\\n".join(contents)
-    ctx.actions.run_shell(
+    ctx.actions.run(
         inputs = inputs,
         outputs = [out_file],
-        command ="%s/add-entry-points-to-wheel.sh '%s' '%s' '%s' '%s'"  % (
-            ctx.var["path"], ctx.attr.distr_info,  inputs[0].path, contents, out_file.path
-        ),
-
+        arguments = [ctx.attr.distr_info,  inputs[0].path, contents, out_file.path],
+        executable = ctx.executable._add_ep_runner,
+        progress_message = "Building wheel",
     )
 
 
@@ -28,6 +29,11 @@ _add_entry_points = rule(
         "distr_info": attr.string(mandatory=True),
         "whl_file": attr.label(mandatory = True),
         "output": attr.output(doc = "The generated file"),
+        "_add_ep_runner": attr.label(
+                executable = True,
+                cfg = "host",
+                default = ":run-add-ep-script",
+        ),
     },
 )
 
@@ -47,7 +53,7 @@ def py_wheel_entry_points_ext(**kwargs):
         deps = kwargs["deps"],
     )
     # TODO: Find a way to get an output file of the previous rule
-    outfile = "bazel-bin/" + "-".join(
+    outfile = "out/" + "-".join(
         [
             kwargs["distribution"],
             kwargs["version"],
