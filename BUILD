@@ -1,5 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_binary")
-load("//:py_wheel_extension.bzl", "py_wheel_ext")
+load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext" )
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 
 # bazel run :c7n_aws_cli env/aws-sample.yml
@@ -19,20 +19,20 @@ py_binary(
 )
 
 # bazel build //:c7n_wheel
-#py_wheel_ext(
-#    name = "c7n_wheel",
-#    console_scripts = {
-#        "custodian": "c7n.cli:main",
-#    },
-#    distribution = "c7n",
-#    version = "0.8.45.4",
-#    deps = [
-#        "//c7n:core_pkg",
-#    ],
-#)
+py_wheel(
+    name = "c7n_wheel",
+    console_scripts = {
+        "custodian": "c7n.cli:main",
+    },
+    distribution = "c7n",
+    version = "0.8.45.4",
+    deps = [
+        "//c7n:core_pkg",
+    ],
+)
 
-# bazel build //:c7n_gcp_wheel
-py_wheel_ext(
+# sudo bazel build c7n_gcp_wheel --define=path=$(pwd)
+py_wheel_entry_points_ext(
     name = "c7n_gcp_wheel",
     distribution = "c7n_gcp",
     entry_points = {
@@ -54,6 +54,8 @@ py_wheel_ext(
 #    name = "c7n_wheel",
 #    srcs = ["wheelmaker.sh ."],
 #)
+
+
 #
 #sh_binary(
 #    name = "c7n_gcp_wheel",
@@ -73,18 +75,7 @@ py_wheel_ext(
 #    ],
 #)
 #
-#py_wheel(
-#    name = "c7n_gcp_wheel",
-#    distribution = "c7n_gcp",
-#    strip_path_prefixes = [
-#        "tools/c7n_gcp/",
-#    ],
-#    version = "0.3.8",
-#    deps = [
-#        #        ":c7n_wheel",
-#        "//tools/c7n_gcp/c7n_gcp",
-#    ],
-#)
+
 
 # bazel run :c7n_gcp_cli env/gcp-sample.yml
 py_binary(

@@ -3,11 +3,13 @@ load("@rules_python//python:defs.bzl", "py_library", "py_test")
 def _impl(ctx):
     old_runner = ctx.attr.test[DefaultInfo].files_to_run.executable
     new_runner = ctx.actions.declare_file(ctx.attr.name)
+    print("This tyuijhgyh")
 
     ctx.actions.run_shell(
         progress_message = 'Patching file content - %s' % old_runner.short_path,
         # TODO: replace all *.inner mentions in file_to_run
-        command ="sed $'s/" +
+        command =
+            "sed $'s/" +
             "  args = \[python_program, main_filename\] + args/" + # search string
             "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" + # replacing strings
             "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +

@@ -1,14 +1,12 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@gcp_pip_deps//:requirements.bzl", "all_requirements", "requirement")
+load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
 load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
-#c7n_core_requirements = [requirement(i) for i in c7n_core_requirements]
 
 c7n_gcp_requirements = [i for i in all_requirements]  #+ ["//tools/c7n"]
 
-c7n_gcp_requirements = c7n_gcp_requirements
 
 py_library(
     name = "c7n_gcp_lib",
@@ -29,19 +27,19 @@ py_package(
 py_library(
     name = "c7n_gcp",
     srcs = glob(["**/*.py"]),
-    #    deps = [
-    #        requirement("argcomplete"),
-    #        requirement("boto3"),
-    #        requirement("botocore"),
-    #        requirement("jsonschema"),
-    #        requirement("PyYAML"),
-    #        requirement("tabulate"),
-    #        requirement("jsonpatch"),
-    #        requirement("futures"),
-    #        requirement("python-dateutil"),
-    #        requirement("urllib3"),
-    #        requirement("certifi"),
-    #    ],
+        deps = [
+            requirement("argcomplete"),
+            requirement("boto3"),
+            requirement("botocore"),
+            requirement("jsonschema"),
+            requirement("PyYAML"),
+            requirement("tabulate"),
+            requirement("jsonpatch"),
+            requirement("futures"),
+            requirement("python-dateutil"),
+            requirement("urllib3"),
+            requirement("certifi"),
+        ],
 )
 
 py_library(
@@ -67,18 +65,18 @@ py_library(
     ],
 )
 
-#py_library(
-#    name = "resources",
-#    srcs = glob(["resources/*.py"]),
-#    deps = [
-#        ":actions",
-#        ":provider",
-#        ":query",
-#        "//c7n:filters",
-#        "//c7n:utils",
-#        requirement("jmespath"),
-#    ],
-#)
+py_library(
+    name = "resources",
+    srcs = glob(["resources/*.py"]),
+    deps = [
+        ":actions",
+        ":provider",
+        ":query",
+        "//c7n:filters",
+        "//c7n:utils",
+        requirement("jmespath"),
+    ],
+)
 
 py_library(
     name = "client",
@@ -166,17 +164,17 @@ py_library(
     ],
 )
 
-#py_library(
-#    name = "query",
-#    srcs = ["query.py"],
-#    deps = [
-#        "//c7n:actions",
-#        "//c7n:filters",
-#        "//c7n:manager",
-#        "//c7n:query",
-#        "//c7n:utils",
-#        requirement("google-api-python-client"),
-#        requirement("six"),
-#        requirement("jmespath"),
-#    ],
-#)
+py_library(
+    name = "query",
+    srcs = ["query.py"],
+    deps = [
+        "//c7n:actions",
+        "//c7n:filters",
+        "//c7n:manager",
+        "//c7n:query",
+        "//c7n:utils",
+        requirement("google-api-python-client"),
+        requirement("six"),
+        requirement("jmespath"),
+    ],
+)
