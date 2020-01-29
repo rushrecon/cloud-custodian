@@ -8,7 +8,7 @@ c7n_gcp_requirements = [i for i in all_requirements]
 
 py_library(
     name = "c7n_gcp_lib",
-    deps = c7n_gcp_requirements,  # c7n_gcp/requirements.txt doesn't misses some dependencies that's why we have to use requirements-bazel-dev.txt
+    deps = c7n_gcp_requirements,  # c7n_gcp/requirements.txt misses some dependencies that's why we have to use requirements-bazel-dev.txt
 )
 
 py_package(
