@@ -17,27 +17,6 @@ load("@rules_python//python:pip.bzl", "pip3_import", "pip_repositories")
 
 pip_repositories()
 
-#=== Install pip deps for core part ====
-pip3_import(
-    name = "core_pip_deps",
-    requirements = "//:requirements-bazel-dev.txt",
-)
-
-load("@core_pip_deps//:requirements.bzl", "pip_install")
-
-pip_install()
-
-#=== Install pip deps for GCP part ====
-pip3_import(
-    name = "gcp_pip_deps",
-    requirements = "//tools/c7n_gcp:requirements.txt",
-)
-
-load("@gcp_pip_deps//:requirements.bzl", "pip_install")
-
-pip_install()
-
-#=== Install pip deps for core part ====
 pip3_import(
     name = "pip_deps",
     requirements = "//:requirements-bazel-dev.txt",

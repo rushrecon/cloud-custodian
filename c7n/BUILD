@@ -1,7 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@core_pip_deps//:requirements.bzl", "all_requirements", "requirement")
+load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
 load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
 c7n_core_requirements = [i for i in all_requirements]

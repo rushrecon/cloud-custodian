@@ -25,6 +25,7 @@ sh_binary(
 )
 
 # bazel build //:c7n_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
 py_wheel(
     name = "c7n_wheel",
     console_scripts = {
@@ -38,6 +39,8 @@ py_wheel(
 )
 
 # bazel build c7n_gcp_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
+# Installing c7n first is required for Custodian to work.
 py_wheel_entry_points_ext(
     name = "c7n_gcp_wheel",
     distribution = "c7n_gcp",
@@ -51,7 +54,6 @@ py_wheel_entry_points_ext(
     ],
     version = "0.3.8",
     deps = [
-        "//tools/c7n_gcp/c7n_gcp",
         "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
     ],
 )
