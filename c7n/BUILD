@@ -30,7 +30,7 @@ py_library(
         ":commands",
         ":config",
         requirement("argcomplete"),
-    ]
+    ],
 )
 
 py_library(
@@ -39,16 +39,16 @@ py_library(
         "commands.py",
     ],
     deps = [
+        ":config",
         ":exceptions",
         ":policy",
-        ":schema",
-        ":utils",
-        ":config",
         ":provider",
         ":resources",
+        ":schema",
+        ":utils",
         requirement("six"),
         requirement("PyYAML"),
-    ]
+    ],
 )
 
 py_library(
@@ -58,7 +58,7 @@ py_library(
     ],
     deps = [
         ":utils",
-    ]
+    ],
 )
 
 py_library(
@@ -86,15 +86,20 @@ py_library(
 py_library(
     name = "handler",
     srcs = [
-        "handler.py"
+        "handler.py",
     ],
     deps = [
+        ":config",
         ":policy",
         ":resources",
         ":utils",
-        ":config",
         requirement("boto3"),
     ],
+)
+
+py_library(
+    name = "resource_map",
+    srcs = ["resources/resource_map.py"],
 )
 
 py_library(
@@ -105,6 +110,7 @@ py_library(
         ":credentials",
         ":log",
         ":query",
+        ":resource_map",
         requirement("botocore"),
         requirement("boto3"),
         requirement("aws_xray_sdk"),
@@ -282,6 +288,13 @@ py_library(
 )
 
 py_library(
+    name = "loader",
+    srcs = [
+        "loader.py",
+    ],
+)
+
+py_library(
     name = "lookup",
     srcs = [
         "lookup.py",
@@ -324,6 +337,7 @@ py_library(
         "testing.py",
     ],
     deps = [
+        ":loader",
         ":policy",
         ":schema",
         requirement("mock"),

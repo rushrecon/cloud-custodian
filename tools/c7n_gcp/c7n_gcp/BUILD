@@ -27,12 +27,18 @@ py_library(
 )
 
 py_library(
+    name = "resource_map",
+    srcs = ["resources/resource_map.py"],
+)
+
+py_library(
     name = "resources",
     srcs = glob(["resources/*.py"]),
     deps = [
         ":actions",
         ":provider",
         ":query",
+        ":resource_map",
         "//c7n:filters",
         "//c7n:utils",
         requirement("jmespath"),
