@@ -114,6 +114,11 @@ py_library(
 )
 
 py_library(
+    name = "resource_map",
+    srcs = ["resources/resource_map.py"],
+)
+
+py_library(
     name = "resources",
     srcs = glob(["resources/*.py"]),
     deps = [
@@ -121,6 +126,7 @@ py_library(
         ":credentials",
         ":log",
         ":query",
+        ":resource_map",
         requirement("botocore"),
         requirement("boto3"),
         requirement("aws_xray_sdk"),
@@ -298,6 +304,13 @@ py_library(
 )
 
 py_library(
+    name = "loader",
+    srcs = [
+        "loader.py",
+    ],
+)
+
+py_library(
     name = "lookup",
     srcs = [
         "lookup.py",
@@ -340,6 +353,7 @@ py_library(
         "testing.py",
     ],
     deps = [
+        ":loader",
         ":policy",
         ":schema",
         requirement("mock"),
