@@ -24,17 +24,18 @@ py_library(
         "common.py",
         "zpill.py",
         "test_offhours.py",
-        "test_s3.py"
+        "test_s3.py",
     ]),
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
+    imports = ["../tools/c7n_gcp/."],
     deps = [
-        "//c7n:testing",
-        "//c7n:handler",
-        "//c7n:ufuncs",
-        "//c7n:reports",
-        "//c7n:commands",
         "//c7n:cli",
+        "//c7n:commands",
+        "//c7n:handler",
+        "//c7n:reports",
         "//c7n:sqsexec",
+        "//c7n:testing",
+        "//c7n:ufuncs",
         "//tools/c7n_gcp/c7n_gcp:entry",
         requirement("coverage"),
         requirement("placebo"),
@@ -51,7 +52,6 @@ py_library(
         requirement("vcrpy"),
         requirement("wrapt"),
     ],
-    imports = ["../tools/c7n_gcp/."],
 )
 
 [c7n_py_test(
