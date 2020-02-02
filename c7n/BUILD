@@ -257,6 +257,7 @@ py_library(
     ],
     deps = [
         ":cwe",
+        ":mu",
         ":provider",
         ":resources",
         requirement("python-dateutil"),

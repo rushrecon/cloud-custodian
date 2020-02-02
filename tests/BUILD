@@ -6,15 +6,15 @@ load("//:c7n_py_test.bzl", "c7n_py_test")
 EXCLUDED_TESTS = [
     # AssertionError: 'azure.vm' not found in 'resources:
     # Not all cloud modules registered
-    "test_cli.py",
+    #    "test_cli.py",
     # self.assertTrue(content.endswith("hello world"))
     # AssertionError: False is not true
-    "test_output.py",
+    #    "test_output.py",
     # First extra element 2:
     #- ['aws', 'gcp']
     #+ ['aws', 'azure', 'gcp', 'k8s']
     # Not all cloud modules registered
-    "test_provider.py",
+    #    "test_provider.py",
 ]
 
 py_library(
@@ -27,7 +27,11 @@ py_library(
         "test_s3.py",
     ]),
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
-    imports = ["../tools/c7n_gcp/."],
+    imports = [
+        "../tools/c7n_gcp/.",
+        "../tools/c7n_stub/c7n_azure/.",
+        "../tools/c7n_stub/c7n_kube/.",
+    ],
     deps = [
         "//c7n:cli",
         "//c7n:commands",
@@ -37,6 +41,8 @@ py_library(
         "//c7n:testing",
         "//c7n:ufuncs",
         "//tools/c7n_gcp/c7n_gcp:entry",
+        "//tools/c7n_stub/c7n_azure/c7n_azure:entry",
+        "//tools/c7n_stub/c7n_kube/c7n_kube:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),

@@ -16,6 +16,8 @@ py_library(
         "//c7n:testing",
         "//tools/c7n_gcp/c7n_gcp:client",
         "//tools/c7n_gcp/c7n_gcp:handler",  # for test_mu_gcp.py only
+        #        "//tools/c7n_stub/c7n_azure/tests_azure:azure_common",
+        #        "//tools/c7n_stub/c7n_kube/tests:common_kube",
     ],
 )
 
@@ -23,8 +25,8 @@ py_library(
     name = test_file[:-3],
     srcs = [test_file],
     data = glob(["data/**"]),
-    srcs_version = "PY2AND3",
     imports = ["."],
+    srcs_version = "PY2AND3",
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 
