@@ -12,8 +12,6 @@ py_library(
     name = "provider",
     srcs = ["provider.py"],
     deps = [":resources"],
-    #    imports = ["../../../c7n_azure/."],
-    #    deps = ["//tools/c7n_azure/c7n_azure:resources"],
 )
 
 py_library(
@@ -23,6 +21,8 @@ py_library(
 
 py_library(
     name = "resources",
-    srcs = glob(["resources/*.py"]),
-    deps = [":resource_map"],
+    #    srcs = glob(["resources/*.py"]),
+    deps = [
+        ":resource_map",
+    ],
 )

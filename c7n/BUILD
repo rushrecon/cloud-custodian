@@ -109,8 +109,10 @@ py_library(
         ":actions",
         ":credentials",
         ":log",
+        # ":manager", # troubleshooting test_revisions
         ":query",
         ":resource_map",
+        # ":registry", # troubleshooting test_revisions
         requirement("botocore"),
         requirement("boto3"),
         requirement("aws_xray_sdk"),
