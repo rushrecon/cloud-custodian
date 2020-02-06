@@ -1,0 +1,28 @@
+load("@rules_python//python:defs.bzl", "py_library", "py_binary")
+load("@py_deps//:requirements.bzl", "requirement")
+
+package(default_visibility = ["//visibility:public"])
+
+py_library(
+    name = "constants",
+    srcs = ["constants.py"]
+)
+
+py_library(
+    name = "storage_utils",
+    srcs = ["storage_utils.py"],
+    deps = [
+        requirement("azure-common"),
+        requirement("azure-storage-common"),
+        requirement("azure-storage-blob"),
+        requirement("azure-storage-queue"),
+        ":constants",
+    ],
+)
+
+py_binary(
+    name = "storage_utils_run",
+    srcs = ["storage_utils.py"],
+    main = "storage_utils.py",
+    deps = [":storage_utils"],
+)

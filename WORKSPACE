@@ -25,3 +25,20 @@ pip3_import(
 load("@pip_deps//:requirements.bzl", "pip_install")
 
 pip_install()
+
+# azure deps experimental
+git_repository(
+    name = "rules_python_external",
+    commit = "a6f4ae984e7a5d4436fb7aed1678c117a8ddd12b",
+    remote = "https://github.com/dillon-giacoppo/rules_python_external",
+)
+
+# Install the rule dependencies
+load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
+rules_python_external_dependencies()
+
+load("@rules_python_external//:defs.bzl", azure_pip_install="pip_install")
+azure_pip_install(
+    name = "py_deps",
+    requirements = "//tools/c7n_azure:requirements.txt",
+)
