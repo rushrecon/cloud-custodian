@@ -49,7 +49,3 @@ class DataflowJobTest(BaseTest):
         self.assertEqual(resource[0]['name'], 'test1')
         self.assertEqual(resource[0]['projectId'], project_id)
         self.assertEqual(resource[0]['location'], 'us-central1')
-
-
-if __name__ == "__main__":
-    BaseTest.main()

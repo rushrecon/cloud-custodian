@@ -76,7 +76,3 @@ class DMDeploymentTest(BaseTest):
                      'filter': 'name = lamp-1'})
 
         self.assertEqual(result['deployments'][0]['operation']['operationType'], 'delete')
-
-
-if __name__ == "__main__":
-    BaseTest.main()

@@ -27,7 +27,3 @@ class ResourceMetaTest(BaseTest):
         if missing:
             raise KeyError(
                 "Following resources are missing id metadata %s" % " ".join(missing))
-
-
-if __name__ == "__main__":
-    BaseTest.main()
