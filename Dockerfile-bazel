@@ -1,0 +1,5 @@
+FROM johnybear/my-repo:ubuntuforbazel
+COPY . /workspace/
+RUN mkdir /tmp/output_build/
+RUN sed -i -e 's/\r$//' add-entry-points-to-wheel.sh # remove CR characters to avoid /bin/bash^M error if we copy files from Windows
+
