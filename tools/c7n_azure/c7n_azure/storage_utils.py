@@ -26,6 +26,7 @@ try:
 except ImportError:
     from backports.functools_lru_cache import lru_cache
 
+print("MAKAKA")
 
 class StorageUtilities(object):
 

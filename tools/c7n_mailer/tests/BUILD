@@ -1,12 +1,12 @@
-load("@rules_python//python:defs.bzl", "py_library")
 load("//:c7n_py_test.bzl", "c7n_py_test")
+load("@pip_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:private"])
 
 # TODO: get rid of excluded tests
 # All three complaining about azure.xxx imports.
 EXCLUDED_AZURE_TESTS = [
-  # "test_azure.py",
+    # "test_azure.py",
     "test_azure_mailer_utils.py",
     "test_utils.py",
 ]
@@ -22,6 +22,24 @@ py_library(
     data = ["example.jinja"],
     deps = [
         ":test_data",
+        "//c7n",
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
+        requirement("mock"),
+        requirement("fakeredis"),
+        requirement("attrs"),
+        requirement("pytest"),
+        requirement("pyrsistent"),
+        requirement("pluggy"),
+        requirement("sortedcontainers"),
+        requirement("pyasn1"),
+        requirement("importlib_metadata"),
+        requirement("zipp"),
+        requirement("py"),
+        requirement("packaging"),
+        requirement("more_itertools"),
+        requirement("jsonpointer"),
+        requirement("jsonpatch"),
+        requirement("python_http_client"),
     ],
 )
 
@@ -30,6 +48,8 @@ py_library(
     srcs = [test_file],
     imports = [
         ".",
+        "..",
+        "../../c7n_azure/.",
     ],
     main = test_file,
     srcs_version = "PY2AND3",
@@ -37,6 +57,7 @@ py_library(
         ":test_deps",
         "//tools/c7n_mailer/c7n_mailer:c7n_mailer_cli",  # used instead of c7n_mailer_core_deps for testing cli as well
         "//tools/c7n_azure/c7n_azure:storage_utils",
+        #        "//tools/c7n_azure/c7n_azure:storage_utils",
     ],
 ) for test_file in glob(
     include = ["test_*.py"],

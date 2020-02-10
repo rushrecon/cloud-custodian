@@ -1,11 +1,16 @@
-load("@rules_python//python:defs.bzl", "py_library", "py_binary")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("@py_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
 
 py_library(
+    name = "c7n_azure_lib",
+    srcs = glob(["**/*.py"]),
+)
+
+py_library(
     name = "constants",
-    srcs = ["constants.py"]
+    srcs = ["constants.py"],
 )
 
 py_library(
