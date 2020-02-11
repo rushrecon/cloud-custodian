@@ -1,0 +1,4 @@
+FROM johnybear/my-repo:ubuntuforbazel
+COPY . /workspace/
+RUN mkdir /tmp/output_build/
+
