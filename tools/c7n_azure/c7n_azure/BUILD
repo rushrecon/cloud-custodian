@@ -6,6 +6,9 @@ package(default_visibility = ["//visibility:public"])
 py_library(
     name = "c7n_azure_lib",
     srcs = glob(["**/*.py"]),
+    deps = [
+        ":storage_utils",
+    ],
 )
 
 py_library(
@@ -17,10 +20,14 @@ py_library(
     name = "storage_utils",
     srcs = ["storage_utils.py"],
     deps = [
+        requirement("azure"),
         requirement("azure-common"),
         requirement("azure-storage-common"),
         requirement("azure-storage-blob"),
         requirement("azure-storage-queue"),
+        requirement("msrest"),
+        requirement("msrestazure"),
+        requirement("netaddr"),
         ":constants",
     ],
 )
@@ -28,6 +35,10 @@ py_library(
 py_binary(
     name = "storage_utils_run",
     srcs = ["storage_utils.py"],
+    legacy_create_init = 0,
     main = "storage_utils.py",
-    deps = [":storage_utils"],
+    deps = [
+        ":c7n_azure_lib",
+        ":storage_utils",
+    ],
 )

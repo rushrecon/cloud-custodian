@@ -27,10 +27,17 @@ from c7n_mailer.smtp_delivery import SmtpDelivery
 try:
     from c7n_azure.storage_utils import StorageUtilities
     from c7n_azure.session import Session
-except ImportError:
+except ImportError as e:
+    print(e)
     StorageUtilities = None
     Session = None
     pass
+try:
+    import c7n_azure.storage_utils
+    print(c7n_azure.storage_utils.__file__)
+    print("OK"*20)
+except ImportError:
+    print("BAD"*20)
 
 
 class MailerAzureQueueProcessor(object):

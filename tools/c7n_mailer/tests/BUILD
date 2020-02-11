@@ -7,8 +7,8 @@ package(default_visibility = ["//visibility:private"])
 # All three complaining about azure.xxx imports.
 EXCLUDED_AZURE_TESTS = [
     # "test_azure.py",
-    "test_azure_mailer_utils.py",
-    "test_utils.py",
+    # "test_azure_mailer_utils.py",
+    # "test_utils.py",
 ]
 
 py_library(
@@ -40,6 +40,7 @@ py_library(
         requirement("jsonpointer"),
         requirement("jsonpatch"),
         requirement("python_http_client"),
+        requirement("PyJWT"),
     ],
 )
 
@@ -58,6 +59,7 @@ py_library(
         "//tools/c7n_mailer/c7n_mailer:c7n_mailer_cli",  # used instead of c7n_mailer_core_deps for testing cli as well
         "//tools/c7n_azure/c7n_azure:storage_utils",
         #        "//tools/c7n_azure/c7n_azure:storage_utils",
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
     ],
 ) for test_file in glob(
     include = ["test_*.py"],

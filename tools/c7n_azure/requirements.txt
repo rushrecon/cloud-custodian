@@ -10,3 +10,7 @@ azure-storage-queue~=2.1
 azure-storage-file~=2.1
 
 adal
+msrest
+msrestazure
+azure
+netaddr

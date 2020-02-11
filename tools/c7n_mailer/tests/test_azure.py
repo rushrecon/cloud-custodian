@@ -27,6 +27,12 @@ from c7n_mailer.azure_mailer.sendgrid_delivery import SendGridDelivery
 from common import (ASQ_MESSAGE, ASQ_MESSAGE_DATADOG, ASQ_MESSAGE_SLACK,
                     ASQ_MESSAGE_TAG, MAILER_CONFIG_AZURE, logger)
 
+import sys
+#
+# for i in sys.path:
+#     print(i)
+
+
 
 class AzureTest(unittest.TestCase):
 
