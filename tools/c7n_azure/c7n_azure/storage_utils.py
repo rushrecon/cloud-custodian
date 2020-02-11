@@ -11,11 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import sys
-import site
-
-print(site.getsitepackages())
-
 from collections import namedtuple
 from functools import wraps
 
@@ -23,15 +18,14 @@ from azure.common import AzureHttpError
 from azure.storage.common import TokenCredential
 from azure.storage.blob import BlockBlobService
 from azure.storage.queue import QueueService
-from six.moves.urllib.parse import urlparse
 from c7n_azure.constants import RESOURCE_STORAGE
+from six.moves.urllib.parse import urlparse
 
 try:
     from functools import lru_cache
 except ImportError:
     from backports.functools_lru_cache import lru_cache
 
-print("MAKAKA")
 
 class StorageUtilities(object):
 

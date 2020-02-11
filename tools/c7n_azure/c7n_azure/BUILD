@@ -7,6 +7,7 @@ py_library(
     name = "c7n_azure_lib",
     srcs = glob(["**/*.py"]),
     deps = [
+        ":constants",
         ":storage_utils",
     ],
 )
@@ -35,10 +36,6 @@ py_library(
 py_binary(
     name = "storage_utils_run",
     srcs = ["storage_utils.py"],
-    legacy_create_init = 0,
     main = "storage_utils.py",
-    deps = [
-        ":c7n_azure_lib",
-        ":storage_utils",
-    ],
+    deps = [":storage_utils"],
 )

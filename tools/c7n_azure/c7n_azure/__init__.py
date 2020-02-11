@@ -13,11 +13,10 @@
 # limitations under the License.
 import logging
 
-# import adal
+import adal
 
 # Quiet logging from dependencies
-# adal.set_logging_options({'level': 'WARNING'})
-
+adal.set_logging_options({'level': 'WARNING'})
 logging.getLogger("msrest").setLevel(logging.ERROR)
 logging.getLogger("keyring").setLevel(logging.WARNING)
 logging.getLogger("azure.storage.common.storageclient").setLevel(logging.WARNING)
