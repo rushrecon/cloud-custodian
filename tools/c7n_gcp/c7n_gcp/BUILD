@@ -1,7 +1,23 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@pip_deps//:requirements.bzl", "requirement")
+load("@rules_python//experimental/python:wheel.bzl", "py_package")
+load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
+
+c7n_gcp_requirements = [i for i in all_requirements]
+
+py_library(
+    name = "c7n_gcp_lib",
+    deps = c7n_gcp_requirements,  # c7n_gcp/requirements.txt misses some dependencies that's why we have to use requirements-bazel-dev.txt
+)
+
+py_package(
+    name = "gcp_pkg",
+    deps = [
+        ":c7n_gcp_lib",
+        ":entry",
+    ],
+)
 
 py_library(
     name = "actions",
