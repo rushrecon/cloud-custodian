@@ -2,6 +2,12 @@ package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
+load("@rules_python//experimental/python:wheel.bzl", "py_package")
+
+py_package(
+    name = "c7n_mailer_pkg",
+    deps = ["c7n_mailer_cli"],
+)
 
 py_library(
     name = "c7n_mailer_requirements",

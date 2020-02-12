@@ -58,6 +58,24 @@ py_wheel_entry_points_ext(
     ],
 )
 
+# bazel build //:c7n_mailer_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
+py_wheel(
+    name = "c7n_mailer_wheel",
+    console_scripts = {
+        "c7n-mailer": "c7n_mailer.cli:main",
+        "c7n-mailer-replay": "c7n_mailer.replay:main",
+    },
+    distribution = "c7n-mailer",
+    strip_path_prefixes = [
+        "tools/c7n_mailer/",
+    ],
+    version = "0.5.7",
+    deps = [
+        "//tools/c7n_mailer/c7n_mailer:c7n_mailer_pkg",
+    ],
+)
+
 # bazel run :c7n_gcp_cli env/gcp-sample.yml
 py_binary(
     name = "c7n_gcp_cli",
