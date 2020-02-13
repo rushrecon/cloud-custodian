@@ -14,7 +14,6 @@ EXCLUDED_TESTS = [
     # 1) AssertionError: False is not true
     # self.assertTrue(content.endswith("hello world"))
     "test_output.py",
-    # "test_revisions.py", # undeterministic, could fail in different venvs
 ]
 
 py_library(

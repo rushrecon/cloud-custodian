@@ -2,12 +2,15 @@ package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
 load("@mailer_py_deps//:requirements.bzl", "requirement")
-#load("@rules_python//experimental/python:wheel.bzl", "py_package")
+load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
-#py_package(
-#    name = "c7n_mailer_pkg",
-#    deps = ["c7n_mailer_cli"],
-#)
+py_package(
+    name = "c7n_mailer_pkg",
+    deps = [
+        "c7n_mailer_cli",
+        ":c7n_mailer_core_deps",
+    ],
+)
 
 py_library(
     name = "c7n_mailer_requirements",
@@ -19,7 +22,7 @@ py_library(
         requirement("vcversioner"),
         requirement("Jinja2"),
         requirement("jsonschema"),
-        requirement("ruamel.yaml"),
+        requirement("ruamel.yaml.clib"),
         requirement("six"),
         requirement("datadog"),
         requirement("sendgrid"),

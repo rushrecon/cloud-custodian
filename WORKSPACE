@@ -54,7 +54,7 @@ gcp_pip_install(
 
 load("@rules_python_external//:defs.bzl", mailer_pip_install = "pip_install")
 
-gcp_pip_install(
+mailer_pip_install(
     name = "mailer_py_deps",
-    requirements = "//tools/c7n_mailer:requirements-bazel-dev.txt",
+    requirements = "//tools/c7n_mailer:requirements.txt",
 )
