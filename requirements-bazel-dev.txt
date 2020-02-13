@@ -8,3 +8,4 @@ more_itertools
 zipp
 uritemplate
 vcrpy
+jsonpointer
