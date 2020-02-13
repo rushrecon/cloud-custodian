@@ -1,7 +1,7 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@pip_deps//:requirements.bzl", "requirement")
+load("@mailer_py_deps//:requirements.bzl", "requirement")
 #load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
 #py_package(

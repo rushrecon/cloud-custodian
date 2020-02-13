@@ -1,0 +1,7 @@
+-r requirements.txt
+
+azure-common==1.1.23
+azure-keyvault==1.1.0
+python_http_client
+sortedcontainers
+jsonpointer

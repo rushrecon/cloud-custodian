@@ -42,7 +42,7 @@ py_library(
         "//c7n:ufuncs",
         "//tools/c7n_gcp/c7n_gcp:entry",
         "//tools/c7n_stub/c7n_azure/c7n_azure:entry",
-        "//tools/c7n_stub/c7n_kube/c7n_kube:entry",
+        #        "//tools/c7n_stub/c7n_kube/c7n_kube:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),

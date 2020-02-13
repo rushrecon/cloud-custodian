@@ -35,10 +35,26 @@ git_repository(
 
 # Install the rule dependencies
 load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
+
 rules_python_external_dependencies()
 
-load("@rules_python_external//:defs.bzl", azure_pip_install="pip_install")
+load("@rules_python_external//:defs.bzl", azure_pip_install = "pip_install")
+
 azure_pip_install(
-    name = "py_deps",
-    requirements = "//tools/c7n_azure:requirements.txt",
+    name = "azure_py_deps",
+    requirements = "//tools/c7n_azure:requirements-bazel-dev.txt",
+)
+
+load("@rules_python_external//:defs.bzl", gcp_pip_install = "pip_install")
+
+gcp_pip_install(
+    name = "gcp_py_deps",
+    requirements = "//tools/c7n_gcp:requirements-bazel-dev.txt",
+)
+
+load("@rules_python_external//:defs.bzl", mailer_pip_install = "pip_install")
+
+gcp_pip_install(
+    name = "mailer_py_deps",
+    requirements = "//tools/c7n_mailer:requirements-bazel-dev.txt",
 )

@@ -9,10 +9,3 @@ azure-storage-common~=2.0
 azure-storage-queue~=2.1
 azure-storage-file~=2.1
 
-# added
-adal
-msrest
-PyJWT
-msrestazure
-azure
-netaddr
