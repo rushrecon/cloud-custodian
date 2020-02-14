@@ -357,6 +357,7 @@ py_library(
         ":loader",
         ":policy",
         ":schema",
+        ":lookup",
         requirement("mock"),
         requirement("pytest"),
         requirement("jmespath"),

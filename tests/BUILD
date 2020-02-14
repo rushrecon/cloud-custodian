@@ -14,7 +14,6 @@ EXCLUDED_TESTS = [
     # 1) AssertionError: False is not true
     # self.assertTrue(content.endswith("hello world"))
     "test_output.py",
-    # "test_revisions.py", # undeterministic, could fail in different venvs
 ]
 
 py_library(
@@ -52,6 +51,7 @@ py_library(
         requirement("tox"),
         requirement("six"),
         requirement("psutil"),
+        requirement("jsonpointer"),
         requirement("fakeredis"),
         requirement("tabulate"),
         requirement("argcomplete"),

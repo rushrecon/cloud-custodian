@@ -2,7 +2,7 @@ package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
 load("@rules_python//experimental/python:wheel.bzl", "py_package")
-load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
+load("@gcp_py_deps//:requirements.bzl", "all_requirements", "requirement")
 
 c7n_gcp_requirements = [i for i in all_requirements]
 
