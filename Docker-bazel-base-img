@@ -1,0 +1,21 @@
+FROM ubuntu
+RUN mkdir -p /workspace/
+RUN apt-get update
+RUN apt install curl -y
+RUN apt install gnupg2 -y
+RUN curl https://bazel.build/bazel-release.pub.gpg | apt-key add -
+RUN echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | tee /etc/apt/sources.list.d/bazel.list
+RUN apt-get update
+RUN apt-get install bazel -y
+RUN apt-get install python3-dev -y
+RUN apt-get install python2.7 -y
+RUN apt-get install zip -y
+RUN apt-get install python3-pip
+RUN ln -s /usr/bin/python2.7 /usr/bin/python
+RUN apt-get install git -y
+WORKDIR /workspace/
+
+# copy the c7n project into the image's workspace dir
+COPY . /workspace/
+RUN mkdir /tmp/output_build/
+
