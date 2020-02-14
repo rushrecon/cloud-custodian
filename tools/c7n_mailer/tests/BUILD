@@ -15,7 +15,6 @@ py_library(
     deps = [
         ":test_data",
         "//c7n",
-        #        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
         requirement("mock"),
         requirement("fakeredis"),
         requirement("attrs"),
