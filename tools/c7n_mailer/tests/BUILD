@@ -3,14 +3,6 @@ load("@pip_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:private"])
 
-# TODO: get rid of excluded tests
-# All three complaining about azure.xxx imports.
-EXCLUDED_AZURE_TESTS = [
-    # "test_azure.py",
-    # "test_azure_mailer_utils.py",
-    # "test_utils.py",
-]
-
 py_library(
     name = "test_data",
     data = glob(["test-templates/*.j2"]),
