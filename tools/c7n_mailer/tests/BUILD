@@ -53,7 +53,6 @@ py_library(
     ],
 ) for test_file in glob(
     include = ["test_*.py"],
-    exclude = EXCLUDED_AZURE_TESTS,
 )]
 
 # bazel test //tools/c7n_mailer/tests
