@@ -12,9 +12,3 @@ sendgrid==6.1.1
 redis==3.3.11
 ldap3==2.6
 
-
-azure-common==1.1.23
-azure-keyvault==1.1.0
-python_http_client
-sortedcontainers
-jsonpointer

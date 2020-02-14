@@ -8,7 +8,6 @@ py_package(
     name = "c7n_mailer_pkg",
     deps = [
         "c7n_mailer_cli",
-        ":c7n_mailer_core_deps",
     ],
 )
 
@@ -22,8 +21,11 @@ py_library(
         requirement("vcversioner"),
         requirement("Jinja2"),
         requirement("jsonschema"),
-        requirement("ruamel.yaml.clib"),
+        requirement("ruamel.yaml"),
         requirement("six"),
+        requirement("pyasn1"),
+        requirement("python_http_client"),
+        requirement("markupsafe"),
         requirement("datadog"),
         requirement("sendgrid"),
         requirement("redis"),

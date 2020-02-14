@@ -45,16 +45,20 @@ azure_pip_install(
     requirements = "//tools/c7n_azure:requirements-bazel-dev.txt",
 )
 
-load("@rules_python_external//:defs.bzl", gcp_pip_install = "pip_install")
-
-gcp_pip_install(
+pip3_import(
     name = "gcp_py_deps",
     requirements = "//tools/c7n_gcp:requirements-bazel-dev.txt",
 )
 
-load("@rules_python_external//:defs.bzl", mailer_pip_install = "pip_install")
+load("@gcp_py_deps//:requirements.bzl", "pip_install")
 
-mailer_pip_install(
+pip_install()
+
+pip3_import(
     name = "mailer_py_deps",
-    requirements = "//tools/c7n_mailer:requirements.txt",
+    requirements = "//tools/c7n_mailer:requirements-bazel-dev.txt",
 )
+
+load("@mailer_py_deps//:requirements.bzl", "pip_install")
+
+pip_install()
