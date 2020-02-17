@@ -15,7 +15,5 @@ RUN ln -s /usr/bin/python2.7 /usr/bin/python
 RUN apt-get install git -y
 WORKDIR /workspace/
 
-# copy the c7n project into the image's workspace dir
-COPY . /workspace/
-RUN mkdir /tmp/output_build/
+
 

@@ -1,0 +1,3 @@
+# copy the c7n project into the image's workspace dir
+COPY . /workspace/
+RUN mkdir /tmp/output_build/
