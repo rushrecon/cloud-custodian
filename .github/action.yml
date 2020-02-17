@@ -1,7 +1,0 @@
-name: 'Bazel Test Everyting'
-description: 'Runs bazel test ... in a docker container with Docker-bazel-base-img.'
-runs:
-  using: 'docker'
-  image: 'Docker-bazel-base-img'
-  args:
-    - -idt -v /tmp/output_build:/tmp/output_build --name bazel-c7n-container my-baz

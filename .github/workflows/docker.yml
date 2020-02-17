@@ -1,0 +1,16 @@
+name: buildtool
+
+on:
+  pull_request:
+
+jobs:
+  bazel-test-everything:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build container with bazel
+        uses: buildtool/build-action@v1
+        with:
+          dockerfile: Docker-bazel-base-img
+          docker-build-args: '-skiplogin'
