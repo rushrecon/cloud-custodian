@@ -26,7 +26,8 @@ load("@pip_deps//:requirements.bzl", "pip_install")
 
 pip_install()
 
-# azure deps experimental
+# pip_import / requirement() does not work for the pypi azure package, therefore we use rules_python_external rules
+# See issue: https://github.com/bazelbuild/rules_python/issues/273
 git_repository(
     name = "rules_python_external",
     commit = "a6f4ae984e7a5d4436fb7aed1678c117a8ddd12b",
