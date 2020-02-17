@@ -76,6 +76,25 @@ py_wheel(
     ],
 )
 
+# bazel build //:c7n_kube_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
+py_wheel_entry_points_ext(
+    name = "c7n_kube_wheel",
+    distribution = "c7n-kube",
+    entry_points = {
+        "custodian.resources": [
+            "kube = c7n_kube.entry:initialize_kube",
+        ],
+    },
+    strip_path_prefixes = [
+        "tools/c7n_kube/",
+    ],
+    version = "0.1.1",
+    deps = [
+        "//tools/c7n_kube/c7n_kube:c7n_kube_pkg",
+    ],
+)
+
 # bazel run :c7n_gcp_cli env/gcp-sample.yml
 py_binary(
     name = "c7n_gcp_cli",
