@@ -1,0 +1,30 @@
+name: Run all tests in bazel
+on: [push]
+
+jobs:
+  build:
+    name: Run all tests in bazel
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-18.04, macos-10.15]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install bazel (apt)
+        if: ${{ startsWith(matrix.os, 'ubuntu') }}
+        run: |
+          curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
+          echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+          sudo apt update && sudo apt install bazel
+      - name: Install bazel (brew)
+        if: ${{ startsWith(matrix.os, 'macos') }}
+        run: |
+          /usr/bin/ruby -e "$(curl -fsSL \
+          https://raw.githubusercontent.com/Homebrew/install/master/install)"
+          brew tap bazelbuild/tap
+          brew install bazelbuild/tap/bazel
+      - name: Run bazel test ...
+        run: |
+          touch WORKSPACE
+          bazel --output_user_root=/tmp/output_build test ... --sandbox_debug
