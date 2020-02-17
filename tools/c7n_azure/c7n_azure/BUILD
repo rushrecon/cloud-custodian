@@ -1,4 +1,4 @@
-load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("@rules_python//python:defs.bzl", "py_library")
 load("@azure_py_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
@@ -31,11 +31,4 @@ py_library(
         requirement("netaddr"),
         ":constants",
     ],
-)
-
-py_binary(
-    name = "storage_utils_run",
-    srcs = ["storage_utils.py"],
-    main = "storage_utils.py",
-    deps = [":storage_utils"],
 )
