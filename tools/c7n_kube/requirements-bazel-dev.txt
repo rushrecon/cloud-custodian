@@ -1,6 +1,8 @@
 -r requirements.txt
 # -r ../c7n_azure/requirements.txt
 
-# azure
+
+vcrpy
+# azure<=3
 # azure-mgmt
 # azure-mgmt-eventgrid==2.2.0

@@ -22,16 +22,17 @@ import sys
 import types
 from collections import namedtuple
 
+
+
+
+from c7n_azure.utils import (ResourceIdParser, StringUtils, custodian_azure_send_override,
+                             ManagedGroupHelper, get_keyvault_secret)
 import jwt
 import six
-import azure
-print(dir(azure.__package__))
 from azure.common.credentials import (BasicTokenAuthentication,
                                       ServicePrincipalCredentials)
 from azure.keyvault import KeyVaultAuthentication, AccessToken
 from c7n_azure import constants
-from c7n_azure.utils import (ResourceIdParser, StringUtils, custodian_azure_send_override,
-                             ManagedGroupHelper, get_keyvault_secret)
 from msrest.exceptions import AuthenticationError
 from msrestazure.azure_active_directory import MSIAuthentication
 from requests import HTTPError

@@ -14,8 +14,24 @@
 
 import logging
 import re
+import os
 import sys
 import time
+
+
+
+for i in sys.path:
+    print(i)
+    if "azure" in i:
+        print(i)
+        # if "common" in os.listdir(i):
+        #     print(i)
+        #     print(os.listdir(i))
+    # if "eventgrid" in i:
+    #      with open(i + "/azure/__init__.py", "r") as f:
+    #          print("Init file")
+    #          print(f.read())
+
 
 import six
 from azure.mgmt.eventgrid.models import \
