@@ -116,6 +116,7 @@ py_library(
         ":resources_apps",
         ":resources_core",
         ":resources_crd",
+        requirement("azure-mgmt-eventgrid"),
     ],
 )
 

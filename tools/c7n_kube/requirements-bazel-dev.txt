@@ -1,6 +1,6 @@
 -r requirements.txt
+-r ../c7n_azure/requirements.txt
 
-vcrpy
-wrapt
-azure-common==1.1.23
-azure-keyvault==1.1.0
+azure
+azure-keyvault
+azure-mgmt-eventgrid==2.2.0
