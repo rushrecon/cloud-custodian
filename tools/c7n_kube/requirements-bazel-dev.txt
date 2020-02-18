@@ -1,6 +1,6 @@
 -r requirements.txt
--r ../c7n_azure/requirements.txt
+# -r ../c7n_azure/requirements.txt
 
-azure
-azure-keyvault
-azure-mgmt-eventgrid==2.2.0
+# azure
+# azure-mgmt
+# azure-mgmt-eventgrid==2.2.0

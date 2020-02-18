@@ -24,6 +24,8 @@ from collections import namedtuple
 
 import jwt
 import six
+import azure
+print(dir(azure.__package__))
 from azure.common.credentials import (BasicTokenAuthentication,
                                       ServicePrincipalCredentials)
 from azure.keyvault import KeyVaultAuthentication, AccessToken

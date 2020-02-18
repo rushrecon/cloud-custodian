@@ -4,8 +4,6 @@ load("//:c7n_py_test.bzl", "c7n_py_test")
 
 package(default_visibility = ["//visibility:private"])
 
-pip_deps = [i for i in all_requirements]
-
 py_library(
     name = "kube_common_deps",
     testonly = True,
@@ -31,7 +29,6 @@ py_library(
     deps = [
         ":kube_common_deps",
         "//c7n:testing",
-        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
         "//tools/c7n_azure/c7n_azure:storage_utils",
     ],
 )
@@ -42,7 +39,7 @@ py_library(
     data = glob(["data/**"]),
     imports = ["."],
     srcs_version = "PY2AND3",
-    deps = [":kube_common"] + pip_deps,
+    deps = [":kube_common"],
 ) for test_file in glob(["test_*.py"])]
 
 # bazel test //tools/c7n_kube/tests

@@ -1,8 +1,12 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@kube_py_deps//:requirements.bzl", "requirement")
+load("@kube_py_deps//:requirements.bzl", "all_requirements", "requirement")
 load("@rules_python//experimental/python:wheel.bzl", "py_package")
+
+pip_deps = [i for i in all_requirements]
+
+[print(i) for i in sorted(pip_deps) if "azure" in i]
 
 py_package(
     name = "c7n_kube_pkg",
@@ -116,8 +120,7 @@ py_library(
         ":resources_apps",
         ":resources_core",
         ":resources_crd",
-        requirement("azure-mgmt-eventgrid"),
-    ],
+    ] + pip_deps,
 )
 
 py_library(
