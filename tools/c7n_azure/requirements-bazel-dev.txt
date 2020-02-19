@@ -7,3 +7,4 @@ PyJWT
 msrestazure
 azure
 netaddr
+azure-mgmt-keyvault
