@@ -1,0 +1,8 @@
+-r requirements.txt
+
+adal
+msrest
+PyJWT
+msrestazure
+azure
+netaddr
