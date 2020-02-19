@@ -4,8 +4,14 @@ load("@azure_py_deps//:requirements.bzl", "requirement")
 package(default_visibility = ["//visibility:public"])
 
 py_library(
+    name = "azure_lib",
+    srcs = glob(["azure/**"]),
+)
+
+py_library(
     name = "entry",
     srcs = ["entry.py"],
+    imports = ["azure/."],
     deps = [
         ":constants",
         ":storage_utils",
@@ -29,6 +35,7 @@ py_library(
 py_library(
     name = "storage_utils",
     srcs = ["storage_utils.py"],
+    imports = ["./azure"],
     deps = [
         requirement("azure"),
         requirement("azure-common"),
@@ -38,6 +45,7 @@ py_library(
         requirement("msrest"),
         requirement("msrestazure"),
         requirement("netaddr"),
+        ":azure_lib",
         ":constants",
     ],
 )

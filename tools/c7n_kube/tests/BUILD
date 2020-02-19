@@ -7,6 +7,11 @@ package(default_visibility = ["//visibility:private"])
 pip_deps = [i for i in all_requirements]
 
 py_library(
+    name = "azure_lib",
+    srcs = glob(["azure/**"]),
+)
+
+py_library(
     name = "kube_common_deps",
     testonly = True,
     deps = [
@@ -26,6 +31,7 @@ py_library(
     imports = [
         "..",
         "../../c7n_azure/.",
+        "../../c7n_azure/c7n_azure/azure",
     ],
     srcs_version = "PY2AND3",
     deps = [
@@ -44,7 +50,10 @@ py_library(
     imports = ["."],
     legacy_create_init = 1,
     srcs_version = "PY2AND3",
-    deps = [":kube_common"] + pip_deps,
+    deps = [
+        ":kube_common",
+        ":azure_lib",
+    ] + pip_deps,
 ) for test_file in glob(["test_*.py"])]
 
 # bazel test //tools/c7n_kube/tests
