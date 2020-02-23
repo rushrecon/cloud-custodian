@@ -14,6 +14,9 @@ jobs:
       - name: Run a container with the image
         run: |
           docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
-      - name: Execute running all bazel tests in the running container
+      - name: Execute bazel test //tests
         run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test ...
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests
+      - name: Execute bazel test //tools/c7n_gcp/tests
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
