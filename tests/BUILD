@@ -1,6 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
+#load("//:c7n_py_test.bzl", "c7n_py_cov_test")
 
 # TODO: get rid of excluded tests
 EXCLUDED_TESTS = [
@@ -15,6 +16,7 @@ EXCLUDED_TESTS = [
     #+ ['aws', 'azure', 'gcp', 'k8s']
     # Not all cloud modules registered
     "test_provider.py",
+    "test_mu.py",
 ]
 
 py_library(
@@ -24,17 +26,18 @@ py_library(
         "common.py",
         "zpill.py",
         "test_offhours.py",
-        "test_s3.py"
+        "test_s3.py",
     ]),
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
+    imports = ["../tools/c7n_gcp/."],
     deps = [
-        "//c7n:testing",
-        "//c7n:handler",
-        "//c7n:ufuncs",
-        "//c7n:reports",
-        "//c7n:commands",
         "//c7n:cli",
+        "//c7n:commands",
+        "//c7n:handler",
+        "//c7n:reports",
         "//c7n:sqsexec",
+        "//c7n:testing",
+        "//c7n:ufuncs",
         "//tools/c7n_gcp/c7n_gcp:entry",
         requirement("coverage"),
         requirement("placebo"),
@@ -51,7 +54,6 @@ py_library(
         requirement("vcrpy"),
         requirement("wrapt"),
     ],
-    imports = ["../tools/c7n_gcp/."],
 )
 
 [c7n_py_test(
@@ -67,3 +69,7 @@ py_library(
 test_suite(
     name = "tests",
 )
+#
+#c7n_py_cov_test(
+#    name = "coverage",
+#)
