@@ -14,6 +14,58 @@
 
 import json
 import logging
+import pkgutil
+
+import os, sys
+
+import azure.cosmosdb
+# import azure.cosmos
+#
+# for n, i in enumerate(azure.__path__):
+#     if "table" in i:
+#         i = "%s/azure/cosmosdb/table" % i
+#         azure.__path__[n] = i
+#         print("keeeeek", azure.__path__[n])
+#         break
+#
+# for importer, modname, ispkg in pkgutil.walk_packages(path=azure.cosmosdb.__path__,
+#                                                       prefix=azure.cosmosdb.__name__+'.',
+#                                                       onerror=lambda x: "kek"):
+    # print("*"*10, importer)
+#
+    # pass
+
+from azure.batch.models import *
+
+
+# for i in sorted(sys.path):
+#     if i.endswith("table" ):
+#         print(i)
+#         print(os.listdir(i))
+#         try:
+#             print("table dir is", os.listdir("%s/azure/cosmosdb/" % i))
+#             with open("%s/azure/cosmosdb/__init__.py" % i) as f:
+#                 print(f.read())
+#             print("Cosmodb path", azure.cosmosdb.__path__)
+#             sys.path.append(pkgutil.extend_path(azure.cosmosdb.__path__[1] + "/table", azure.cosmosdb.__name__ + ".table"))
+#         except Exception as e:
+#             print("%s while rocessing %s" % (str(e), i))
+#             pass
+
+a = azure.cosmosdb.__path__[0]
+a = a.replace("nspkg", "table")
+azure.cosmosdb.__path__.append(a)
+print(azure.cosmosdb.__path__)
+# for importer, modname, ispkg in pkgutil.walk_packages(path=azure.__path__,
+#                                                       prefix=azure.__name__+'.',
+#                                                       onerror=lambda x: "kek"):
+#     print(modname)
+
+
+
+for i in sorted(sys.path):
+    if "table" in i:
+        print("Number two", i)
 
 import jsonpickle
 from azure.cosmosdb.table import TableService

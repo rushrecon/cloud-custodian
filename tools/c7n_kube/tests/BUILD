@@ -6,6 +6,8 @@ package(default_visibility = ["//visibility:private"])
 
 pip_deps = [i for i in all_requirements]
 
+[print(i) for i in all_requirements]
+
 py_library(
     name = "azure_lib",
     srcs = glob(["azure/**"]),
@@ -32,6 +34,8 @@ py_library(
         "..",
         "../../c7n_azure/.",
         "../../c7n_azure/c7n_azure/azure",
+        "../../c7n_azure/c7n_gcp/.",
+        "../../c7n_gcp/.",
     ],
     srcs_version = "PY2AND3",
     deps = [
@@ -40,6 +44,7 @@ py_library(
         "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
         "//tools/c7n_azure/c7n_azure:entry",
         "//tools/c7n_azure/c7n_azure:storage_utils",
+        "//tools/c7n_gcp/c7n_gcp:entry",
     ],
 )
 
@@ -48,11 +53,12 @@ py_library(
     srcs = [test_file],
     data = glob(["data/**"]),
     imports = ["."],
-    legacy_create_init = 1,
+    legacy_create_init = 0,
     srcs_version = "PY2AND3",
     deps = [
         ":kube_common",
         ":azure_lib",
+        #        requirement("azure-cosmosdb-table"),
     ] + pip_deps,
 ) for test_file in glob(["test_*.py"])]
 

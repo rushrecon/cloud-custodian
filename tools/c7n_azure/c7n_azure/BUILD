@@ -1,6 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("@azure_py_deps//:requirements.bzl", "requirement")
 
+#[print(i) for i in all_requirements]
+print(requirement("azure-cosmosdb-table"))
+
 package(default_visibility = ["//visibility:public"])
 
 py_library(
@@ -33,19 +36,29 @@ py_library(
 )
 
 py_library(
+    name = "resources",
+    srcs = glob(["resources/*"]),
+)
+
+py_library(
     name = "storage_utils",
     srcs = ["storage_utils.py"],
-    imports = ["./azure"],
     deps = [
-        requirement("azure"),
+        #        requirement("azure-cosmosdb-table"),
+        requirement("azure-cosmos"),
         requirement("azure-common"),
+        requirement("azure-mgmt-costmanagement"),
+        requirement("azure-mgmt-resourcegraph"),
         requirement("azure-storage-common"),
         requirement("azure-storage-blob"),
         requirement("azure-storage-queue"),
+        requirement("azure"),
         requirement("msrest"),
         requirement("msrestazure"),
         requirement("netaddr"),
         ":azure_lib",
         ":constants",
+        ":resources",
+        "@azure_py_deps//pypi__azure_cosmosdb_table",
     ],
 )

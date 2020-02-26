@@ -1,15 +1,10 @@
 -r requirements.txt
 # -r ../c7n_azure/requirements.txt
-azure-mgmt-costmanagement
-azure-mgmt-eventgrid==2.2.0
-azure-mgmt-resourcegraph
+# azure
+# azure-mgmt-costmanagement
+# azure-mgmt-resourcegraph
 applicationinsights
 google-api-python-client
 ratelimiter
 retrying
-azure-cosmos
-azure-graphrbac
-azure-mgmt-keyvault
-azure-keyvault
-
 vcrpy

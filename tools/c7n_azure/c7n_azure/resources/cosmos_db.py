@@ -15,6 +15,15 @@
 import logging
 from itertools import groupby
 
+import pkgutil
+
+import os, sys
+
+import azure.cosmosdb
+
+
+
+
 from azure.cosmos.cosmos_client import CosmosClient
 from azure.cosmos.errors import HTTPFailure
 from azure.mgmt.cosmosdb.models import VirtualNetworkRule

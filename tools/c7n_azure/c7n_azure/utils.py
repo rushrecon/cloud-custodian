@@ -20,12 +20,7 @@ import logging
 import re
 import time
 import uuid
-import sys
 from concurrent.futures import as_completed
-
-for i in sys.path:
-    if "azure" in i:
-        print(i)
 
 import six
 from azure.graphrbac.models import DirectoryObject, GetObjectsParameters
