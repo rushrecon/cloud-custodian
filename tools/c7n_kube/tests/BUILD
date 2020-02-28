@@ -2,6 +2,9 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@kube_py_deps//:requirements.bzl", "all_requirements", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
 
+EXCLUDED_PKGS = [
+    "azure_cosmosdb_nspkg",
+]
 package(default_visibility = ["//visibility:private"])
 
 pip_deps = [i for i in all_requirements]
@@ -55,6 +58,7 @@ py_library(
     imports = ["."],
     legacy_create_init = 0,
     srcs_version = "PY2AND3",
+    excluded_pkgs = EXCLUDED_PKGS,
     deps = [
         ":kube_common",
         ":azure_lib",

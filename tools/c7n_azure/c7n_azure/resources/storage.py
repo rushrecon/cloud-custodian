@@ -37,6 +37,13 @@ import azure.cosmosdb
 
 from azure.batch.models import *
 
+for k, v in sys.modules.items():
+    print(k, v)
+    print()
+
+
+for i in sorted(sys.path):
+    print(i)
 
 # for i in sorted(sys.path):
 #     if i.endswith("table" ):
@@ -52,10 +59,11 @@ from azure.batch.models import *
 #             print("%s while rocessing %s" % (str(e), i))
 #             pass
 
-a = azure.cosmosdb.__path__[0]
-a = a.replace("nspkg", "table")
-azure.cosmosdb.__path__.append(a)
-print(azure.cosmosdb.__path__)
+# a = azure.cosmosdb.__path__[0]
+# a = a.replace("nspkg", "table")
+# # azure.cosmosdb.__path__.append(a)
+# sys.path.append(a)
+# print(azure.cosmosdb.__path__)
 # for importer, modname, ispkg in pkgutil.walk_packages(path=azure.__path__,
 #                                                       prefix=azure.__name__+'.',
 #                                                       onerror=lambda x: "kek"):
