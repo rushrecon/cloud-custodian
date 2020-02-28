@@ -32,6 +32,7 @@ py_wheel(
         "custodian": "c7n.cli:main",
     },
     distribution = "c7n",
+    # the version is from setup.py
     version = "0.8.45.4",
     deps = [
         "//c7n:core_pkg",
@@ -52,6 +53,7 @@ py_wheel_entry_points_ext(
     strip_path_prefixes = [
         "tools/c7n_gcp/",
     ],
+    # the version is from tools/c7n_gcp/setup.py
     version = "0.3.8",
     deps = [
         "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
@@ -70,6 +72,7 @@ py_wheel(
     strip_path_prefixes = [
         "tools/c7n_mailer/",
     ],
+    # the version is from tools/c7n_mailer/setup.py
     version = "0.5.7",
     deps = [
         "//tools/c7n_mailer/c7n_mailer:c7n_mailer_pkg",
@@ -89,6 +92,7 @@ py_wheel_entry_points_ext(
     strip_path_prefixes = [
         "tools/c7n_kube/",
     ],
+    # the version is from tools/c7n_kube/setup.py
     version = "0.1.1",
     deps = [
         "//tools/c7n_kube/c7n_kube:c7n_kube_pkg",

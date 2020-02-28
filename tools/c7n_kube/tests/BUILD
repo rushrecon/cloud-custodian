@@ -5,6 +5,7 @@ load("//:c7n_py_test.bzl", "c7n_py_test")
 EXCLUDED_PKGS = [
     "azure_cosmosdb_nspkg",
 ]
+
 package(default_visibility = ["//visibility:private"])
 
 pip_deps = [i for i in all_requirements]
@@ -53,14 +54,12 @@ py_library(
     name = test_file[:-3],
     srcs = [test_file],
     data = glob(["data/**"]),
+    excluded_pkgs = EXCLUDED_PKGS,
     imports = ["."],
     legacy_create_init = 0,
     srcs_version = "PY2AND3",
-    excluded_pkgs = EXCLUDED_PKGS,
     deps = [
         ":kube_common",
-        ":azure_lib",
-        #        requirement("azure-cosmosdb-table"),
     ] + pip_deps,
 ) for test_file in glob(["test_*.py"])]
 
