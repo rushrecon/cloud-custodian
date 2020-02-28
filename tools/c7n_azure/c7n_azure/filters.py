@@ -50,9 +50,6 @@ scalar_ops = {
     'lt': operator.lt,
     'less-than': operator.lt
 }
-import azure.mgmt
-
-
 
 
 class MetricFilter(Filter):

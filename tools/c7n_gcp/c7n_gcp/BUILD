@@ -11,11 +11,6 @@ py_library(
     deps = c7n_gcp_requirements,  # c7n_gcp/requirements.txt misses some dependencies that's why we have to use requirements-bazel-dev.txt
 )
 
-py_library(
-    name = "c7n_gcp_common_lib",
-    deps = [":entry"] + c7n_gcp_requirements,
-)
-
 py_package(
     name = "gcp_pkg",
     deps = [

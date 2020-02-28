@@ -4,11 +4,10 @@ adal
 msrest
 PyJWT
 msrestazure
+azure
 netaddr
 azure-cosmos
 azure-cosmosdb-table
-# azure-graphrbac
-azure
 azure-mgmt-eventgrid==2.2.0
 azure-mgmt-costmanagement
 azure-mgmt-resourcegraph

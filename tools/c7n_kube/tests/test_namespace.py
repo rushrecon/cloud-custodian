@@ -13,9 +13,6 @@
 # limitations under the License.
 import time
 from common_kube import KubeTest
-import os
-
-print(os.environ)
 
 
 class NamespaceTest(KubeTest):
