@@ -6,8 +6,6 @@ load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
 pip_deps = [i for i in all_requirements]
 
-#[print(i) for i in sorted(pip_deps) if "azure" in i]
-
 py_package(
     name = "c7n_kube_pkg",
     deps = [

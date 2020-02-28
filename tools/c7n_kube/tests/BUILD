@@ -9,8 +9,6 @@ package(default_visibility = ["//visibility:private"])
 
 pip_deps = [i for i in all_requirements]
 
-[print(i) for i in all_requirements]
-
 py_library(
     name = "azure_lib",
     srcs = glob(["azure/**"]),
