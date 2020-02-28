@@ -1,0 +1,22 @@
+name: Run all tests in bazel
+on: [push]
+
+jobs:
+  build:
+    name: Run all tests in bazel
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build a docker image with bazel
+        run: |
+          docker build -f Docker-bazel-exec -t my-baz .
+      - name: Run a container with the image
+        run: |
+          docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
+      - name: Execute bazel test //tests
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests
+      - name: Execute bazel test //tools/c7n_gcp/tests
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
