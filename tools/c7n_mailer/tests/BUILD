@@ -1,5 +1,5 @@
 load("//:c7n_py_test.bzl", "c7n_py_test")
-load("@pip_deps//:requirements.bzl", "requirement")
+load("@mailer_py_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -47,7 +47,7 @@ py_library(
     srcs_version = "PY2AND3",
     deps = [
         ":test_deps",
-        "//tools/c7n_azure/c7n_azure:storage_utils",
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
         "//tools/c7n_mailer/c7n_mailer:c7n_mailer_cli",  # used instead of c7n_mailer_core_deps for testing cli as well
     ],
 ) for test_file in glob(
