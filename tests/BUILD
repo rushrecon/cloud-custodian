@@ -2,7 +2,7 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
 
-# TODO: get rid of excluded tests
+# TODO: get rid of excluded tests; remember to update bazel-test-excluded.yml
 EXCLUDED_TESTS = [
     # 1) AssertionError: 'azure.vm' not found in 'resources:
     # c7n_azure is a stub with no resources available
