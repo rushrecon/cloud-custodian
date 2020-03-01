@@ -6,12 +6,20 @@ jobs:
     name: Expect failures for excluded tests in bazel
     runs-on: ubuntu-18.04
     steps:
+      - name: Solely experimental step 0
+        run: |
+          (exit 0) | true; \
+          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
+      - name: Solely experimental step 1
+        run: |
+          (exit 1) | true; \
+          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
         run: |
           sed 's/"test_(cli|iamgen|output).py",//' -i --regexp-extended tests/BUILD
-      - name: Build a docker image with bazel
+      - name: Build a docker image with bazel included
         run: |
           docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
