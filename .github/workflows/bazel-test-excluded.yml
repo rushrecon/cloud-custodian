@@ -19,17 +19,17 @@ jobs:
           docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Expect failing bazel test //tests:test_cli
         run: |
-          true | docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli ;\
-          if [ ${PIPESTATUS[1]} -ne 0 ]; then exit 0; else exit 1; fi
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli | true;\
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi
       - name: Expect failing bazel test //tests:test_iamgen
         run: |
-          true | docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen ;\
-          if [ ${PIPESTATUS[1]} -ne 0 ]; then exit 0; else exit 1; fi
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen | true;\
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi
       - name: Expect failing bazel test //tests:test_output
         run: |
-          true | docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output ;\
-          if [ ${PIPESTATUS[1]} -ne 0 ]; then exit 0; else exit 1; fi
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output | true;\
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi
       - name: Expect failing bazel test //tests:test_ami (workflow fails here)
         run: |
-          true | docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami ;\
-          if [ ${PIPESTATUS[1]} -ne 0 ]; then exit 0; else exit 1; fi
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami | true;\
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi
