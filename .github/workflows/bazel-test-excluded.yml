@@ -6,9 +6,12 @@ jobs:
     name: Expect failures for excluded tests in bazel
     runs-on: ubuntu-18.04
     steps:
-      - name: Solely experimental step
+      - name: Solely experimental step 0
         run: |
-          (exit 1)| (if [ $? -ne 0 ]; then echo 123; else echo 456; fi)
+          (exit 0) | true; (if [ ${PIPESTATUS[0]} -ne 0 ]; then echo 123; else echo 456; fi)
+      - name: Solely experimental step 1
+        run: |
+          (exit 1) | true; (if [ ${PIPESTATUS[0]} -ne 0 ]; then echo 123; else echo 456; fi)
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
