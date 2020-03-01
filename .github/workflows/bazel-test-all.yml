@@ -12,20 +12,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build a docker image with bazel
-        run: |
-          docker build -f Docker-bazel-exec -t my-baz .
+        run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
-        run: |
-          docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
+        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel test //tests
         if: matrix.worker == 'tests'
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests
       - name: Execute bazel test //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp_tests'
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
       - name: Execute bazel test //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_tests'
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
