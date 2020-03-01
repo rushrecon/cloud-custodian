@@ -20,12 +20,16 @@ jobs:
       - name: Expect failing bazel test //tests:test_cli
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli.py \
-          || if [ $? -ne 0 ]; then exit 0; else exit 1; fi
+          if [ $? -ne 0 ]; then exit 0; else exit 1; fi
       - name: Expect failing bazel test //tests:test_iamgen
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen.py \
-          || if [ $? -ne 0 ]; then exit 0; else exit 1; fi
+          if [ $? -ne 0 ]; then exit 0; else exit 1; fi
       - name: Expect failing bazel test //tests:test_output
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output.py \
-          || if [ $? -ne 0 ]; then exit 0; else exit 1; fi
+          if [ $? -ne 0 ]; then exit 0; else exit 1; fi
+      - name: Expect failing bazel test //tests:test_ami (workflow fails here)
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami.py \
+          if [ $? -ne 0 ]; then exit 0; else exit 1; fi
