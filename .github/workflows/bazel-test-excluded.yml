@@ -5,15 +5,7 @@ jobs:
   build:
     name: Expect failures for excluded tests in bazel
     runs-on: ubuntu-18.04
-    steps:
-      - name: Solely experimental step 0
-        run: |
-          (exit 0) | true; \
-          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
-      - name: Solely experimental step 1
-        run: |
-          (exit 1) | true; \
-          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
+    steps
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
@@ -26,14 +18,16 @@ jobs:
         run: |
           docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Expect failing bazel test //tests:test_cli
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli | true;
-             (if [ ${PIPESTATUS[0]} -ne 0 ]; then echo "${PIPESTATUS[0]}zero"; else echo "${PIPESTATUS[0]}one"; fi)
+        run: |
+          (docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli) | true; \
+          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
+      - name: Expect failing bazel test //tests:test_ami (workflow fails here)
+        run: |
+          (docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami) | true; \
+          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
       - name: Expect failing bazel test //tests:test_iamgen
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen | true;
              if [ ${PIPESTATUS[0]} -ne 0 ]; then echo "${PIPESTATUS[0]}zero"; else echo "${PIPESTATUS[0]}one"; fi
       - name: Expect failing bazel test //tests:test_output
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output | true;
-             if [ ${PIPESTATUS[0]} -ne 0 ]; then echo "${PIPESTATUS[0]}zero"; else echo "${PIPESTATUS[0]}one"; fi
-      - name: Expect failing bazel test //tests:test_ami (workflow fails here)
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami | true;
              if [ ${PIPESTATUS[0]} -ne 0 ]; then echo "${PIPESTATUS[0]}zero"; else echo "${PIPESTATUS[0]}one"; fi
