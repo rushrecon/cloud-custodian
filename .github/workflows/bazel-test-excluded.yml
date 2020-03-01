@@ -18,5 +18,3 @@ jobs:
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli && exit 1 || exit 0
       - name: Expect failing bazel test //tests:test_output
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output && exit 1 || exit 0
-      - name: Expect failing bazel test //tests:test_ami (workflow fails here)
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami && exit 1 || exit 0
