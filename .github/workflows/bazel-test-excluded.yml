@@ -1,0 +1,29 @@
+name: Expect failures for excluded tests in bazel
+on: [push]
+
+jobs:
+  build:
+    name: Expect failures for excluded tests in bazel
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build a docker image with bazel
+        run: |
+          docker build -f Docker-bazel-exec -t my-baz .
+      - name: Run a container with the image
+        run: |
+          docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
+      - name: Execute bazel test //tests:test_cli.py
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli.py
+      - name: Execute bazel test //tests:test_iamgen.py
+        if: failed()
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen.py
+      - name: Execute bazel test //tests:test_output.py
+        if: failed()
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output.py
+      - name: Indicate that everything above has failed as expected
+        if: failed()
