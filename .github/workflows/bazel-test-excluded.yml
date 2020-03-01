@@ -18,13 +18,13 @@ jobs:
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli.py
       - name: Execute bazel test //tests:test_iamgen.py
-        if: failed()
+        if: failure()
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen.py
       - name: Execute bazel test //tests:test_output.py
-        if: failed()
+        if: failure()
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output.py
       - name: Indicate that everything above has failed as expected
-        if: failed()
+        if: failure()
         run: true
