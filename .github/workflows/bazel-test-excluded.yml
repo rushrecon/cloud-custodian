@@ -16,5 +16,5 @@ jobs:
           docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel test //tests:test_cli.py
         run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli.py
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli.py \
           || if [ $? -ne 0 ]; then exit 0; else exit 1; fi
