@@ -6,6 +6,14 @@ jobs:
     name: Expect failures for excluded tests in bazel
     runs-on: ubuntu-18.04
     steps:
+      - name: Solely experimental step 0
+        run: |
+          (cp 1.txt) | true; \
+          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
+      - name: Solely experimental step 1
+        run: |
+          (echo 0) | true; \
+          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
@@ -19,8 +27,8 @@ jobs:
           docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Expect failing bazel test //tests:test_cli
         run: |
-          (docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli) | true; \
-          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
+          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli | true; \
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi
       - name: Expect failing bazel test //tests:test_ami (workflow fails here)
         run: |
           (docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_ami) | true; \
