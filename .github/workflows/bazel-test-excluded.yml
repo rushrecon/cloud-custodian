@@ -10,8 +10,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Solely experimental step
         run: |
-          (exit 1);\
-          (echo 123)
+          (exit 1);| (if [ $? -ne 0 ]; then echo 123; else echo 456; fi)
       - name: Unexclude specified tests in //tests:BUILD
         run: |
           sed 's/"test_(cli|iamgen|output).py",//' -i --regexp-extended tests/BUILD
