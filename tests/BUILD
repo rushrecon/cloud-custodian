@@ -8,9 +8,6 @@ EXCLUDED_TESTS = [
     # c7n_azure is a stub with no resources available
     # 2) jsonschema.exceptions.SchemaError: {'anyOf': []} is not valid under any of the given schemas
     "test_cli.py",
-    # 1) UnboundLocalError: local variable 'invalid' referenced before assignment
-    # a blooper
-    "test_iamgen.py",
     # 1) AssertionError: False is not true
     # self.assertTrue(content.endswith("hello world"))
     "test_output.py",

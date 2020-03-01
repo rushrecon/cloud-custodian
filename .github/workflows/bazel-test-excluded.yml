@@ -16,8 +16,6 @@ jobs:
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Expect failing bazel test //tests:test_cli
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli && exit 1 || exit 0
-      - name: Expect failing bazel test //tests:test_iamgen
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen && exit 1 || exit 0
       - name: Expect failing bazel test //tests:test_output
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output && exit 1 || exit 0
       - name: Expect failing bazel test //tests:test_ami (workflow fails here)
