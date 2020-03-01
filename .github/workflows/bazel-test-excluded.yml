@@ -27,3 +27,4 @@ jobs:
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output.py
       - name: Indicate that everything above has failed as expected
         if: failed()
+        run: true
