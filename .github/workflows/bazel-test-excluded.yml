@@ -17,14 +17,4 @@ jobs:
       - name: Execute bazel test //tests:test_cli.py
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli.py
-      - name: Execute bazel test //tests:test_iamgen.py
-        if: failure()
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_iamgen.py
-      - name: Execute bazel test //tests:test_output.py
-        if: failure()
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output.py
-      - name: Indicate that everything above has failed as expected
-        if: failure()
-        run: true
+          if [ $? -eq 0 ]; then exit 0; else exit 1; fi
