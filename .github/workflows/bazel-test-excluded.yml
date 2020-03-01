@@ -10,10 +10,6 @@ jobs:
         run: |
           (cp 1.txt) | true; \
           (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
-      - name: Solely experimental step 1
-        run: |
-          (echo 0) | true; \
-          (if [ ${PIPESTATUS[0]} -ne 0 ]; then exit 0; else exit 1; fi)
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
