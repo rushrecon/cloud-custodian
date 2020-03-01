@@ -17,6 +17,9 @@ jobs:
       - name: Run a container with the image
         run: |
           docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
+      - name: Solely experimental step
+        run: (exit 1);
+             (echo 123)
       - name: Expect failing bazel test //tests:test_cli
         run: (docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_cli);
              (if [ $? -ne 0 ]; then exit 0; else exit 1; fi)
