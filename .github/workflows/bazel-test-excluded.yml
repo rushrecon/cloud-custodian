@@ -5,7 +5,7 @@ jobs:
   build:
     name: Expect failures for excluded tests in bazel
     runs-on: ubuntu-18.04
-    steps
+    steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
