@@ -6,3 +6,8 @@ python_http_client
 sortedcontainers
 jsonpointer
 markupsafe
+pyasn1
+mock
+fakeredis
+pytest
+jsonpatch
