@@ -6,7 +6,7 @@ jobs:
     name: Run tests in bazel
     strategy:
       matrix:
-        worker: [tests, c7n_gcp_tests, c7n_mailer_tests]
+        worker: [tests, c7n_gcp_tests, c7n_mailer_tests, c7n_kube_tests]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -24,3 +24,6 @@ jobs:
       - name: Execute bazel test //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
+      - name: Execute bazel test //tools/c7n_kube/tests
+        if: matrix.worker == 'c7n_kube_tests'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
