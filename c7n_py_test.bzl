@@ -11,7 +11,7 @@ def add_exclude_pkgs_command(excluded_pkgs):
         "| sed $'s/" + \
         "  python_path_entries = \[GetWindowsPathWithUNCPrefix(d) for d in python_path_entries\]/" + \
         "  python_path_entries = [GetWindowsPathWithUNCPrefix\(d\)" + \
-        " for d in python_path_entries if not list\(filter\(d.__contains__, %s\)\)]/g'" % excluded_pkgs
+        " for d in python_path_entries if not list\(filter\(d.endswith, %s\)\)]/g'" % excluded_pkgs
     return exclude_pkgs_command
 
 def _impl(ctx):

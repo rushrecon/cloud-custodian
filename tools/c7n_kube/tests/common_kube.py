@@ -49,10 +49,6 @@ KUBE_CONFIG = {
     ],
 }
 
-import sys
-
-for i in sorted(sys.path):
-    print(i)
 
 def init_kube_config():
     fh = tempfile.NamedTemporaryFile(delete=False)
