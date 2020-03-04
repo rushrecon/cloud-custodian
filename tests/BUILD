@@ -1,7 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
-#load("//:c7n_py_test.bzl", "c7n_py_cov_test")
+load("//:c7n_py_test.bzl", "c7n_py_cov")
 
 # TODO: get rid of excluded tests
 EXCLUDED_TESTS = [
@@ -69,7 +69,12 @@ py_library(
 test_suite(
     name = "tests",
 )
-#
-#c7n_py_cov_test(
-#    name = "coverage",
-#)
+
+# bazel run tests/coverage --test_env='/home/.../cloud-custodian/'
+c7n_py_cov(
+    name = "coverage",
+    srcs = glob(
+        include = ["test_*.py"],
+        exclude = EXCLUDED_TESTS,
+    ),
+)
