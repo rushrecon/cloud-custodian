@@ -1,4 +1,11 @@
--r requirements-bazel-dev.txt
+-r requirements-common.txt
+
+
+-r tools/c7n_mailer/requirements.txt
+-r tools/c7n_azure/requirements.txt
+-r tools/c7n_gcp/requirements.txt
+-r tools/c7n_kube/requirements.txt
+
 
 # Local package required for c7n_mailer tests
 -e tools/c7n_mailer
