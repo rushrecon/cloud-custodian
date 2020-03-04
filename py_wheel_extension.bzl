@@ -20,6 +20,7 @@ def _impl_a(ctx):
         for p in v:
             contents.append(p)
     contents = "\\n".join(contents)
+    print(ctx.repository_ctx.read("setup.py"))
     ctx.actions.run(
         inputs = inputs,
         outputs = [out_file],
