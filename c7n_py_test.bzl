@@ -55,7 +55,6 @@ def c7n_py_test(name, **kwargs):
     py_test(name = inner_test_name, **kwargs)
     _py_test(name = name, tags = tags, test = inner_test_name, excluded_pkgs = excluded_pkgs)
 
-
 def _c7n_py_cov_impl(ctx):
     my_out = ctx.outputs.executable
     ctx.actions.write(
