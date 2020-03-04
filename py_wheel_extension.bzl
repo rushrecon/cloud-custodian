@@ -19,8 +19,13 @@ def _impl_a(ctx):
         contents.append("[%s]" % k)
         for p in v:
             contents.append(p)
+    ctx.actions.run(
+        inputs = inputs,
+        outputs = [out_file],
+        executable = ctx.executable._setup,
+        progress_message = "Building wheel",
+    )
     contents = "\\n".join(contents)
-    print(ctx.repository_ctx.read("setup.py"))
     ctx.actions.run(
         inputs = inputs,
         outputs = [out_file],
@@ -41,6 +46,40 @@ _add_entry_points = rule(
             cfg = "host",
             default = ":run-add-ep-script",
         ),
+        "setup": attr.label(
+            cfg = "host",
+            executable = False,
+            default = ":run-add-ep-script",
+        ),
+    },
+)
+
+def define_add_ep_rule():
+    native.sh_binary(
+        name = "run-add-ep-script",
+        srcs = ["add-entry-points-to-wheel.sh"],
+        data = ["file_hash.py"],
+    )
+
+def define_path_to_setup_rule(py_wheel_rule_name):
+    native.sh_binary(
+        name = py_wheel_rule_name + "sh",
+        srcs = ["setup.py"],
+        data = ["setup.py"],
+    )
+
+def _impl_wheel(ctx):
+    for f in ctx.attr.setup.data_runfiles.files.to_list():
+        print(f.basename)
+
+_py_wheel = rule(
+    implementation = _impl_a,
+    attrs = {
+        "setup": attr.label(
+            cfg = "host",
+            executable = False,
+            default = ":run-add-ep-script",
+        ),
     },
 )
 
@@ -50,6 +89,9 @@ def py_wheel_entry_points_ext(**kwargs):
     else:
         fail("Entry points not specified")
     py_wheel_rule_name = kwargs["name"] + "_wheel"
+    _py_wheel(
+        name = py_wheel_rule_name + "1",
+    )
     py_wheel(
         name = py_wheel_rule_name,
         distribution = kwargs["distribution"],
@@ -57,6 +99,8 @@ def py_wheel_entry_points_ext(**kwargs):
         version = kwargs["version"],
         deps = kwargs["deps"],
     )
+    define_add_ep_rule()
+    define_path_to_setup_rule(py_wheel_rule_name)
     outfile = "out/" + "-".join(
         [
             kwargs["distribution"],
@@ -72,4 +116,5 @@ def py_wheel_entry_points_ext(**kwargs):
         distr_info = kwargs["distribution"] + "-" + kwargs["version"],
         whl_file = "//:" + py_wheel_rule_name,
         output = outfile,
+        setup = py_wheel_rule_name + "1",
     )

@@ -18,12 +18,6 @@ py_binary(
     ],
 )
 
-sh_binary(
-    name = "run-add-ep-script",
-    srcs = ["add-entry-points-to-wheel.sh"],
-    data = ["file_hash.py"],
-)
-
 # bazel build //:c7n_wheel
 # To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
 py_wheel(
