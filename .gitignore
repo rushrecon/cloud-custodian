@@ -45,3 +45,5 @@ docs/source/*/resources
 bazel-*
 env/
 secrets.sh
+htmlcov
+*.pyc.*
