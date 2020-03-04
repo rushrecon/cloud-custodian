@@ -32,6 +32,7 @@ py_wheel(
         "custodian": "c7n.cli:main",
     },
     distribution = "c7n",
+    # the version is from setup.py
     version = "0.8.45.4",
     deps = [
         "//c7n:core_pkg",
@@ -52,6 +53,7 @@ py_wheel_entry_points_ext(
     strip_path_prefixes = [
         "tools/c7n_gcp/",
     ],
+    # the version is from tools/c7n_gcp/setup.py
     version = "0.3.8",
     deps = [
         "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
@@ -70,9 +72,30 @@ py_wheel(
     strip_path_prefixes = [
         "tools/c7n_mailer/",
     ],
+    # the version is from tools/c7n_mailer/setup.py
     version = "0.5.7",
     deps = [
         "//tools/c7n_mailer/c7n_mailer:c7n_mailer_pkg",
+    ],
+)
+
+# bazel build //:c7n_kube_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
+py_wheel_entry_points_ext(
+    name = "c7n_kube_wheel",
+    distribution = "c7n-kube",
+    entry_points = {
+        "custodian.resources": [
+            "kube = c7n_kube.entry:initialize_kube",
+        ],
+    },
+    strip_path_prefixes = [
+        "tools/c7n_kube/",
+    ],
+    # the version is from tools/c7n_kube/setup.py
+    version = "0.1.1",
+    deps = [
+        "//tools/c7n_kube/c7n_kube:c7n_kube_pkg",
     ],
 )
 

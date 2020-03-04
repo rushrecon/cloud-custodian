@@ -63,3 +63,12 @@ pip3_import(
 load("@mailer_py_deps//:requirements.bzl", "pip_install")
 
 pip_install()
+
+pip3_import(
+    name = "kube_py_deps",
+    requirements = "//tools/c7n_kube:requirements-bazel-dev.txt",
+)
+
+load("@kube_py_deps//:requirements.bzl", "pip_install")
+
+pip_install()
