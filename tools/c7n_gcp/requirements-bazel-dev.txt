@@ -1,0 +1,8 @@
+-r requirements.txt
+
+
+cachetools
+jmespath
+pyasn1
+pyasn1_modules
+rsa

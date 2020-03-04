@@ -4,3 +4,8 @@ backports.functools_lru_cache==1.6.1
 pywin32<226; sys_platform == 'win32'
 azure-functions; python_version >= '3.6'
 parameterized
+azure-storage-blob~=2.1
+azure-storage-common~=2.0
+azure-storage-queue~=2.1
+azure-storage-file~=2.1
+

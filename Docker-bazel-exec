@@ -1,0 +1,4 @@
+# copy the c7n project into the image's workspace dir
+FROM johnybear/ubuntu_for_c7n_bazel:latest
+COPY . /workspace/
+RUN mkdir /tmp/output_build/

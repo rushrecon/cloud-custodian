@@ -1,0 +1,7 @@
+-r requirements.txt
+
+applicationinsights
+google-api-python-client
+ratelimiter
+retrying
+vcrpy
