@@ -21,9 +21,9 @@ jobs:
       - name: Execute bazel test //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
-      - name: Execute bazel test //tools/c7n_mailer/tests
-        if: matrix.worker == 'c7n_mailer_tests'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
       - name: Execute bazel test //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
+      - name: Execute bazel test //tools/c7n_mailer/tests
+        if: matrix.worker == 'c7n_mailer_tests'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
