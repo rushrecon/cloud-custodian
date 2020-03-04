@@ -46,4 +46,3 @@ bazel-*
 env/
 secrets.sh
 htmlcov
-*.pyc.*
