@@ -6,7 +6,7 @@ jobs:
     name: Run tests in bazel
     strategy:
       matrix:
-        worker: [tests, c7n_gcp_tests, c7n_mailer_tests, c7n_kube_tests]
+        worker: [tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
