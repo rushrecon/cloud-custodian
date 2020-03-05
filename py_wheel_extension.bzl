@@ -12,6 +12,7 @@ def _impl_a(ctx):
     if not python_script_file:
         fail("Can't find 'file_hash.py' in data of the run-add-ep-script rule")
     inputs.append(python_script_file)
+    print("kek")
     out_file = ctx.outputs.output
     contents = []
     args = ctx.actions.args()
@@ -19,12 +20,15 @@ def _impl_a(ctx):
         contents.append("[%s]" % k)
         for p in v:
             contents.append(p)
-    ctx.actions.run(
-        inputs = inputs,
-        outputs = [out_file],
-        executable = ctx.executable._setup,
-        progress_message = "Building wheel",
-    )
+
+    print(ctx.attr.setup, "KEK")
+
+    #    ctx.actions.run(
+    #        inputs = inputs,
+    #        outputs = [out_file],
+    #        executable = ,
+    #        progress_message = "Building wheel",
+    #    )
     contents = "\\n".join(contents)
     ctx.actions.run(
         inputs = inputs,
@@ -71,9 +75,10 @@ def define_path_to_setup_rule(py_wheel_rule_name):
 def _impl_wheel(ctx):
     for f in ctx.attr.setup.data_runfiles.files.to_list():
         print(f.basename)
+    return struct(txt = f.basename)
 
 _py_wheel = rule(
-    implementation = _impl_a,
+    implementation = _impl_wheel,
     attrs = {
         "setup": attr.label(
             cfg = "host",
@@ -116,5 +121,5 @@ def py_wheel_entry_points_ext(**kwargs):
         distr_info = kwargs["distribution"] + "-" + kwargs["version"],
         whl_file = "//:" + py_wheel_rule_name,
         output = outfile,
-        setup = py_wheel_rule_name + "1",
+        setup = "//:" + py_wheel_rule_name + "1",
     )
