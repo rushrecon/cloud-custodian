@@ -43,11 +43,15 @@ from c7n.mu import (
     CloudWatchEventSource
 )
 
-# for k, v in sorted(sys.modules.items()):
-#     print(k, v)
+for k, v in sorted(sys.modules.items()):
+    print(k, v)
 
 for k in sorted(sys.path):
     print(k)
+
+import c7n
+
+print(c7n.__path__)
 
 from c7n.ufuncs import logsub
 from .common import (

@@ -7,17 +7,17 @@ def a():
 
 BUILD_TEMPLATE2 = '''
 \n
-
 package(default_visibility = ["//visibility:public"])
 
+exports_files(["c7n/version.py"])
 load("@rules_python//python:defs.bzl", "py_library")
 
-py_library(
-    name = "version",
-    srcs = [
-        "c7n/version.py",
-    ],
-)
+#py_library(
+#    name = "version",
+#    srcs = [
+#        "c7n/version.py",
+#    ],
+#)
 
 
 
@@ -31,7 +31,7 @@ grep -oP \"'fallback_version': \K'.*?'\"
 def _create_version_py(ctx):
     b = ctx.execute(["grep", "-oP", "'fallback_version': \K'.*?'", "setup.py"]).stdout
     ctx.file("c7n/version.py", "version = u%s" % b)
-    ctx.file("BUILD.bazel", '\nexports_files(["c7n/version.py"])')
+    ctx.file("BUILD.bazel", "\n")
 
 def _hello_repo_impl(ctx):
     ctx.file("hello.txt", ctx.attr.message)
@@ -43,7 +43,7 @@ def _hello_repo_impl(ctx):
 
 hello_repo = repository_rule(
     implementation = _hello_repo_impl,
-    local = True,
+    local = False,
     attrs = {
         "message": attr.string(
             mandatory = True,

@@ -21,7 +21,7 @@ py_package(
 
 py_library(
     name = "c7n",
-    srcs = glob(["**/*.py"]),
+    srcs = glob(["**/*.py"]) + ["@hello//:c7n/version.py"],
     deps = [
         requirement("argcomplete"),
         requirement("boto3"),
@@ -232,7 +232,7 @@ py_library(
 
 #py_library(
 #    name = "version",
-#    deps = [
+#    srcs = [
 #        "@hello//:c7n/version.py",
 #    ],
 #    #    imports = ["../../hello/c7n/"],
@@ -246,7 +246,7 @@ py_library(
     deps = [
         ":output",
         ":utils",
-        "@hello//:version",
+        #        "@hello//:version",
     ],
 )
 
