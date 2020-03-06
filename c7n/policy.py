@@ -33,7 +33,7 @@ from c7n.resources import load_resources
 from c7n.registry import PluginRegistry
 from c7n.provider import clouds, get_resource_class
 from c7n import utils
-from c7n.version import version
+from hello.c7n.version import version
 
 log = logging.getLogger('c7n.policy')
 

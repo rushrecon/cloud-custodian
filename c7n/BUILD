@@ -230,12 +230,13 @@ py_library(
     ],
 )
 
-py_library(
-    name = "version",
-    srcs = [
-        "version.py",
-    ],
-)
+#py_library(
+#    name = "version",
+#    deps = [
+#        "@hello//:c7n/version.py",
+#    ],
+#    #    imports = ["../../hello/c7n/"],
+#)
 
 py_library(
     name = "ctx",
@@ -245,7 +246,7 @@ py_library(
     deps = [
         ":output",
         ":utils",
-        ":version",
+        "@hello//:version",
     ],
 )
 

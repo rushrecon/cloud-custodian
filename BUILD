@@ -2,6 +2,11 @@ load("@rules_python//python:defs.bzl", "py_binary")
 load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 
+#load("@hello//:hello.txt")
+load("@hello//:kek.bzl", "a")
+
+a()
+
 # bazel run :c7n_aws_cli env/aws-sample.yml
 py_binary(
     name = "c7n_aws_cli",

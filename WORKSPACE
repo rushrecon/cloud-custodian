@@ -63,3 +63,21 @@ pip3_import(
 load("@mailer_py_deps//:requirements.bzl", "pip_install")
 
 pip_install()
+
+#
+#generated_repo(
+#    name = "pwd",
+#    path = "kek",
+#)
+local_repository(
+    name = "custom_repo",
+    path = "custom_repo",
+)
+
+load("//:custom_repository.bzl", "hello_repo")
+
+hello_repo(
+    name = "hello",
+    message = "Hello, world!",
+    setup_file = "@//:setup.py",
+)
