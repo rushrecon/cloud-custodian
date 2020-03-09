@@ -27,7 +27,7 @@ from c7n.output import (
     tracer_outputs)
 
 from c7n.utils import reset_session_cache, dumps, local_session
-from hello.c7n.version import version
+from c7n.version import version
 
 
 class ExecutionContext(object):
