@@ -20,12 +20,10 @@ def _create_version_py(ctx):
 
 def create_versions_bzl(ctx):
     versions = []
-    for i in ctx.attr.setup_files:
-        ctx.file("tmp", content = ctx.read(i))
-        b = ctx.execute(["grep", "-oP", "version=\K'.*'", "tmp"]).stdout.strip()
-        versions.append("\"%s\":%s" % (i, b))
-    print(versions)
-    print(VERSIONS_TEMPLATE % ",".join(versions))
+    for setup_file_name in ctx.attr.setup_files:
+        ctx.file("tmp", content = ctx.read(setup_file_name))
+        version = ctx.execute(["grep", "-oP", "version=\K'.*'", "tmp"]).stdout.strip()
+        versions.append("\"%s\":%s" % (setup_file_name, version))
     return VERSIONS_TEMPLATE % ",".join(versions)
 
 def _hello_repo_impl(ctx):

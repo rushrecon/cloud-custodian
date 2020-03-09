@@ -92,7 +92,7 @@ py_wheel_entry_points_ext(
         "tools/c7n_kube/",
     ],
     # the version is from tools/c7n_kube/setup.py
-    version = "0.1.1",
+    version = setup_version("//tools/c7n_kube:setup.py"),
     deps = [
         "//tools/c7n_kube/c7n_kube:c7n_kube_pkg",
     ],
