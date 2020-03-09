@@ -3,6 +3,11 @@ load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 load("@setup_versions//:versions.bzl", "setup_version")
 
+#load("@hello//:hello.txt")
+load("@hello//:kek.bzl", "a")
+
+a()
+
 # bazel run :c7n_aws_cli env/aws-sample.yml
 py_binary(
     name = "c7n_aws_cli",
@@ -17,12 +22,6 @@ py_binary(
     deps = [
         "//c7n",
     ],
-)
-
-sh_binary(
-    name = "run-add-ep-script",
-    srcs = ["add-entry-points-to-wheel.sh"],
-    data = ["file_hash.py"],
 )
 
 # bazel build //:c7n_wheel
