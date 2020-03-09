@@ -18,23 +18,45 @@ def _impl(ctx):
     old_runner = ctx.attr.test[DefaultInfo].files_to_run.executable
     new_runner = ctx.actions.declare_file(ctx.attr.name)
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
-    ctx.actions.run_shell(
-        progress_message = "Patching file content - %s" % old_runner.short_path,
-        # TODO: replace all *.inner mentions in file_to_run
-        command = "sed $'s/" +
-                  "  args = \[python_program, main_filename\] + args/" +  # search string
-                  "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +  # replacing strings
-                  "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +
-                  "  args = \[python_program, \"-m\", \"unittest\", module_name\] + args/g'" +
-                  " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
-        inputs = [old_runner],
-        outputs = [new_runner],
-    )
+    package = ctx.label.package
+    test_name = ctx.attr.name
+    if ctx.configuration.coverage_enabled:
+        ctx.actions.run_shell(
+            command = "sed $'s/" +
+                      "  args = \[python_program, main_filename\] + args/" +  # search string
+                      # replacing strings
+                      "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +
+                      "  module_name = os.path.join(\"%s\", \"%s.py\")\\\n" % (package, test_name) +  # relative path to test: tests/test_cli.py
+                      "  os.system(\"mkdir \/tmp\/C7N-cov; mkdir \/tmp\/C7N-cov\/%s\")\\\n" % (package.replace("/", ".")) +  # make temp dirs to store reports and test results
+                      #"  os.chdir(os.getenv(\"C7N\"))\\\n" +  # cd to project root to run tests correctly
+                      #"  os.environ\[\"COVERAGE_FILE\"\] = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \".coverage\")\\\n" % (package.replace("/", ".")) +
+                      "  args = \[python_program, \"-m\", \"pytest\", \"-n\", \"auto\"," +
+                      "  \"--cov-report\", \"html:\" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"html\")," % (package.replace("/", ".")) +
+                      "  \"--cov-append\", \"--junitxml\", os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"test-results.xml\"), \"--cov\", os.path.join(os.getenv(\"C7N\"), \"%s\"), module_name\] + args/g'" % (package, package) +
+                      " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+            inputs = [old_runner],
+            outputs = [new_runner],
+        )
+    else:
+        ctx.actions.run_shell(
+            progress_message = "Patching file content - %s" % old_runner.short_path,
+            # TODO: replace all *.inner mentions in file_to_run
+            command = "sed $'s/" +
+                      "  args = \[python_program, main_filename\] + args/" +  # search string
+                      "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +  # replacing strings
+                      "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +
+                      "  args = \[python_program, \"-m\", \"unittest\", module_name\] + args/g'" +
+                      " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+            inputs = [old_runner],
+            outputs = [new_runner],
+        )
 
     return [DefaultInfo(
         runfiles = ctx.attr.test.default_runfiles,
         executable = new_runner,
     )]
+
+#"  args = \[python_program, \"-m\", \"py.test\" , \"--cov-report\", \"html\", \"--cov\", \"\/home\/polina\/cloud-custodian\/tests\", \"\/home\/polina\/cloud-custodian\/\" + module_name + \".py\"] + args\\\n  print(args)/g'" +
 
 _py_test = rule(
     implementation = _impl,
@@ -55,20 +77,20 @@ def c7n_py_test(name, **kwargs):
     py_test(name = inner_test_name, **kwargs)
     _py_test(name = name, tags = tags, test = inner_test_name, excluded_pkgs = excluded_pkgs)
 
-def _c7n_py_cov_impl(ctx):
-    my_out = ctx.outputs.executable
-    ctx.actions.write(
-        content = "cd $C7N; pytest -n auto --cov-report html --cov-append --cov tests {}; cd -".format(" ".join([f.path for f in ctx.files.srcs])),
-        output = my_out,
-        is_executable = True,
-    )
-
-    return [DefaultInfo(executable = my_out)]
-
-c7n_py_cov = rule(
-    implementation = _c7n_py_cov_impl,
-    attrs = {
-        "srcs": attr.label_list(allow_files = True),
-    },
-    executable = True,
-)
+#def _c7n_py_cov_impl(ctx):
+#    my_out = ctx.outputs.executable
+#    ctx.actions.write(
+#        content = "cd $C7N; pytest -n auto --cov-report html --cov-append --cov tests {}; cd -".format(" ".join([f.path for f in ctx.files.srcs])),
+#        output = my_out,
+#        is_executable = True,
+#    )
+#
+#    return [DefaultInfo(executable = my_out)]
+#
+#c7n_py_cov = rule(
+#    implementation = _c7n_py_cov_impl,
+#    attrs = {
+#        "srcs": attr.label_list(allow_files = True),
+#    },
+#    executable = True,
+#)
