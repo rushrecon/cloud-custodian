@@ -29,9 +29,6 @@ def create_versions_bzl(ctx):
 def _hello_repo_impl(ctx):
     ctx.file("BUILD.bazel", 'exports_files(["hello.txt"])')
     ctx.file("versions.bzl", create_versions_bzl(ctx))
-
-    #     ctx.file(ctx.path(ctx.attr.setup_file) k.py", content = ctx.read(ctx.attr.setup_file))
-    #    _create_version_py(ctx)
     ctx.file("BUILD.bazel", "")
 
 setup_versions_repository = repository_rule(
