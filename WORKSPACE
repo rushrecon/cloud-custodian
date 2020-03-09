@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load(":setup_versions_repository.bzl", "setup_versions_repository")
 
 # https://github.com/bazelbuild/rules_python
 git_repository(
@@ -63,3 +64,13 @@ pip3_import(
 load("@mailer_py_deps//:requirements.bzl", "pip_install")
 
 pip_install()
+
+# Create
+setup_versions_repository(
+    name = "setup_versions",
+    setup_files = [
+        "//tools/c7n_gcp:setup.py",
+        "//tools/c7n_kube:setup.py",
+        "//tools/c7n_mailer:setup.py",
+    ],
+)
