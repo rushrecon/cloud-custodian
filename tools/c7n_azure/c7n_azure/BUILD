@@ -44,18 +44,6 @@ py_library(
 )
 
 py_library(
-    name = "dependency_manager",
-    srcs = ["dependency_manager.py"],
-    deps = [
-        ":constants",
-        ":provisioning",
-        ":session",
-        ":storage_utils",
-        ":utils",
-    ],
-)
-
-py_library(
     name = "entry",
     srcs = ["entry.py"],
     deps = [
@@ -90,7 +78,6 @@ py_library(
     srcs = ["function_package.py"],
     deps = [
         ":constants",
-        ":dependency_manager",
         ":session",
     ],
 )
