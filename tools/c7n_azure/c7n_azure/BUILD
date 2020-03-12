@@ -163,6 +163,7 @@ py_library(
     deps = [
         ":constants",
         # ":utils", # avoiding cyclic dependency
+        requirement("azure"),
     ],
 )
 
