@@ -16,8 +16,7 @@ py_library(
         ":azure_serializer",
         ":tools_tags",
         "//c7n:testing",
-        #        "//tools/c7n_azure/c7n_azure:constants",
-        "//tools/c7n_azure/c7n_azure:azure_lib",
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
     ],
 )
 

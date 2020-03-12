@@ -4,7 +4,7 @@ load("@azure_py_deps//:requirements.bzl", "requirement")
 package(default_visibility = ["//visibility:public"])
 
 py_library(
-    name = "azure_lib",
+    name = "c7n_azure_lib",
     deps = [
         ":function",
     ],

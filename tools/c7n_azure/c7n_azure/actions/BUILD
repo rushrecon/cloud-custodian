@@ -5,4 +5,7 @@ package(default_visibility = ["//visibility:public"])
 py_library(
     name = "actions",
     srcs = glob(["*.py"]),
+    deps = [
+        "//tools/c7n_azure/c7n_azure:tags",
+    ],
 )
