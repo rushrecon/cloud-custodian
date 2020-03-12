@@ -17,6 +17,7 @@ py_library(
         ":tools_tags",
         "//c7n:testing",
         "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
+        requirement("vcrpy-unittest"),
     ],
 )
 
@@ -35,7 +36,11 @@ py_library(
 [c7n_py_test(
     name = test_file[:-3],
     srcs = [test_file],
-    data = glob(["data/**"]),
+    data = glob([
+        "cassettes/**",
+        "data/**",
+        "templates/**",
+    ]),
     imports = ["."],
     srcs_version = "PY2AND3",
     deps = [":azure_common"],

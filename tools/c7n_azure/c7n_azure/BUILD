@@ -60,6 +60,7 @@ py_library(
     deps = [
         ":tags",
         ":utils",
+        requirement("azure-mgmt-costmanagement"),
     ],
 )
 
@@ -108,6 +109,7 @@ py_library(
     deps = [
         ":storage_utils",
         ":utils",
+        requirement("applicationinsights"),
     ],
 )
 
@@ -176,5 +178,6 @@ py_library(
     deps = [
         ":constants",
         ":session",
+        requirement("netaddr"),
     ],
 )

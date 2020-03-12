@@ -11,3 +11,4 @@ azure-cosmosdb-table
 azure-mgmt-eventgrid==2.2.0
 azure-mgmt-costmanagement
 azure-mgmt-resourcegraph
+applicationinsights
