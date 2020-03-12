@@ -1,4 +1,4 @@
-name: Run tests in bazel
+name: Run in bazel
 on: [pull_request]
 
 jobs:
