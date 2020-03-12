@@ -1,3 +1,4 @@
+# template for generating bzl-file
 VERSIONS_TEMPLATE = """
 
 _versions = {%s}
@@ -9,15 +10,6 @@ def setup_version(name):
 
 """
 
-GET_VERSION_FROM_SETUP_PY = """
-grep -oP \"'fallback_version': \K'.*?'\"
-"""
-
-def _create_version_py(ctx):
-    b = ctx.execute(["grep", "-oP", "'fallback_version': \K'.*?'", "setup.py"]).stdout
-    ctx.file("version.py", "version = u%s" % b)
-    ctx.file("BUILD.bazel", "\n")
-
 def create_versions_bzl(ctx):
     versions = []
     for setup_file_name in ctx.attr.setup_files:
@@ -26,13 +18,12 @@ def create_versions_bzl(ctx):
         versions.append("\"%s\":%s" % (setup_file_name, version))
     return VERSIONS_TEMPLATE % ",".join(versions)
 
-def _hello_repo_impl(ctx):
-    ctx.file("BUILD.bazel", 'exports_files(["hello.txt"])')
+def _version_repo_impl(ctx):
     ctx.file("versions.bzl", create_versions_bzl(ctx))
     ctx.file("BUILD.bazel", "")
 
 setup_versions_repository = repository_rule(
-    implementation = _hello_repo_impl,
+    implementation = _version_repo_impl,
     local = False,
     attrs = {
         "setup_files": attr.label_list(allow_files = True),

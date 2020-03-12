@@ -74,7 +74,6 @@ load("@kube_py_deps//:requirements.bzl", "pip_install")
 
 pip_install()
 
-# Create
 setup_versions_repository(
     name = "setup_versions",
     setup_files = [
