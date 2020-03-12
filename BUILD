@@ -3,29 +3,13 @@ load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 load("@setup_versions//:versions.bzl", "setup_version")
 
-# bazel run :c7n_aws_cli env/aws-sample.yml
-py_binary(
-    name = "c7n_aws_cli",
-    srcs = ["//c7n:cli.py"],
-    args = [
-        "run",
-        "--cache-period=0",
-        "--output-dir=whatever",
-    ],
-    data = glob(["env/*"]),
-    main = "//c7n:cli.py",
-    deps = [
-        "//c7n",
-    ],
-)
-
 sh_binary(
     name = "run-add-ep-script",
     srcs = ["add-entry-points-to-wheel.sh"],
     data = ["file_hash.py"],
 )
 
-# bazel build //:c7n_wheel
+# bazel build c7n_wheel
 # To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
 py_wheel(
     name = "c7n_wheel",
@@ -60,25 +44,7 @@ py_wheel_entry_points_ext(
     ],
 )
 
-# bazel build //:c7n_mailer_wheel
-# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
-py_wheel(
-    name = "c7n_mailer_wheel",
-    console_scripts = {
-        "c7n-mailer": "c7n_mailer.cli:main",
-        "c7n-mailer-replay": "c7n_mailer.replay:main",
-    },
-    distribution = "c7n-mailer",
-    strip_path_prefixes = [
-        "tools/c7n_mailer/",
-    ],
-    version = setup_version("//tools/c7n_mailer:setup.py"),
-    deps = [
-        "//tools/c7n_mailer/c7n_mailer:c7n_mailer_pkg",
-    ],
-)
-
-# bazel build //:c7n_kube_wheel
+# bazel build c7n_kube_wheel
 # To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
 py_wheel_entry_points_ext(
     name = "c7n_kube_wheel",
@@ -97,39 +63,20 @@ py_wheel_entry_points_ext(
     ],
 )
 
-# bazel run :c7n_gcp_cli env/gcp-sample.yml
-py_binary(
-    name = "c7n_gcp_cli",
-    srcs = ["//c7n:cli.py"],
-    args = [
-        "run",
-        "--cache-period=0",
-        "--output-dir=whatever",
+# bazel build c7n_mailer_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
+py_wheel(
+    name = "c7n_mailer_wheel",
+    console_scripts = {
+        "c7n-mailer": "c7n_mailer.cli:main",
+        "c7n-mailer-replay": "c7n_mailer.replay:main",
+    },
+    distribution = "c7n-mailer",
+    strip_path_prefixes = [
+        "tools/c7n_mailer/",
     ],
-    data = glob(["env/*"]),
-    imports = [
-        "tools/c7n_gcp",
-    ],
-    main = "//c7n:cli.py",
+    version = setup_version("//tools/c7n_mailer:setup.py"),
     deps = [
-        "//c7n",
-        "//tools/c7n_gcp/c7n_gcp:entry",
-    ],
-)
-
-# TODO: consider creating a separate rule for --update-lambda or removing args
-# bazel run :c7n_mailer_cli env/mailer-config.yml
-py_binary(
-    name = "c7n_mailer_cli",
-    srcs = ["//tools/c7n_mailer/c7n_mailer:cli.py"],
-    args = [
-        "--run",
-        "-c",
-    ],
-    data = glob(["env/*"]),
-    main = "//tools/c7n_mailer/c7n_mailer:cli.py",
-    deps = [
-        "//c7n",
-        "//tools/c7n_mailer/c7n_mailer:c7n_mailer_cli",
+        "//tools/c7n_mailer/c7n_mailer:c7n_mailer_pkg",
     ],
 )
