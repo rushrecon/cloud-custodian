@@ -11,7 +11,6 @@ py_library(
         "recorder.py",
     ],
     imports = [".."],
-    srcs_version = "PY2AND3",
     deps = [
         "//c7n:testing",
         "//tools/c7n_gcp/c7n_gcp:client",
@@ -26,7 +25,6 @@ py_library(
     srcs = [test_file],
     data = glob(["data/**"]),
     imports = ["."],
-    srcs_version = "PY2AND3",
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]
 
