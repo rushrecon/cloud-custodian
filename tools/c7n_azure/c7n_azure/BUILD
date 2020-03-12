@@ -153,7 +153,7 @@ py_library(
         ":actions",
         ":constants",
         ":filters",
-        ":provider",
+        # ":provider", # avoiding cyclic dependency
     ],
 )
 
@@ -162,7 +162,7 @@ py_library(
     srcs = ["session.py"],
     deps = [
         ":constants",
-        #        ":utils", # avoiding cyclic dependency
+        # ":utils", # avoiding cyclic dependency
     ],
 )
 
