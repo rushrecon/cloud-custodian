@@ -1,6 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_binary")
 load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
+load("@setup_versions//:versions.bzl", "setup_version")
 
 # bazel run :c7n_aws_cli env/aws-sample.yml
 py_binary(
@@ -53,8 +54,7 @@ py_wheel_entry_points_ext(
     strip_path_prefixes = [
         "tools/c7n_gcp/",
     ],
-    # the version is from tools/c7n_gcp/setup.py
-    version = "0.3.8",
+    version = setup_version("//tools/c7n_gcp:setup.py"),
     deps = [
         "//tools/c7n_gcp/c7n_gcp:gcp_pkg",
     ],
@@ -72,8 +72,7 @@ py_wheel(
     strip_path_prefixes = [
         "tools/c7n_mailer/",
     ],
-    # the version is from tools/c7n_mailer/setup.py
-    version = "0.5.7",
+    version = setup_version("//tools/c7n_mailer:setup.py"),
     deps = [
         "//tools/c7n_mailer/c7n_mailer:c7n_mailer_pkg",
     ],
@@ -92,8 +91,7 @@ py_wheel_entry_points_ext(
     strip_path_prefixes = [
         "tools/c7n_kube/",
     ],
-    # the version is from tools/c7n_kube/setup.py
-    version = "0.1.1",
+    version = setup_version("//tools/c7n_kube:setup.py"),
     deps = [
         "//tools/c7n_kube/c7n_kube:c7n_kube_pkg",
     ],
