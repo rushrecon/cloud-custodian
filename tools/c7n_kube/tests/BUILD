@@ -34,7 +34,6 @@ py_library(
         "../../c7n_azure/c7n_gcp/.",
         "../../c7n_gcp/.",
     ],
-    srcs_version = "PY2AND3",
     deps = [
         ":kube_common_deps",
         "//c7n:testing",
@@ -51,8 +50,6 @@ py_library(
     data = glob(["data/**"]),
     excluded_pkgs = EXCLUDED_PKGS,
     imports = ["."],
-    legacy_create_init = 0,
-    srcs_version = "PY2AND3",
     deps = [
         ":kube_common",
     ] + pip_deps,

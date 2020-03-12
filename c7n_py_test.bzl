@@ -6,7 +6,6 @@ def add_exclude_pkgs_command(excluded_pkgs):
         return ""
     excluded_pkgs = ["\"__%s\"" % i.replace("-", "_").replace(".", "_") for i in excluded_pkgs]
     excluded_pkgs = "[%s]" % ",".join(excluded_pkgs)
-    print(excluded_pkgs)
     exclude_pkgs_command = \
         "| sed $'s/" + \
         "  python_path_entries = \[GetWindowsPathWithUNCPrefix(d) for d in python_path_entries\]/" + \

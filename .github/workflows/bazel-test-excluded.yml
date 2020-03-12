@@ -1,5 +1,5 @@
 name: Expect failures for excluded tests in bazel
-on: [push]
+on: [pull_request]
 
 jobs:
   build:

@@ -44,7 +44,6 @@ py_library(
         "../../c7n_azure/.",
     ],
     main = test_file,
-    srcs_version = "PY2AND3",
     deps = [
         ":test_deps",
         "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
