@@ -2,6 +2,10 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("//:c7n_py_test.bzl", "c7n_py_test")
 load("@azure_py_deps//:requirements.bzl", "requirement")
 
+EXCLUDED_PKGS = [
+    "azure_cosmosdb_nspkg",
+]
+
 package(default_visibility = ["//visibility:private"])
 
 py_library(
@@ -41,6 +45,7 @@ py_library(
         "data/**",
         "templates/**",
     ]),
+    excluded_pkgs = EXCLUDED_PKGS,
     imports = ["."],
     srcs_version = "PY2AND3",
     deps = [":azure_common"],

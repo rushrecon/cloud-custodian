@@ -7,6 +7,7 @@ py_library(
     name = "c7n_azure_lib",
     deps = [
         ":function",
+        requirement("azure-mgmt-eventgrid"),
     ],
 )
 
@@ -61,6 +62,9 @@ py_library(
         ":tags",
         ":utils",
         requirement("azure-mgmt-costmanagement"),
+        requirement("azure-mgmt-policyinsights"),
+        requirement("python-dateutil"),
+        requirement("msrest"),
     ],
 )
 
@@ -71,6 +75,7 @@ py_library(
         ":entry",
         ":handler",
         ":utils",
+        requirement("azure-functions"),
     ],
 )
 
@@ -80,6 +85,9 @@ py_library(
     deps = [
         ":constants",
         ":session",
+        requirement("requests"),
+        "//c7n:mu",
+        "//c7n:utils",
     ],
 )
 
@@ -92,6 +100,7 @@ py_library(
         ":session",
         ":storage_utils",
         ":utils",
+        "//c7n:utils",
     ],
 )
 
@@ -100,6 +109,13 @@ py_library(
     srcs = ["handler.py"],
     deps = [
         ":provider",
+        requirement("azure-common"),
+        requirement("msrestazure"),
+        "//c7n:config",
+        "//c7n:policy",
+        "//c7n:resources",
+        "//c7n:structure",
+        "//c7n:utils",
     ],
 )
 
@@ -109,7 +125,10 @@ py_library(
     deps = [
         ":storage_utils",
         ":utils",
+        "//c7n:output",
+        "//c7n:utils",
         requirement("applicationinsights"),
+        requirement("azure-common"),
     ],
 )
 
@@ -124,6 +143,12 @@ py_library(
         ":resources",
         ":storage_utils",
         ":utils",
+        requirement("azure-mgmt-eventgrid"),
+        "//c7n:actions",
+        "//c7n:exceptions",
+        "//c7n:mu",
+        "//c7n:policy",
+        "//c7n:utils",
     ],
 )
 
@@ -132,6 +157,10 @@ py_library(
     srcs = ["provider.py"],
     deps = [
         ":resources",
+        ":session",
+        "//c7n:provider",
+        "//c7n:registry",
+        "//c7n:utils",
     ],
 )
 
@@ -143,6 +172,13 @@ py_library(
         ":constants",
         ":filters",
         # ":provider", # avoiding cyclic dependency
+        requirement("azure-mgmt-resourcegraph"),
+        "//c7n:actions",
+        "//c7n:exceptions",
+        "//c7n:filters",
+        "//c7n:manager",
+        "//c7n:query",
+        "//c7n:utils",
     ],
 )
 
@@ -153,6 +189,12 @@ py_library(
         ":constants",
         # ":utils", # avoiding cyclic dependency
         requirement("azure"),
+        requirement("azure-cli-core"),
+        requirement("azure-common"),
+        requirement("azure-keyvault"),
+        requirement("msrest"),
+        requirement("msrestazure"),
+        requirement("requests"),
     ],
 )
 
@@ -161,6 +203,10 @@ py_library(
     srcs = ["storage_utils.py"],
     deps = [
         ":constants",
+        requirement("azure-common"),
+        requirement("azure-storage-common"),
+        requirement("azure-storage-blob"),
+        requirement("azure-storage-queue"),
     ],
 )
 
@@ -169,6 +215,7 @@ py_library(
     srcs = ["tags.py"],
     deps = [
         ":utils",
+        requirement("azure-mgmt-resource"),
     ],
 )
 
@@ -178,6 +225,12 @@ py_library(
     deps = [
         ":constants",
         ":session",
+        requirement("azure-graphrbac"),
+        requirement("azure-keyvault"),
+        requirement("azure-mgmt-managementgroups"),
+        requirement("azure-mgmt-web"),
+        requirement("msrestazure"),
         requirement("netaddr"),
+        "//c7n:utils",
     ],
 )

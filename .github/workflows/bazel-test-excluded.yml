@@ -9,7 +9,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Unexclude specified tests in //tests:BUILD
-        run: sed 's/"test_(cli|iamgen|output).py",//' -i --regexp-extended tests/BUILD
+        run: sed 's/"test_(cli|output).py",//' -i --regexp-extended tests/BUILD
       - name: Build a docker image with bazel included
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
