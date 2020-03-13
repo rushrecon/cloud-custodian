@@ -23,7 +23,6 @@ from c7n_gcp.resources.resource_map import ResourceMap
 
 @clouds.register('gcp')
 class GoogleCloud(Provider):
-    print("DEBUG: in GoogleCloud")
 
     display_name = 'GCP'
     resource_prefix = 'gcp'

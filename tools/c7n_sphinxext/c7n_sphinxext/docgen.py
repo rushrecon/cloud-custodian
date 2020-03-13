@@ -58,6 +58,7 @@ class SafeNoAliasDumper(yaml.SafeDumper):
 
 
 class CustodianDirective(Directive):
+
     has_content = True
     required_arguments = 1
 
@@ -92,20 +93,18 @@ class CustodianResource(CustodianDirective):
     @classmethod
     def render_resource(cls, resource_path):
         resource_class = cls.resolve(resource_path)
-        # print("DEBUG: entering CustodianResource resource_path %s" % resource_path)
-
         provider_name, resource_name = resource_path.split('.', 1)
-        # print("DEBUG: inside CustodianResource provider_name " + provider_name)
         return cls._render('resource.rst',
-                           variables=dict(
-                               provider_name=provider_name,
-                               resource_name="%s.%s" % (provider_name, resource_class.type),
-                               filters=ElementSchema.elements(resource_class.filter_registry),
-                               actions=ElementSchema.elements(resource_class.action_registry),
-                               resource=resource_class))
+            variables=dict(
+                provider_name=provider_name,
+                resource_name="%s.%s" % (provider_name, resource_class.type),
+                filters=ElementSchema.elements(resource_class.filter_registry),
+                actions=ElementSchema.elements(resource_class.action_registry),
+                resource=resource_class))
 
 
 class CustodianSchema(CustodianDirective):
+
     option_spec = {'module': unchanged}
 
     @classmethod
@@ -156,13 +155,11 @@ def setup(app):
             'parallel_write_safe': True}
 
 
-# @click.command()
-# @click.option('--provider', required=True)
-# @click.option('--output-dir', type=click.Path(), required=True)
-# @click.option('--group-by')
+@click.command()
+@click.option('--provider', required=True)
+@click.option('--output-dir', type=click.Path(), required=True)
+@click.option('--group-by')
 def main(provider, output_dir, group_by):
-    import sys
-    print(sys.argv)
     try:
         _main(provider, output_dir, group_by)
     except Exception:
@@ -183,9 +180,8 @@ def _main(provider, output_dir, group_by):
 
     logging.basicConfig(level=logging.INFO)
     output_dir = os.path.abspath(output_dir)
-    # print("DEBUG: inside __main__ output_dir " + output_dir)
     provider_class = clouds[provider]
-    # print("DEBUG: inside __main__ provider_class %s" % provider_class)
+
     # group by will be provider specific, supports nested attributes
     group_by = operator.attrgetter(group_by or "type")
 
@@ -203,10 +199,8 @@ def _main(provider, output_dir, group_by):
     # Create individual resources pages
     for r in provider_class.resources.values():
         rpath = resource_file_name(output_dir, r)
-
         with open(rpath, 'w') as fh:
             t = env.get_template('provider-resource.rst')
-            # print("DEBUG: inside __main__ template " + t)
             fh.write(t.render(
                 provider_name=provider,
                 resource=r))
@@ -270,9 +264,3 @@ def _main(provider, output_dir, group_by):
         log.info("Writing Provider Index to %s", provider_path)
         t = env.get_template('provider-index.rst')
         fh.write(t.render(provider_name=provider_class.display_name, files=files))
-
-
-if __name__ == '__main__':
-    import sys
-
-    main(sys.argv[2], sys.argv[1], sys.argv[3])
