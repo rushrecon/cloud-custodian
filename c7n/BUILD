@@ -1,7 +1,23 @@
 package(default_visibility = ["//visibility:public"])
 
 load("@rules_python//python:defs.bzl", "py_library")
-load("@pip_deps//:requirements.bzl", "requirement")
+load("@pip_deps//:requirements.bzl", "all_requirements", "requirement")
+load("@rules_python//experimental/python:wheel.bzl", "py_package")
+
+c7n_core_requirements = [i for i in all_requirements]
+
+py_library(
+    name = "c7n_core_lib",
+    deps = c7n_core_requirements,
+)
+
+py_package(
+    name = "core_pkg",
+    deps = [
+        ":c7n",
+        ":c7n_core_lib",
+    ],
+)
 
 py_library(
     name = "c7n",
@@ -30,7 +46,7 @@ py_library(
         ":commands",
         ":config",
         requirement("argcomplete"),
-    ]
+    ],
 )
 
 py_library(
@@ -39,16 +55,16 @@ py_library(
         "commands.py",
     ],
     deps = [
+        ":config",
         ":exceptions",
         ":policy",
-        ":schema",
-        ":utils",
-        ":config",
         ":provider",
         ":resources",
+        ":schema",
+        ":utils",
         requirement("six"),
         requirement("PyYAML"),
-    ]
+    ],
 )
 
 py_library(
@@ -58,7 +74,7 @@ py_library(
     ],
     deps = [
         ":utils",
-    ]
+    ],
 )
 
 py_library(
@@ -86,15 +102,20 @@ py_library(
 py_library(
     name = "handler",
     srcs = [
-        "handler.py"
+        "handler.py",
     ],
     deps = [
+        ":config",
         ":policy",
         ":resources",
         ":utils",
-        ":config",
         requirement("boto3"),
     ],
+)
+
+py_library(
+    name = "resource_map",
+    srcs = ["resources/resource_map.py"],
 )
 
 py_library(
@@ -105,6 +126,7 @@ py_library(
         ":credentials",
         ":log",
         ":query",
+        ":resource_map",
         requirement("botocore"),
         requirement("boto3"),
         requirement("aws_xray_sdk"),
@@ -251,6 +273,7 @@ py_library(
     ],
     deps = [
         ":cwe",
+        ":mu",
         ":provider",
         ":resources",
         requirement("python-dateutil"),
@@ -278,6 +301,13 @@ py_library(
     name = "executor",
     srcs = [
         "executor.py",
+    ],
+)
+
+py_library(
+    name = "loader",
+    srcs = [
+        "loader.py",
     ],
 )
 
@@ -324,8 +354,10 @@ py_library(
         "testing.py",
     ],
     deps = [
+        ":loader",
         ":policy",
         ":schema",
+        ":lookup",
         requirement("mock"),
         requirement("pytest"),
         requirement("jmespath"),

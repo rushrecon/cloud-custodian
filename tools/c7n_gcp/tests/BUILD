@@ -11,11 +11,12 @@ py_library(
         "recorder.py",
     ],
     imports = [".."],
-    srcs_version = "PY2AND3",
     deps = [
         "//c7n:testing",
         "//tools/c7n_gcp/c7n_gcp:client",
         "//tools/c7n_gcp/c7n_gcp:handler",  # for test_mu_gcp.py only
+        "//tools/c7n_stub/c7n_azure/tests_azure:azure_common",  # registering c7n_azure as an available provider
+        "//tools/c7n_stub/c7n_kube/tests:common_kube",  # registering c7n_kube as an available provider
     ],
 )
 
@@ -23,7 +24,6 @@ py_library(
     name = test_file[:-3],
     srcs = [test_file],
     data = glob(["data/**"]),
-    srcs_version = "PY2AND3",
     imports = ["."],
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]

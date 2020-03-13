@@ -1,4 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
+load(":setup_versions_repository.bzl", "setup_versions_repository")
 
 # https://github.com/bazelbuild/rules_python
 git_repository(
@@ -26,14 +27,60 @@ load("@pip_deps//:requirements.bzl", "pip_install")
 
 pip_install()
 
-local_repository(
-    name = "c7n",
-    path = "c7n",
+# pip_import / requirement() does not work for the pypi azure package, therefore we use rules_python_external rules
+# See issue: https://github.com/bazelbuild/rules_python/issues/273
+git_repository(
+    name = "rules_python_external",
+    commit = "a6f4ae984e7a5d4436fb7aed1678c117a8ddd12b",
+    remote = "https://github.com/dillon-giacoppo/rules_python_external",
 )
 
-local_repository(
-    name = "c7n_gcp",
-    path = "tools/c7n_gcp/c7n_gcp",
+# Install the rule dependencies
+load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
+
+rules_python_external_dependencies()
+
+load("@rules_python_external//:defs.bzl", azure_pip_install = "pip_install")
+
+azure_pip_install(
+    name = "azure_py_deps",
+    requirements = "//tools/c7n_azure:requirements-bazel-dev.txt",
+)
+
+pip3_import(
+    name = "gcp_py_deps",
+    requirements = "//tools/c7n_gcp:requirements-bazel-dev.txt",
+)
+
+load("@gcp_py_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
+pip3_import(
+    name = "mailer_py_deps",
+    requirements = "//tools/c7n_mailer:requirements-bazel-dev.txt",
+)
+
+load("@mailer_py_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
+pip3_import(
+    name = "kube_py_deps",
+    requirements = "//tools/c7n_kube:requirements-bazel-dev.txt",
+)
+
+load("@kube_py_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
+setup_versions_repository(
+    name = "setup_versions",
+    setup_files = [
+        "//tools/c7n_gcp:setup.py",
+        "//tools/c7n_kube:setup.py",
+        "//tools/c7n_mailer:setup.py",
+    ],
 )
 
 pip3_import(
