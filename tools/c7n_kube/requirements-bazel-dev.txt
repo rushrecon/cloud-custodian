@@ -2,7 +2,6 @@
 
 applicationinsights
 google-api-python-client
-google-api-core
 ratelimiter
 retrying
 vcrpy
