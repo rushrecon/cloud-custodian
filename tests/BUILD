@@ -46,6 +46,7 @@ py_library(
         requirement("pytest-cov"),
         requirement("twine"),
         requirement("tox"),
+        requirement("toml"),
         requirement("six"),
         requirement("psutil"),
         requirement("jsonpointer"),
