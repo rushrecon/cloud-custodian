@@ -14,6 +14,10 @@ py_library(
     name = "common_kube_deps",
     testonly = True,
     deps = [
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
+        "//tools/c7n_azure/c7n_azure:entry",
+        "//tools/c7n_azure/c7n_azure:storage_utils",
+        "//tools/c7n_gcp/c7n_gcp:entry",
         "//tools/c7n_kube/c7n_kube:entry",
         "//tools/c7n_kube/c7n_kube:filters",
         "//tools/c7n_kube/c7n_kube:provider",
@@ -37,11 +41,9 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         ":common_kube_deps",
+        "//c7n:resources",
         "//c7n:testing",
-        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
-        "//tools/c7n_azure/c7n_azure:entry",
-        "//tools/c7n_azure/c7n_azure:storage_utils",
-        "//tools/c7n_gcp/c7n_gcp:entry",
+        "//tools/c7n_kube/c7n_kube:client",
     ],
 )
 

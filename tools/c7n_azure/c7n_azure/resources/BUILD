@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_library")
+load("@azure_py_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
 
@@ -9,5 +10,8 @@ py_library(
         "//tools/c7n_azure/c7n_azure:filters",
         "//tools/c7n_azure/c7n_azure:query",
         "//tools/c7n_azure/c7n_azure/actions",
+        requirement("azure-cosmosdb-table"),
+        requirement("azure-cosmos"),
+        requirement("azure-common"),
     ],
 )
