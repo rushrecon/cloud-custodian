@@ -27,7 +27,7 @@ jobs:
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
       - name: Execute bazel test //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube_tests'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
+        run: docker exec -t baz bash -c 'source .github/bazel-test-print-logs.sh //tools/c7n_kube/tests --output_user_root=/tmp/output_build'
       - name: Execute bazel test //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
