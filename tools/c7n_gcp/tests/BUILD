@@ -13,10 +13,10 @@ py_library(
     imports = [".."],
     deps = [
         "//c7n:testing",
+        "//tools/c7n_azure/tests_azure:azure_common",  # registering c7n_azure as an available provider
         "//tools/c7n_gcp/c7n_gcp:client",
         "//tools/c7n_gcp/c7n_gcp:handler",  # for test_mu_gcp.py only
         "//tools/c7n_kube/tests:common_kube",  # registering c7n_kube as an available provider
-        "//tools/c7n_stub/c7n_azure/tests_azure:azure_common",  # registering c7n_azure as an available provider
     ],
 )
 
