@@ -13,6 +13,8 @@ py_library(
         ],
     ),
     deps = [
+        ":base",
+        ":delete",
         "//tools/c7n_azure/c7n_azure:tags",
     ],
 )
