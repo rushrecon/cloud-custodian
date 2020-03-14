@@ -3,6 +3,7 @@ load("//:c7n_py_test.bzl", "c7n_py_test")
 load("@azure_py_deps//:requirements.bzl", "requirement")
 
 EXCLUDED_PKGS = [
+    "azure_cli_nspkg",
     "azure_cosmosdb_nspkg",
 ]
 
