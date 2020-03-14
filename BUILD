@@ -17,8 +17,7 @@ py_wheel(
         "custodian": "c7n.cli:main",
     },
     distribution = "c7n",
-    # the version is from setup.py
-    version = "0.8.45.4",
+    version = setup_version("//:setup.py"),
     deps = [
         "//c7n:core_pkg",
     ],

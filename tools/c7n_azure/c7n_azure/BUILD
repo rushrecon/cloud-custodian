@@ -5,7 +5,7 @@ package(default_visibility = ["//visibility:public"])
 
 py_library(
     name = "azure_lib",
-    srcs = glob(["azure/**"]),
+    srcs = glob(["azure/*.py"]),
 )
 
 py_library(
@@ -34,7 +34,7 @@ py_library(
 
 py_library(
     name = "resources",
-    srcs = glob(["resources/*"]),
+    srcs = glob(["resources/*.py"]),
 )
 
 py_library(
