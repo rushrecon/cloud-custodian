@@ -25,8 +25,8 @@ py_library(
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
     imports = [
         "../tools/c7n_gcp/.",
+        "../tools/c7n_kube/.",
         "../tools/c7n_stub/c7n_azure/.",
-        "../tools/c7n_stub/c7n_kube/.",
     ],
     deps = [
         "//c7n:cli",
@@ -37,8 +37,8 @@ py_library(
         "//c7n:testing",
         "//c7n:ufuncs",
         "//tools/c7n_gcp/c7n_gcp:entry",
+        "//tools/c7n_kube/c7n_kube:entry",
         "//tools/c7n_stub/c7n_azure/c7n_azure:entry",
-        "//tools/c7n_stub/c7n_kube/c7n_kube:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),
