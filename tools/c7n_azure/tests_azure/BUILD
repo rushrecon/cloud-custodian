@@ -16,6 +16,7 @@ py_library(
     ],
     imports = [".."],
     srcs_version = "PY2AND3",
+    visibility = ["//visibility:public"],
     deps = [
         ":azure_serializer",
         ":tools_tags",
@@ -51,7 +52,7 @@ py_library(
     deps = [":azure_common"],
 ) for test_file in glob(["test_*.py"])]
 
-# bazel test //tools/c7n_azure/tests_azure:tests
+# bazel test //tools/c7n_azure/tests_azure
 test_suite(
-    name = "tests",
+    name = "tests_azure",
 )
