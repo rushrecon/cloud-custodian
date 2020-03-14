@@ -7,3 +7,4 @@ jsonpointer
 mock
 pytest
 jsonpatch
+vcversioner==2.16.0.0
