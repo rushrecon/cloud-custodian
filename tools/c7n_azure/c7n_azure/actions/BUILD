@@ -10,12 +10,14 @@ py_library(
         exclude = [
             "base.py",
             "delete.py",
+            "tagging.py",
         ],
     ),
     visibility = ["//visibility:public"],
     deps = [
         ":base",
         ":delete",
+        ":tagging",
         "//tools/c7n_azure/c7n_azure:tags",
     ],
 )
@@ -38,5 +40,22 @@ py_library(
         "//c7n:utils",
         # "//tools/c7n_azure/c7n_azure:actions", # avoiding cyclic dependency
         "//tools/c7n_azure/c7n_azure:utils",
+    ],
+)
+
+py_library(
+    name = "tagging",
+    srcs = ["tagging.py"],
+    deps = [
+        requirement("jmespath"),
+        "//tools/c7n_azure/c7n_azure:constants",
+        "//tools/c7n_azure/c7n_azure:tags",
+        "//tools/c7n_azure/c7n_azure:utils",
+        requirement("python-dateutil"),
+        requirement("msrest"),
+        "//c7n:exceptions",
+        "//c7n:filters",
+        "//c7n:lookup",
+        "//c7n:utils",
     ],
 )
