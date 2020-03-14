@@ -1,5 +1,5 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-load(":setup_versions_repository.bzl", "setup_versions_repository")
+load("//:setup_versions_repository.bzl", "setup_versions_repository")
 
 # https://github.com/bazelbuild/rules_python
 git_repository(

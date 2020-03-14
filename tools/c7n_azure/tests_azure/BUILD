@@ -1,11 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_library")
-load("//:c7n_py_test.bzl", "c7n_py_test")
 load("@azure_py_deps//:requirements.bzl", "requirement")
-
-EXCLUDED_PKGS = [
-    "azure_cli_nspkg",
-    "azure_cosmosdb_nspkg",
-]
+load("//:c7n_py_test.bzl", "c7n_py_test")
+load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
 package(default_visibility = ["//visibility:private"])
 
