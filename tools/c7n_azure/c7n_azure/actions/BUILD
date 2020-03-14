@@ -1,7 +1,7 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("@azure_py_deps//:requirements.bzl", "requirement")
 
-package(default_visibility = ["//visibility:public"])
+package(default_visibility = ["//visibility:private"])
 
 py_library(
     name = "actions",
@@ -12,6 +12,7 @@ py_library(
             "delete.py",
         ],
     ),
+    visibility = ["//visibility:public"],
     deps = [
         ":base",
         ":delete",
@@ -35,7 +36,7 @@ py_library(
     srcs = ["delete.py"],
     deps = [
         "//c7n:utils",
-        "//tools/c7n_azure/c7n_azure:actions",
+        # "//tools/c7n_azure/c7n_azure:actions", # avoiding cyclic dependency
         "//tools/c7n_azure/c7n_azure:utils",
     ],
 )
