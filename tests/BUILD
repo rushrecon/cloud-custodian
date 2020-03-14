@@ -2,6 +2,8 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
 
+package(default_visibility = ["//visibility:private"])
+
 # TODO: get rid of excluded tests; remember to update bazel-test-excluded.yml
 EXCLUDED_TESTS = [
     # 1) AssertionError: 'azure.vm' not found in 'resources:
@@ -25,8 +27,8 @@ py_library(
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
     imports = [
         "../tools/c7n_gcp/.",
+        "../tools/c7n_kube/.",
         "../tools/c7n_stub/c7n_azure/.",
-        "../tools/c7n_stub/c7n_kube/.",
     ],
     deps = [
         "//c7n:cli",
@@ -37,8 +39,8 @@ py_library(
         "//c7n:testing",
         "//c7n:ufuncs",
         "//tools/c7n_gcp/c7n_gcp:entry",
+        "//tools/c7n_kube/c7n_kube:entry",
         "//tools/c7n_stub/c7n_azure/c7n_azure:entry",
-        "//tools/c7n_stub/c7n_kube/c7n_kube:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),
@@ -46,6 +48,7 @@ py_library(
         requirement("pytest-cov"),
         requirement("twine"),
         requirement("tox"),
+        requirement("toml"),
         requirement("six"),
         requirement("psutil"),
         requirement("jsonpointer"),
