@@ -50,6 +50,7 @@ py_library(
     data = glob(["data/**"]),
     excluded_pkgs = EXCLUDED_PKGS,
     imports = ["."],
+    legacy_create_init = 0,
     deps = [
         ":kube_common",
     ] + pip_deps,
