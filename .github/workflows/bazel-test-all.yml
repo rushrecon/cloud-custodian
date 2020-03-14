@@ -6,8 +6,7 @@ jobs:
     name: Run checks in bazel
     strategy:
       matrix:
-        worker: [c7n_tests, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests,
-                 c7n_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
+        worker: [c7n_kube_tests]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -16,30 +15,6 @@ jobs:
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
-      - name: Execute bazel test //tests
-        if: matrix.worker == 'c7n_tests'
-        run: docker exec -t baz bash -c 'source .github/bazel-test-print-logs.sh //tests --output_user_root=/tmp/output_build'
-      - name: Execute bazel test //tools/c7n_azure/tests_azure:tests
-        if: matrix.worker == 'c7n_azure_tests'
-        run: docker exec -t baz bash -c 'source .github/bazel-test-print-logs.sh //tools/c7n_azure/tests_azure:tests --output_user_root=/tmp/output_build'
-      - name: Execute bazel test //tools/c7n_gcp/tests
-        if: matrix.worker == 'c7n_gcp_tests'
-        run: docker exec -t baz bash -c 'source .github/bazel-test-print-logs.sh //tools/c7n_gcp/tests --output_user_root=/tmp/output_build'
       - name: Execute bazel test //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube_tests'
         run: docker exec -t baz bash -c 'source .github/bazel-test-print-logs.sh //tools/c7n_kube/tests --output_user_root=/tmp/output_build'
-      - name: Execute bazel test //tools/c7n_mailer/tests
-        if: matrix.worker == 'c7n_mailer_tests'
-        run: docker exec -t baz bash -c 'source .github/bazel-test-print-logs.sh //tools/c7n_mailer/tests --output_user_root=/tmp/output_build'
-      - name: Execute bazel build //:c7n_wheel
-        if: matrix.worker == 'c7n_wheel'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
-      - name: Execute bazel build //:c7n_gcp_wheel
-        if: matrix.worker == 'c7n_gcp_wheel'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
-      - name: Execute bazel build //:c7n_kube_wheel
-        if: matrix.worker == 'c7n_kube_wheel'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
-      - name: Execute bazel build //:c7n_mailer_wheel
-        if: matrix.worker == 'c7n_mailer_wheel'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel

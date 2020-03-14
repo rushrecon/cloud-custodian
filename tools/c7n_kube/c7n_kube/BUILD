@@ -117,6 +117,7 @@ py_library(
     srcs = ["client.py"],
     deps = [
         requirement("kubernetes"),
+        requirement("google-auth"),
     ],
 )
 
