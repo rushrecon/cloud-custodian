@@ -78,6 +78,7 @@ setup_versions_repository(
     name = "setup_versions",
     setup_files = [
         "//:setup.py",
+        "//tools/c7n_azure:setup.py",
         "//tools/c7n_gcp:setup.py",
         "//tools/c7n_kube:setup.py",
         "//tools/c7n_mailer:setup.py",

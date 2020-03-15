@@ -1,4 +1,5 @@
 load("@rules_python//python:defs.bzl", "py_library")
+load("@rules_python//experimental/python:wheel.bzl", "py_package")
 load("@azure_py_deps//:requirements.bzl", "requirement")
 
 package(default_visibility = ["//visibility:public"])
@@ -8,6 +9,14 @@ py_library(
     deps = [
         ":function",
         requirement("azure-mgmt-eventgrid"),
+    ],
+)
+
+py_package(
+    name = "azure_pkg",
+    deps = [
+        ":c7n_azure_lib",
+        ":entry",
     ],
 )
 
