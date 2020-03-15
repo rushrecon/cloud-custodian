@@ -64,6 +64,7 @@ py_library(
     name = test_file[:-3],
     srcs = [test_file],
     deps = [":c7n_tests_common"],
+    tags = ["first_chunk" if test_file[:-3] < "test_kafka" else "second_chunk"],
 ) for test_file in glob(
     include = ["test_*.py"],
     exclude = EXCLUDED_TESTS,
@@ -72,4 +73,17 @@ py_library(
 # bazel test //tests
 test_suite(
     name = "tests",
+    tests = ["first_chunk", "second_chunk"],
+)
+
+# bazel test //tests:first_chunk
+test_suite(
+    name = "first_chunk",
+    tags = ["first_chunk"],
+)
+
+# bazel test //tests:second_chunk
+test_suite(
+    name = "second_chunk",
+    tags = ["second_chunk"],
 )
