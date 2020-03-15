@@ -5,20 +5,15 @@ package(default_visibility = ["//visibility:private"])
 
 py_library(
     name = "actions",
-    srcs = glob(
-        include = ["*.py"],
-        exclude = [
-            "base.py",
-            "delete.py",
-            "tagging.py",
-        ],
-    ),
     visibility = ["//visibility:public"],
     deps = [
         ":base",
         ":delete",
+        ":firewall",
+        ":lock",
+        ":logic_app",
+        ":notify",
         ":tagging",
-        "//tools/c7n_azure/c7n_azure:tags",
     ],
 )
 
@@ -40,6 +35,50 @@ py_library(
         "//c7n:utils",
         # "//tools/c7n_azure/c7n_azure:actions", # avoiding cyclic dependency
         "//tools/c7n_azure/c7n_azure:utils",
+    ],
+)
+
+py_library(
+    name = "firewall",
+    srcs = ["firewall.py"],
+    deps = [
+        "//c7n:filters",
+        # "//tools/c7n_azure/c7n_azure:actions", # avoiding cyclic dependency
+        "//tools/c7n_azure/c7n_azure:utils",
+        requirement("netaddr"),
+    ],
+)
+
+py_library(
+    name = "lock",
+    srcs = ["lock.py"],
+    deps = [
+        "//c7n:utils",
+        # "//tools/c7n_azure/c7n_azure:actions", # avoiding cyclic dependency
+        "//tools/c7n_azure/c7n_azure:utils",
+        requirement("azure-mgmt-resource"),
+    ],
+)
+
+py_library(
+    name = "logic_app",
+    srcs = ["logic_app.py"],
+    deps = [
+        "//c7n:actions",
+        "//c7n:utils",
+        requirement("azure-mgmt-logic"),
+    ],
+)
+
+py_library(
+    name = "notify",
+    srcs = ["notify.py"],
+    deps = [
+        "//c7n:actions",
+        "//c7n:resolver",
+        "//c7n:utils",
+        "//tools/c7n_azure/c7n_azure:storage_utils",
+        requirement("azure-common"),
     ],
 )
 
