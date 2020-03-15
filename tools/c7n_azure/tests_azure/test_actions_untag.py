@@ -19,11 +19,17 @@ from c7n_azure.actions.tagging import RemoveTag
 from mock import patch, Mock
 
 from c7n.filters import FilterValidationError
+from c7n.resources import load_resources
 
 
 class ActionsRemoveTagTest(BaseTest):
 
     existing_tags = {'pre-existing-1': 'unmodified', 'pre-existing-2': 'unmodified'}
+
+    @classmethod
+    def setUpClass(cls):
+        super(ActionsRemoveTagTest, cls).setUpClass()
+        load_resources(['azure.vm'])
 
     def _get_action(self, data):
         return RemoveTag(data=data, manager=Mock())

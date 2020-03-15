@@ -15,19 +15,20 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from . import tools_tags as tools
 from .azure_common import BaseTest
-from c7n.resources import load_resources
 from c7n_azure.actions.tagging import Tag
 from mock import patch, Mock
 
 from c7n.filters import FilterValidationError
+from c7n.resources import load_resources
 
 
 class ActionsTagTest(BaseTest):
 
     existing_tags = {'pre-existing-1': 'unmodified', 'pre-existing-2': 'unmodified'}
 
-    def __init__(self, *args, **kwargs):
-        super(ActionsTagTest, self).__init__(*args, **kwargs)
+    @classmethod
+    def setUpClass(cls):
+        super(ActionsTagTest, cls).setUpClass()
         load_resources(['azure.vm'])
 
     def _get_action(self, data):
