@@ -65,7 +65,6 @@ py_library(
     name = test_file[:-3],
     srcs = [test_file],
     excluded_pkgs = EXCLUDED_PKGS,
-    legacy_create_init = 0,
     tags = ["first_chunk" if test_file[:-3] < "test_kafka" else "second_chunk"],
     deps = [":c7n_tests_common"],
 ) for test_file in glob(
