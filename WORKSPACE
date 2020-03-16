@@ -4,9 +4,9 @@ load("//:setup_versions_repository.bzl", "setup_versions_repository")
 # https://github.com/bazelbuild/rules_python
 git_repository(
     name = "rules_python",
-    commit = "7a313011f5ae65a405bd5b5345cf33ae0a8843c2",
+    commit = "8b48af707ead5b1a77a68a4fac298c214426da6e",
     remote = "https://github.com/alexkarpitski/rules_python",
-    shallow_since = "1584332890 +0300",
+    shallow_since = "1584359232 +0300",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")

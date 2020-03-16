@@ -15,7 +15,7 @@ jobs:
       - name: Build a docker image with bazel
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
-        run: docker run -dit -v /tmp/output_build:/tmp/output_build --ulimit stack=16384:32768 --name baz my-baz
+        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel test //tests:first_chunk
         if: matrix.worker == 'c7n_tests_first'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:first_chunk
