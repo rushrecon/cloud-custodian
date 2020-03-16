@@ -6,7 +6,7 @@ git_repository(
     name = "rules_python",
     commit = "7879ef37d6cd1248143c7cba39ce4e6efaefbe60",
     remote = "https://github.com/alexkarpitski/rules_python",
-    shallow_since = "1584359232 +0300",
+    shallow_since = "1584368888 +0300",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
