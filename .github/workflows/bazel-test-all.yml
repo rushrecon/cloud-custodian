@@ -37,6 +37,9 @@ jobs:
       - name: Execute bazel build //:c7n_wheel
         if: matrix.worker == 'c7n_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
+      - name: Execute bazel build //:c7n_azure_wheel
+        if: matrix.worker == 'c7n_azure_wheel'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_azure_wheel
       - name: Execute bazel build //:c7n_gcp_wheel
         if: matrix.worker == 'c7n_gcp_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
