@@ -19,21 +19,24 @@ def _impl(ctx):
     new_runner = ctx.actions.declare_file(ctx.attr.name)
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
     package = ctx.label.package
-    test_name = ctx.attr.name
+    test_name = ctx.attr.name  # '\",\"'.join(package.split("/"))
+
+    command = ("sed $'s/" +
+               "  args = \[python_program, main_filename\] + args/" +  # search string
+               # replacing strings
+               "  os.chdir(os.getenv(\"C7N\"))\\\n" +
+               "  module_name = os.path.join(\"%s\", \"%s.py\")\\\n" % (package, test_name) +  # relative path to test: tests/test_cli.py
+               "  os.system(\"mkdir \/tmp\/C7N-cov; mkdir \/tmp\/C7N-cov\/%s\")\\\n" % (package.replace("/", "_")) +  # make temp dirs to store reports and test results
+               "  os.environ\[\"COVERAGE_FILE\"\] = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \".coverage\")\\\n" % (package.replace("/", "_")) +
+               "  args = \[python_program, \"-m\", \"pytest\", \"-n\", \"auto\"," +
+               "  \"--cov-report\", \"html:\" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"html\")," % (package.replace("/", "_")) +
+               "  \"--junitxml\", os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"test-results.xml\"), \"--cov\", \"\/\", \"--cov-config\", \".coveragerc\", module_name\] + args\\\n" % (package.replace("/", "_")) +
+               "  /g'" +
+               " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path))
+    print(command)
     if ctx.configuration.coverage_enabled:
         ctx.actions.run_shell(
-            command = "sed $'s/" +
-                      "  args = \[python_program, main_filename\] + args/" +  # search string
-                      # replacing strings
-                      "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +
-                      "  module_name = os.path.join(\"%s\", \"%s.py\")\\\n" % (package, test_name) +  # relative path to test: tests/test_cli.py
-                      "  os.system(\"mkdir \/tmp\/C7N-cov; mkdir \/tmp\/C7N-cov\/%s\")\\\n" % (package.replace("/", ".")) +  # make temp dirs to store reports and test results
-                      #"  os.chdir(os.getenv(\"C7N\"))\\\n" +  # cd to project root to run tests correctly
-                      #"  os.environ\[\"COVERAGE_FILE\"\] = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \".coverage\")\\\n" % (package.replace("/", ".")) +
-                      "  args = \[python_program, \"-m\", \"pytest\", \"-n\", \"auto\"," +
-                      "  \"--cov-report\", \"html:\" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"html\")," % (package.replace("/", ".")) +
-                      "  \"--cov-append\", \"--junitxml\", os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"test-results.xml\"), \"--cov\", os.path.join(os.getenv(\"C7N\"), \"%s\"), module_name\] + args/g'" % (package, package) +
-                      " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+            command = command,
             inputs = [old_runner],
             outputs = [new_runner],
         )
