@@ -74,6 +74,24 @@ load("@kube_py_deps//:requirements.bzl", "pip_install")
 
 pip_install()
 
+rules_python_external_dependencies()
+
+load("@rules_python_external//:defs.bzl", sphinx_pip_install = "pip_install")
+
+sphinx_pip_install(
+    name = "my_sphinx_deps",
+    requirements = "//:requirements-docs-bzl.txt",
+)
+
+#pip3_import(
+#    name = "my_sphinx_deps",
+#    requirements = "//:requirements-docs-bzl.txt",
+#)
+#
+#load("@my_sphinx_deps//:requirements.bzl", "pip_install")
+#
+#pip_install()
+
 setup_versions_repository(
     name = "setup_versions",
     setup_files = [
@@ -82,12 +100,3 @@ setup_versions_repository(
         "//tools/c7n_mailer:setup.py",
     ],
 )
-
-pip3_import(
-    name = "my_sphinx_deps",
-    requirements = "//:requirements-docs-bzl.txt",
-)
-
-load("@my_sphinx_deps//:requirements.bzl", "pip_install")
-
-pip_install()

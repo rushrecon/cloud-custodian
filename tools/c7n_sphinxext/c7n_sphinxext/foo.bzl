@@ -22,10 +22,14 @@ def _impl2(ctx):
     doctrees = ctx.actions.declare_directory("build/doctrees")
     html = ctx.actions.declare_directory("build/html")
 
+    print(html.path)
     inputs = []
     commands = []
     directories = []
 
+    commands.append(
+        "echo `pwd`"
+    )
     #   Make commands for create directories
     for file in ctx.files.srcs:
         inputs.append(file)
@@ -66,6 +70,7 @@ def _impl2(ctx):
         )
         inputs.append(list[0])
 
+    print("\n".join(commands))
     #   Run commands
     ctx.actions.run_shell(
         inputs = depset(inputs),
@@ -140,3 +145,53 @@ foo_library = rule(
         "srcs": attr.label_list(allow_files = True),
     },
 )
+
+def add_exclude_pkgs_command(excluded_pkgs):
+    """If there are excluded packages, add extra sed command to exclude these pkges from runfile"""
+    if excluded_pkgs == []:
+        return ""
+    excluded_pkgs = ["\"__%s\"" % i.replace("-", "_").replace(".", "_") for i in excluded_pkgs]
+    excluded_pkgs = "[%s]" % ",".join(excluded_pkgs)
+    exclude_pkgs_command = \
+        "| sed $'s/" + \
+        "  python_path_entries = \[GetWindowsPathWithUNCPrefix(d) for d in python_path_entries\]/" + \
+        "  python_path_entries = [GetWindowsPathWithUNCPrefix\(d\)" + \
+        " for d in python_path_entries if not list\(filter\(d.endswith, %s\)\)]/g'" % excluded_pkgs
+    return exclude_pkgs_command
+
+def _impl_exclude_pkgs(ctx):
+    old_runner = ctx.attr.build[DefaultInfo].files_to_run.executable
+    print(ctx.attr.build[DefaultInfo].data_runfiles.files.to_list())
+    new_runner = ctx.actions.declare_file(ctx.attr.name)
+    excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
+    ctx.actions.run_shell(
+        progress_message = "Patching file content - %s" % old_runner.short_path,
+        command = "sed $'s/*/*/g '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+        inputs = [old_runner],
+        outputs = [new_runner],
+    )
+
+    return [DefaultInfo(
+        runfiles = ctx.attr.build.default_runfiles,
+        executable = new_runner,
+    )]
+
+_foo = rule(
+    implementation = _impl_exclude_pkgs,
+    executable = True,
+    attrs = {
+        "build": attr.label(mandatory = True),
+        "excluded_pkgs": attr.string_list(default = []),
+    },
+)
+
+def docgen_sphinx_exclude_pkgs(name, **kwargs):
+    inner_build_name = name + ".inner"
+    print(name)
+    tags = kwargs.pop("tags", default = [])
+    main_name = kwargs.pop("name", default = name + ".py")
+    excluded_pkgs = kwargs.pop("excluded_pkgs", default = [])
+
+    #    kwargs.update(main = main_name, tags = tags + ["manual"])
+    foo(name = inner_build_name, **kwargs)
+    _foo(name = name, tags = tags, build = inner_build_name, excluded_pkgs = excluded_pkgs)

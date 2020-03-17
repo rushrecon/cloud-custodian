@@ -95,7 +95,6 @@ foo_library(
     srcs = [
         "tools/c7n_guardian/readme.md",
         "tools/c7n_logexporter/README.md",
-        "tools/c7n_mailer/README.md",
         "tools/c7n_org/README.md",
         "tools/c7n_policystream/README.md",
         "tools/c7n_salactus/README.md",
@@ -103,5 +102,6 @@ foo_library(
         "tools/cask/readme.md",
         "tools/omnissm/README.md",
         "tools/omnissm/assets/omnissm.svg",
+        "//tools/c7n_mailer:README.md",
     ],
 )

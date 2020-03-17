@@ -24,6 +24,23 @@ py_package(
 )
 
 py_library(
+    name = "kube_lib",
+    deps = [
+        "actions_core",
+        "actions_labels",
+        "actions_shared",
+        "client",
+        "entry",
+        "filters",
+        "provider",
+        "query",
+        "resources_apps",
+        "resources_core",
+        "resources_crd",
+    ],
+)
+
+py_library(
     name = "resource_lib",
     deps = [
         "resources_apps",
