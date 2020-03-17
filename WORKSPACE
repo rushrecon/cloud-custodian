@@ -1,13 +1,12 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
-load(":setup_versions_repository.bzl", "setup_versions_repository")
+load("//:setup_versions_repository.bzl", "setup_versions_repository")
 
 # https://github.com/bazelbuild/rules_python
 git_repository(
     name = "rules_python",
-    commit = "94677401bc56ed5d756f50b441a6a5c7f735a6d4",
-    remote = "https://github.com/bazelbuild/rules_python",
-    shallow_since = "1573842889 -0500",
-    #    sha256 = "aa96a691d3a8177f3215b14b0edc9641787abaaa30363a080165d06ab65e1161",
+    commit = "7879ef37d6cd1248143c7cba39ce4e6efaefbe60",
+    remote = "https://github.com/alexkarpitski/rules_python",
+    shallow_since = "1584368888 +0300",
 )
 
 load("@rules_python//python:repositories.bzl", "py_repositories")
@@ -31,8 +30,9 @@ pip_install()
 # See issue: https://github.com/bazelbuild/rules_python/issues/273
 git_repository(
     name = "rules_python_external",
-    commit = "a6f4ae984e7a5d4436fb7aed1678c117a8ddd12b",
+    commit = "95e72ceda4d1edaa788c0a300c6ead0cc12568ef",
     remote = "https://github.com/dillon-giacoppo/rules_python_external",
+    shallow_since = "1582765833 +1100",
 )
 
 # Install the rule dependencies
@@ -78,6 +78,7 @@ setup_versions_repository(
     name = "setup_versions",
     setup_files = [
         "//:setup.py",
+        "//tools/c7n_azure:setup.py",
         "//tools/c7n_gcp:setup.py",
         "//tools/c7n_kube:setup.py",
         "//tools/c7n_mailer:setup.py",

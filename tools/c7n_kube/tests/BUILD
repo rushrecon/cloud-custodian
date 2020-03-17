@@ -1,12 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("@kube_py_deps//:requirements.bzl", "all_requirements", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
+load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
 package(default_visibility = ["//visibility:private"])
-
-EXCLUDED_PKGS = [
-    "azure_cosmosdb_nspkg",
-]
 
 pip_deps = [i for i in all_requirements]
 
@@ -14,6 +11,10 @@ py_library(
     name = "common_kube_deps",
     testonly = True,
     deps = [
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
+        "//tools/c7n_azure/c7n_azure:entry",
+        "//tools/c7n_azure/c7n_azure:storage_utils",
+        "//tools/c7n_gcp/c7n_gcp:entry",
         "//tools/c7n_kube/c7n_kube:entry",
         "//tools/c7n_kube/c7n_kube:filters",
         "//tools/c7n_kube/c7n_kube:provider",
@@ -37,11 +38,9 @@ py_library(
     visibility = ["//visibility:public"],
     deps = [
         ":common_kube_deps",
+        "//c7n:resources",
         "//c7n:testing",
-        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
-        "//tools/c7n_azure/c7n_azure:entry",
-        "//tools/c7n_azure/c7n_azure:storage_utils",
-        "//tools/c7n_gcp/c7n_gcp:entry",
+        "//tools/c7n_kube/c7n_kube:client",
     ],
 )
 
