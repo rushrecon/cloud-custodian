@@ -1,11 +1,11 @@
 load("@my_sphinx_deps//:requirements.bzl", "requirement")
-load(":foo.bzl", "docgen_sphinx_exclude_pkgs", "foo", "foo2")
+load(":foo.bzl", "foo", "foo2")
 
 EXCLUDED_PKGS = [
     "azure_cosmosdb_nspkg",
 ]
 
-SPHINX_REPO_PATH_FMT = requirement("Sphinx") + ":%s"
+SPHINX_REPO_PATH_FMT = requirement("Sphinx").split(":")[0] + ":%s"
 
 print(SPHINX_REPO_PATH_FMT)
 
@@ -23,7 +23,7 @@ py_binary(
     deps = [
         ":sphinxlib",
         "//c7n",
-        #        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
+        "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
         "//tools/c7n_gcp/c7n_gcp:entry",
         "//tools/c7n_kube/c7n_kube:kube_lib",
     ],
@@ -48,13 +48,13 @@ py_binary(
         "//tools/c7n_kube/c7n_kube:kube_lib",
     ],
 )
-#
-#foo(
-#    name = "aws_gen",
-#    provider = "aws",
-#    resource_type = "resource_type.service",
-#    tool = ":c7n_sphinxext_docgen",
-#)
+
+foo(
+    name = "aws_gen",
+    provider = "aws",
+    resource_type = "resource_type.service",
+    tool = ":c7n_sphinxext_docgen",
+)
 
 foo(
     name = "gcp_gen",
@@ -63,12 +63,13 @@ foo(
     tool = ":c7n_sphinxext_docgen",
 )
 
-#foo(
-#    name = "azure_gen",
-#    provider = "azure",
-#    resource_type = "resource_type.doc_groups",
-#    tool = ":c7n_sphinxext_docgen",
-#)
+foo(
+    name = "azure_gen",
+    excluded_pkgs = EXCLUDED_PKGS,
+    provider = "azure",
+    resource_type = "resource_type.doc_groups",
+    tool = ":c7n_sphinxext_docgen",
+)
 
 #docgen_sphinx_exclude_pkgs(
 #    name = "azure_gen",
@@ -84,8 +85,8 @@ foo2(
     copy = ["//:copy_from_tools"],
     inputs = [
         #        ":aws_gen",
-        ":gcp_gen",
-        #                ":azure_gen",
+        #        ":gcp_gen",
+        ":azure_gen",
     ],
     tool = ":sphinx_build",
 )

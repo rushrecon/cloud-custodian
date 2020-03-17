@@ -106,7 +106,9 @@ load("//tools/c7n_sphinxext/c7n_sphinxext:foo.bzl", "foo_library")
 
 foo_library(
     name = "ext_files",
-    srcs = glob(["docs/**/*"]),
+    srcs = glob(
+        ["docs/**/*"],
+    ),
 )
 
 foo_library(
