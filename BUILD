@@ -19,10 +19,29 @@ py_wheel(
         "custodian": "c7n.cli:main",
     },
     distribution = "c7n",
-    # the version is from setup.py
-    version = "0.8.45.4",
+    version = setup_version("//:setup.py"),
     deps = [
         "//c7n:core_pkg",
+    ],
+)
+
+# bazel build c7n_azure_wheel
+# To install a generated whl-file into your env: pip install <WORKSPACE_directory>/bazel-bin/<file_name>.whl
+# Installing c7n first is required for Custodian to work.
+py_wheel_entry_points_ext(
+    name = "c7n_azure_wheel",
+    distribution = "c7n_azure",
+    entry_points = {
+        "custodian.resources": [
+            "azure = c7n_azure.entry:initialize_azure",
+        ],
+    },
+    strip_path_prefixes = [
+        "tools/c7n_azure/",
+    ],
+    version = setup_version("//tools/c7n_azure:setup.py"),
+    deps = [
+        "//tools/c7n_azure/c7n_azure:azure_pkg",
     ],
 )
 
