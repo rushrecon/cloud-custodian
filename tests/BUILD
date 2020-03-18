@@ -1,7 +1,9 @@
 load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
-#load("//:c7n_py_test.bzl", "c7n_py_cov")
+load("//:builddefs.bzl", "EXCLUDED_PKGS")
+
+package(default_visibility = ["//visibility:private"])
 
 # TODO: get rid of excluded tests; remember to update bazel-test-excluded.yml
 EXCLUDED_TESTS = [
@@ -25,9 +27,9 @@ py_library(
     ]),
     data = glob(["data/**/*"]) + [":placebo_data.zip"],
     imports = [
+        "../tools/c7n_azure/.",
         "../tools/c7n_gcp/.",
-        "../tools/c7n_stub/c7n_azure/.",
-        "../tools/c7n_stub/c7n_kube/.",
+        "../tools/c7n_kube/.",
     ],
     deps = [
         "//c7n:cli",
@@ -37,9 +39,9 @@ py_library(
         "//c7n:sqsexec",
         "//c7n:testing",
         "//c7n:ufuncs",
+        "//tools/c7n_azure/c7n_azure:entry",
         "//tools/c7n_gcp/c7n_gcp:entry",
-        "//tools/c7n_stub/c7n_azure/c7n_azure:entry",
-        "//tools/c7n_stub/c7n_kube/c7n_kube:entry",
+        "//tools/c7n_kube/c7n_kube:entry",
         requirement("coverage"),
         requirement("placebo"),
         requirement("flake8"),
@@ -47,6 +49,7 @@ py_library(
         requirement("pytest-cov"),
         requirement("twine"),
         requirement("tox"),
+        requirement("toml"),
         requirement("six"),
         requirement("psutil"),
         requirement("jsonpointer"),
@@ -61,6 +64,8 @@ py_library(
 [c7n_py_test(
     name = test_file[:-3],
     srcs = [test_file],
+    excluded_pkgs = EXCLUDED_PKGS,
+    tags = ["first_chunk" if test_file[:-3] < "test_kafka" else "second_chunk"],
     deps = [":c7n_tests_common"],
 ) for test_file in glob(
     include = ["test_*.py"],
@@ -70,13 +75,20 @@ py_library(
 # bazel test //tests
 test_suite(
     name = "tests",
+    tests = [
+        "first_chunk",
+        "second_chunk",
+    ],
 )
 
-# bazel run tests/coverage --test_env='/home/.../cloud-custodian/'
-#c7n_py_cov(
-#    name = "coverage",
-#    srcs = glob(
-#        include = ["test_*.py"],
-#        exclude = EXCLUDED_TESTS,
-#    ),
-#)
+# bazel test //tests:first_chunk
+test_suite(
+    name = "first_chunk",
+    tags = ["first_chunk"],
+)
+
+# bazel test //tests:second_chunk
+test_suite(
+    name = "second_chunk",
+    tags = ["second_chunk"],
+)

@@ -24,7 +24,7 @@ from c7n import policy, manager
 from c7n.config import Config
 from c7n.provider import clouds
 from c7n.exceptions import ResourceLimitExceeded, PolicyValidationError
-from c7n.resources import aws, load_resources
+from c7n.resources import aws, load_available
 from c7n.resources.aws import AWS
 from c7n.resources.ec2 import EC2
 from c7n.schema import generate, JsonSchemaValidator
@@ -67,7 +67,7 @@ class PolicyMetaLint(BaseTest):
 
     def setUp(self):
         # we need to load all resources for the linting meta tests.
-        load_resources()
+        load_available()
 
     def test_policy_missing_provider_session(self):
         self.assertRaises(
@@ -945,8 +945,8 @@ class TestPolicy(BaseTest):
             "actions": [{"days": 10, "type": "retention"}],
         }
         session_factory = self.replay_flight_data("test_logs_from_group")
-        config = {"log_group": "test-logs"}
-        policy = self.load_policy(p_data, config, session_factory)
+        policy = self.load_policy(
+            p_data, session_factory=session_factory, log_group='test-logs')
         logs = list(policy.get_logs("2016-11-01 00:00:00", "2016-11-30 11:59:59"))
         self.assertEqual(len(logs), 6)
         # entries look reasonable

@@ -1,11 +1,9 @@
--r requirements-common.txt
+-r requirements.txt
 
-py
-pluggy
-packaging
-attrs
-more_itertools
-zipp
+futures>=3.1.1
 uritemplate
-vcrpy
-jsonpointer
+
+# requirements-dev.txt
+vcrpy-unittest==0.1.7
+parameterized==0.7.1
+fakeredis==1.2.1
