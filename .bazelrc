@@ -1,3 +1,6 @@
+# https://cloudcustodian.io/docs/developer/tests.html#developer-tests
+# refer to tox.ini for the required envs
+
 test --test_env=AWS_DEFAULT_REGION=us-east-1
 test --test_env=AWS_ACCESS_KEY_ID=foo
 test --test_env=AWS_SECRET_ACCESS_KEY=bar
@@ -6,3 +9,6 @@ test --test_env=C7N_TEST_RUN=true
 
 test --test_env=GOOGLE_APPLICATION_CREDENTIALS=tools/c7n_gcp/tests/data/credentials.json
 test --test_env=CLOUDSDK_CORE_PROJECT=whatever
+
+test --test_env=AZURE_ACCESS_TOKEN=fake_token
+test --test_env=AZURE_SUBSCRIPTION_ID=ea42f556-5106-4743-99b0-c129bfa71a47

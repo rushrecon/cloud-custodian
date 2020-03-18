@@ -264,6 +264,9 @@ py_library(
     srcs = [
         "provider.py",
     ],
+    deps = [
+        ":registry",
+    ],
 )
 
 py_library(
