@@ -18,22 +18,25 @@ def _impl(ctx):
     old_runner = ctx.attr.test[DefaultInfo].files_to_run.executable
     new_runner = ctx.actions.declare_file(ctx.attr.name)
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
-    package = ctx.label.package
+
     test_name = ctx.attr.name  # '\",\"'.join(package.split("/"))
+    package_name = ctx.label.package.replace("/", ".")
+    module_name = "%s.%s" % (package_name, test_name)
+    cov_dir = "C7N-cov"
 
     command = ("sed $'s/" +
-               "  args = \[python_program, main_filename\] + args/" +  # search string
+               # search string
+               "  args = \[python_program, main_filename\] + args/" +
                # replacing strings
-               "  os.chdir(os.getenv(\"C7N\"))\\\n" +
-               "  module_name = os.path.join(\"%s\", \"%s.py\")\\\n" % (package, test_name) +  # relative path to test: tests/test_cli.py
-               "  os.system(\"mkdir \/tmp\/C7N-cov; mkdir \/tmp\/C7N-cov\/%s\")\\\n" % (package.replace("/", "_")) +  # make temp dirs to store reports and test results
-               "  os.environ\[\"COVERAGE_FILE\"\] = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \".coverage\")\\\n" % (package.replace("/", "_")) +
-               "  args = \[python_program, \"-m\", \"pytest\", \"-n\", \"auto\"," +
-               "  \"--cov-report\", \"html:\" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"html\")," % (package.replace("/", "_")) +
-               "  \"--junitxml\", os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \"test-results.xml\"), \"--cov\", \"\/\", \"--cov-config\", \".coveragerc\", module_name\] + args\\\n" % (package.replace("/", "_")) +
-               "  /g'" +
+               "  module_name = \"%s\"\\\n" % (module_name) +
+               "  os.chdir(os.path.join(module_space, \"%s\"))\\\n" % (ctx.workspace_name) +
+               "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"%s\"))\\\n" % (cov_dir) +
+               "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"%s\", \"%s\"))\\\n" % (cov_dir, package_name) +
+               "  os.environ[\"COVERAGE_FILE\"] = os.path.join(os.getenv(\"TMPDIR\"), \"%s\", \"%s\", \".coverage\")\\\n" % (cov_dir, package_name) +
+               "  args = \[python_program, \"-m\", \"coverage\", \"run\"," +
+               "  \"--source\", os.getenv(\"C7N\"), \"--omit\", \"*\/tests\/*,*\/.*\/*\", \"--parallel-mode\"," +
+               "  \"-m\", \"unittest\", module_name\] + args/g'" +
                " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path))
-    print(command)
     if ctx.configuration.coverage_enabled:
         ctx.actions.run_shell(
             command = command,
