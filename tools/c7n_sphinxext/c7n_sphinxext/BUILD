@@ -65,7 +65,6 @@ foo(
 
 foo(
     name = "azure_gen",
-    excluded_pkgs = EXCLUDED_PKGS,
     provider = "azure",
     resource_type = "resource_type.doc_groups",
     tool = ":c7n_sphinxext_docgen",
@@ -83,10 +82,11 @@ foo2(
     name = "sphinx_gen",
     srcs = ["//:ext_files"],
     copy = ["//:copy_from_tools"],
+    excluded_pkgs = EXCLUDED_PKGS,
     inputs = [
-        #        ":aws_gen",
+        ":aws_gen",
         #        ":gcp_gen",
-        ":azure_gen",
+        #        ":azure_gen",
     ],
     tool = ":sphinx_build",
 )

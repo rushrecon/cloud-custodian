@@ -4,11 +4,11 @@ def add_exclude_pkgs_command(excluded_pkgs):
     """If there are excluded packages, add extra sed command to exclude these pkges from runfile"""
     if excluded_pkgs == []:
         return ""
-    excluded_pkgs = ["\"__%s\"" % i.replace("-", "_").replace(".", "_") for i in excluded_pkgs]
+    excluded_pkgs = ["\"__%s\"" % i.replace("-", "_").replace(".", "_").strip() for i in excluded_pkgs]
     excluded_pkgs = "[%s]" % ",".join(excluded_pkgs)
     exclude_pkgs_command = \
         "| sed $'s/" + \
-        "  python_path_entries = \[GetWindowsPathWithUNCPrefix(d) for d in python_path_entries\]/\\\n" + \
+        "  python_path_entries = \[GetWindowsPathWithUNCPrefix(d) for d in python_path_entries\]/" + \
         "  python_path_entries = [GetWindowsPathWithUNCPrefix\(d\)" + \
         " for d in python_path_entries if not list\(filter\(d.endswith, %s\)\)]/g'" % excluded_pkgs
     return exclude_pkgs_command
@@ -16,22 +16,24 @@ def add_exclude_pkgs_command(excluded_pkgs):
 #   Generating rst files from classes
 def _impl(ctx):
     old_runner = ctx.executable.tool
-    new_runner = ctx.actions.declare_file(ctx.attr.name)
-    excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
-    ctx.actions.run_shell(
-        progress_message = "Patching file content - %s" % old_runner.short_path,
-        command = "sed $'s/*/*/g' '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
-        tools = [old_runner],
-        outputs = [new_runner],
-    )
+    #    new_runner = ctx.actions.declare_file(ctx.attr.name)
+
+    #    excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
+    #    ctx.actions.run_shell(
+    #        progress_message = "Patching file content - %s" % old_runner.short_path,
+    #        command = "sed $'s/*/*/g' '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+    #        tools = [old_runner],
+    #        outputs = [new_runner],
+    #    )
     tree = ctx.actions.declare_directory(ctx.attr.provider + "/resources")
-    print(ctx.executable.tool.path)
+
+    #    print(ctx.executable.tool.path)
     ctx.actions.run(
         inputs = [],
         outputs = [tree],
         #   Set arguments for main in docgen.py
         arguments = [tree.path, ctx.attr.provider, ctx.attr.resource_type],
-        executable = new_runner,
+        executable = old_runner,
     )
 
     return [OutputDocs(files = depset([tree]), name = ctx.attr.provider)]
@@ -102,16 +104,38 @@ def _impl2(ctx):
 
     print(ext_docs.path)
 
+    old_runner = ctx.executable.tool
+    new_runner = ctx.actions.declare_file(ctx.attr.name)
+    excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
+    old_runfiles_path = "%s.runfiles" % ctx.executable.tool.path
+    new_runfiles = ctx.actions.declare_directory("%s.runfiles" % new_runner.path)
+    print(old_runner.path.replace("/", "\\/"))
+    ctx.actions.run_shell(
+        progress_message = "Patching file content - %s" % old_runner.short_path,
+        command = "sed $'s/*/*/g' '{old_runner}' {excld_pkgs_cmd} > '{new_runner}'".format(
+                      old_runner = old_runner.path,
+                      excld_pkgs_cmd = excluded_pkgs_command,
+                      new_runner = new_runner.path,
+                  ) +
+                  "&& cp -rf {old_runfiles}/* {new_runfiles}/".format(
+                      old_runfiles = old_runfiles_path,
+                      new_runfiles = new_runfiles.path,
+                  ),
+        tools = [old_runner],
+        outputs = [new_runner, new_runfiles],
+    )
+
     #   Run generating html docs
     ctx.actions.run(
         inputs = [ext_docs],
         outputs = [doctrees, html],
         #   Arguments for sphinx-build
         arguments = ["-j", "auto", "-b", "html", "-d", doctrees.path, ext_docs.path + source, html.path],
-        executable = ctx.executable.tool,
+        executable = new_runner,
     )
-    print("KEEEEEEEEEEEEEEEEEEEEEEEEk")
-
+    print(dir(ctx))
+    print(ctx.executable.tool.path)
+    o = ctx.executable.tool
     return [DefaultInfo(files = depset([doctrees, html]))]
 
 def _impl3(ctx):
@@ -134,7 +158,6 @@ foo = rule(
         "resource_type": attr.string(
             mandatory = True,
         ),
-        "excluded_pkgs": attr.string_list(default = []),
     },
 )
 
@@ -144,7 +167,7 @@ foo2 = rule(
         #    Run sphinx-build.py
         "tool": attr.label(
             executable = True,
-            cfg = "host",
+            cfg = "target",
             allow_files = True,
         ),
         #   Generated files from classes
@@ -161,6 +184,7 @@ foo2 = rule(
             allow_empty = False,
             allow_files = True,
         ),
+        "excluded_pkgs": attr.string_list(default = []),
     },
 )
 
