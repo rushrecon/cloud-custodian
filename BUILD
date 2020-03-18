@@ -102,16 +102,14 @@ py_wheel(
     ],
 )
 
-load("//tools/c7n_sphinxext/c7n_sphinxext:foo.bzl", "foo_library")
-
-foo_library(
+filegroup(
     name = "ext_files",
     srcs = glob(
         ["docs/**/*"],
     ),
 )
 
-foo_library(
+filegroup(
     name = "copy_from_tools",
     srcs = [
         "tools/c7n_guardian/readme.md",

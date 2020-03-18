@@ -1,13 +1,12 @@
 load("@my_sphinx_deps//:requirements.bzl", "requirement")
-load(":foo.bzl", "foo", "foo2")
+load(":foo.bzl", "foo2", "rst_files_gen")
+load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
 EXCLUDED_PKGS = [
     "azure_cosmosdb_nspkg",
 ]
 
 SPHINX_REPO_PATH_FMT = requirement("Sphinx").split(":")[0] + ":%s"
-
-print(SPHINX_REPO_PATH_FMT)
 
 py_binary(
     name = "c7n_sphinxext_docgen",
@@ -49,33 +48,26 @@ py_binary(
     ],
 )
 
-foo(
+rst_files_gen(
     name = "aws_gen",
     provider = "aws",
     resource_type = "resource_type.service",
     tool = ":c7n_sphinxext_docgen",
 )
 
-foo(
+rst_files_gen(
     name = "gcp_gen",
     provider = "gcp",
     resource_type = "resource_type.service",
     tool = ":c7n_sphinxext_docgen",
 )
 
-foo(
+rst_files_gen(
     name = "azure_gen",
     provider = "azure",
     resource_type = "resource_type.doc_groups",
     tool = ":c7n_sphinxext_docgen",
 )
-
-#docgen_sphinx_exclude_pkgs(
-#    name = "azure_gen",
-#    provider = "azure",
-#    resource_type = "resource_type.doc_groups",
-#    tool = ":c7n_sphinxext_docgen",
-#)
 
 # bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
 foo2(
