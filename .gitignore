@@ -45,5 +45,3 @@ docs/source/*/resources
 bazel-*
 env/
 secrets.sh
-htmlcov
-__pycache__

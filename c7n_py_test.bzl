@@ -61,8 +61,6 @@ def _impl(ctx):
         executable = new_runner,
     )]
 
-#"  args = \[python_program, \"-m\", \"py.test\" , \"--cov-report\", \"html\", \"--cov\", \"\/home\/polina\/cloud-custodian\/tests\", \"\/home\/polina\/cloud-custodian\/\" + module_name + \".py\"] + args\\\n  print(args)/g'" +
-
 _py_test = rule(
     implementation = _impl,
     executable = True,
@@ -81,21 +79,3 @@ def c7n_py_test(name, **kwargs):
     kwargs.update(main = main_name, tags = tags + ["manual"])
     py_test(name = inner_test_name, **kwargs)
     _py_test(name = name, tags = tags, test = inner_test_name, excluded_pkgs = excluded_pkgs)
-
-#def _c7n_py_cov_impl(ctx):
-#    my_out = ctx.outputs.executable
-#    ctx.actions.write(
-#        content = "cd $C7N; pytest -n auto --cov-report html --cov-append --cov tests {}; cd -".format(" ".join([f.path for f in ctx.files.srcs])),
-#        output = my_out,
-#        is_executable = True,
-#    )
-#
-#    return [DefaultInfo(executable = my_out)]
-#
-#c7n_py_cov = rule(
-#    implementation = _c7n_py_cov_impl,
-#    attrs = {
-#        "srcs": attr.label_list(allow_files = True),
-#    },
-#    executable = True,
-#)
