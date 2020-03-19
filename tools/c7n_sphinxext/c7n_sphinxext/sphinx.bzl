@@ -13,26 +13,41 @@ def add_exclude_pkgs_command(excluded_pkgs):
         " for d in python_path_entries if not list\(filter\(d.endswith, %s\)\)]/g'" % excluded_pkgs
     return exclude_pkgs_command
 
-#  Generating rst files from classes
-def _impl_rst_files_gen(ctx):
+def patch_executable(ctx):
     old_runner = ctx.executable.tool
-    tree = ctx.actions.declare_directory(ctx.attr.provider + "/resources")
-    ctx.actions.run(
-        inputs = [],
-        outputs = [tree],
-        #   Set arguments for main in docgen.py
-        arguments = [tree.path, ctx.attr.provider, ctx.attr.resource_type],
-        executable = old_runner,
+    new_runner = ctx.actions.declare_file(ctx.attr.name)
+    excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
+    old_runfiles_path = "%s.runfiles" % ctx.executable.tool.path
+    new_runfiles = ctx.actions.declare_directory("%s.runfiles" % new_runner.basename)
+    print(" && cp -rf {old_runfiles}/* {new_runfiles}".format(
+        old_runfiles = old_runfiles_path,
+        new_runfiles = new_runfiles.path,
+    ))
+    ctx.actions.run_shell(
+        progress_message = "Patching file content - %s" % old_runner.short_path,
+        command = "sed $'s/*/*/g' '{old_runner}' {excld_pkgs_cmd} > '{new_runner}'".format(
+                      old_runner = old_runner.path,
+                      excld_pkgs_cmd = excluded_pkgs_command,
+                      new_runner = new_runner.path,
+                  ) +
+                  # an executable file searches for runfiles in <executable_name>.runfiles directory
+                  # therefore we copy <old_executable_name>.runfiles dir into <new_executable_name>.runfiles dir
+                  " && cp -rf {old_runfiles}/* {new_runfiles}".format(
+                      old_runfiles = old_runfiles_path,
+                      new_runfiles = new_runfiles.path,
+                  ),
+        tools = [old_runner],
+        outputs = [new_runner, new_runfiles],
     )
-    return [OutputDocs(files = depset([tree]), name = ctx.attr.provider)]
+    return new_runner, new_runfiles
 
-#   Copying external and generated files, generate html docs
-def _impl2(ctx):
+#   Copy external and generated files, generate html docs
+def _impl_sphinx_generated_docs(ctx):
     ext_docs = ctx.actions.declare_directory("docs/")
     source = "/source"
     tools = "/tools"
-    doctrees = ctx.actions.declare_directory("build/doctrees")
-    html = ctx.actions.declare_directory("build/html")
+    doctrees_dir = ctx.actions.declare_directory("build/doctrees")
+    html_dir = ctx.actions.declare_directory("build/html")
     inputs = []
     commands = []
     directories = []
@@ -54,7 +69,7 @@ def _impl2(ctx):
 
     #   Rename readme.md files and make commands for copy,
     #   and make dir and copy file for docs/source/tools
-    for file in ctx.files.copy:
+    for file in ctx.files.readme_files:
         inputs.append(file)
         if file.basename.lower() >= "readme.md":
             name = file.dirname.split("/")[-1].replace("_", "-") + ".md"
@@ -68,7 +83,7 @@ def _impl2(ctx):
                 "mkdir -p %s && cp %s %s" % (path, file.path, path),
             )
 
-    #   Make commands for create directories and copy generated files
+    #   Make commands for creating directories and copying generated files
     for src in ctx.attr.inputs:
         input_depset = src[OutputDocs].files
         list = src[OutputDocs].files.to_list()
@@ -83,62 +98,21 @@ def _impl2(ctx):
         outputs = [ext_docs],
         command = "\n".join(commands),
     )
-    old_runner = ctx.executable.tool
-    new_runner = ctx.actions.declare_file(ctx.attr.name)
-    excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
-    old_runfiles_path = "%s.runfiles" % ctx.executable.tool.path
-    new_runfiles = ctx.actions.declare_directory("%s.runfiles" % new_runner.path)
-    ctx.actions.run_shell(
-        progress_message = "Patching file content - %s" % old_runner.short_path,
-        command = "sed $'s/*/*/g' '{old_runner}' {excld_pkgs_cmd} > '{new_runner}'".format(
-                      old_runner = old_runner.path,
-                      excld_pkgs_cmd = excluded_pkgs_command,
-                      new_runner = new_runner.path,
-                  ) +
-                  # an executable file searches for runfiles in <executable_name>.runfiles directory
-                  # therefore we copy <old_executable_name>.runfiles dir into <new_executable_name>.runfiles dir
-                  "&& cp -rf {old_runfiles}/* {new_runfiles}/".format(
-                      old_runfiles = old_runfiles_path,
-                      new_runfiles = new_runfiles.path,
-                  ),
-        tools = [old_runner],
-        outputs = [new_runner, new_runfiles],
-    )
+    new_runner, new_runfiles = patch_executable(ctx)
 
     #   Run generating html docs
     ctx.actions.run(
-        inputs = [ext_docs],
-        outputs = [doctrees, html],
+        inputs = [ext_docs, new_runfiles],
+        outputs = [doctrees_dir, html_dir],
         #   Arguments for sphinx-build
-        arguments = ["-j", "auto", "-b", "html", "-d", doctrees.path, ext_docs.path + source, html.path],
+        arguments = ["-j", "auto", "-b", "html", "-d", doctrees_dir.path, ext_docs.path + source, html_dir.path],
         executable = new_runner,
     )
-    return [DefaultInfo(files = depset([doctrees, html]))]
+    return [DefaultInfo(files = depset([doctrees_dir, html_dir]))]
 
-rst_files_gen = rule(
-    implementation = _impl_rst_files_gen,
+sphinx_generate_docs = rule(
+    implementation = _impl_sphinx_generated_docs,
     attrs = {
-        #   Run docgen.py
-        "tool": attr.label(
-            executable = True,
-            cfg = "host",
-            allow_files = True,
-        ),
-        #   Attribute provider for main in docgen.py
-        "provider": attr.string(
-            mandatory = True,
-        ),
-        #   Attribute resource_type for main in docgen.py
-        "resource_type": attr.string(
-            mandatory = True,
-        ),
-    },
-)
-
-foo2 = rule(
-    implementation = _impl2,
-    attrs = {
-        #    Run sphinx-build.py
         "tool": attr.label(
             executable = True,
             cfg = "target",
@@ -154,10 +128,42 @@ foo2 = rule(
             allow_files = True,
         ),
         #   Collected readme.md from tools
-        "copy": attr.label_list(
+        "readme_files": attr.label_list(
             allow_empty = False,
             allow_files = True,
         ),
         "excluded_pkgs": attr.string_list(default = []),
+    },
+)
+
+#  Generate rst files from classes
+def _impl_rst_files_gen(ctx):
+    old_runner = ctx.executable.tool
+    tree = ctx.actions.declare_directory(ctx.attr.provider + "/resources")
+    ctx.actions.run(
+        inputs = [],
+        outputs = [tree],
+        arguments = [tree.path, ctx.attr.provider, ctx.attr.resource_type],
+        executable = old_runner,
+    )
+    return [OutputDocs(files = depset([tree]), name = ctx.attr.provider)]
+
+docgen = rule(
+    implementation = _impl_rst_files_gen,
+    attrs = {
+        #   Run docgen.py
+        "tool": attr.label(
+            executable = True,
+            cfg = "target",
+            allow_files = True,
+        ),
+        #   Attribute provider for main in docgen.py
+        "provider": attr.string(
+            mandatory = True,
+        ),
+        #   Attribute resource_type for main in docgen.py
+        "resource_type": attr.string(
+            mandatory = True,
+        ),
     },
 )

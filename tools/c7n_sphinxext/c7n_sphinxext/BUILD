@@ -1,12 +1,12 @@
 load("@my_sphinx_deps//:requirements.bzl", "requirement")
-load(":foo.bzl", "foo2", "rst_files_gen")
+load(":sphinx.bzl", "docgen", "sphinx_generate_docs")
 load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
 EXCLUDED_PKGS = [
     "azure_cosmosdb_nspkg",
 ]
 
-SPHINX_REPO_PATH_FMT = requirement("Sphinx").split(":")[0] + ":%s"
+SPHINX_BUILD_FMT = requirement("Sphinx").split(":")[0] + ":%s"
 
 py_binary(
     name = "c7n_sphinxext_docgen",
@@ -30,14 +30,14 @@ py_binary(
 
 py_binary(
     name = "sphinx_build",
-    srcs = [SPHINX_REPO_PATH_FMT % "sphinx/cmd/build.py"],
+    srcs = [SPHINX_BUILD_FMT % "sphinx/cmd/build.py"],
     imports = [
         "..",
         "../../c7n_azure",
         "../../c7n_gcp",
         "../../c7n_kube",
     ],
-    main = SPHINX_REPO_PATH_FMT % "sphinx/cmd/build.py",
+    main = SPHINX_BUILD_FMT % "sphinx/cmd/build.py",
     deps = [
         ":c7n_sphinxext",
         ":sphinxlib",
@@ -48,21 +48,21 @@ py_binary(
     ],
 )
 
-rst_files_gen(
+docgen(
     name = "aws_gen",
     provider = "aws",
     resource_type = "resource_type.service",
     tool = ":c7n_sphinxext_docgen",
 )
 
-rst_files_gen(
+docgen(
     name = "gcp_gen",
     provider = "gcp",
     resource_type = "resource_type.service",
     tool = ":c7n_sphinxext_docgen",
 )
 
-rst_files_gen(
+docgen(
     name = "azure_gen",
     provider = "azure",
     resource_type = "resource_type.doc_groups",
@@ -70,16 +70,17 @@ rst_files_gen(
 )
 
 # bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-foo2(
+# then you can get generated docs from bazel-out/k8-fastbuild/bin/tools/c7n_sphinxext/c7n_sphinxext/build/html
+sphinx_generate_docs(
     name = "sphinx_gen",
-    srcs = ["//:ext_files"],
-    copy = ["//:copy_from_tools"],
+    srcs = ["//:doc_rst_files"],
     excluded_pkgs = EXCLUDED_PKGS,
     inputs = [
         ":aws_gen",
-        #        ":gcp_gen",
-        #        ":azure_gen",
+        ":gcp_gen",
+        ":azure_gen",
     ],
+    readme_files = ["//:readme_files"],
     tool = ":sphinx_build",
 )
 

@@ -103,14 +103,14 @@ py_wheel(
 )
 
 filegroup(
-    name = "ext_files",
+    name = "doc_rst_files",
     srcs = glob(
         ["docs/**/*"],
     ),
 )
 
 filegroup(
-    name = "copy_from_tools",
+    name = "readme_files",
     srcs = [
         "tools/c7n_guardian/readme.md",
         "tools/c7n_logexporter/README.md",
