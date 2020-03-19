@@ -6,7 +6,7 @@ EXCLUDED_PKGS = [
     "azure_cosmosdb_nspkg",
 ]
 
-SPHINX_BUILD_FMT = requirement("Sphinx").split(":")[0] + ":%s"
+SPHINX_BUILD_SCRIPT_FMT = requirement("Sphinx").split(":")[0] + ":%s"
 
 py_binary(
     name = "c7n_sphinxext_docgen",
@@ -30,14 +30,14 @@ py_binary(
 
 py_binary(
     name = "sphinx_build",
-    srcs = [SPHINX_BUILD_FMT % "sphinx/cmd/build.py"],
+    srcs = [SPHINX_BUILD_SCRIPT_FMT % "sphinx/cmd/build.py"],
     imports = [
         "..",
         "../../c7n_azure",
         "../../c7n_gcp",
         "../../c7n_kube",
     ],
-    main = SPHINX_BUILD_FMT % "sphinx/cmd/build.py",
+    main = SPHINX_BUILD_SCRIPT_FMT % "sphinx/cmd/build.py",
     deps = [
         ":c7n_sphinxext",
         ":sphinxlib",
