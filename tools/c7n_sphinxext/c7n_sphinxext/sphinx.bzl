@@ -4,6 +4,9 @@ def add_exclude_pkgs_command(excluded_pkgs):
     """If there are excluded packages, add extra sed command to exclude these pkges from runfile"""
     if excluded_pkgs == []:
         return ""
+
+    #  Change pkg name to format understandable by Bazel
+    #  e.g. azure_cosmosdb_nspkg-2.1.3  -> __azure_cosmosdb_nspkg_2_1_3
     excluded_pkgs = ["\"__%s\"" % i.replace("-", "_").replace(".", "_").strip() for i in excluded_pkgs]
     excluded_pkgs = "[%s]" % ",".join(excluded_pkgs)
     exclude_pkgs_command = \
@@ -19,10 +22,6 @@ def patch_executable(ctx):
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
     old_runfiles_path = "%s.runfiles" % ctx.executable.tool.path
     new_runfiles = ctx.actions.declare_directory("%s.runfiles" % new_runner.basename)
-    print(" && cp -rf {old_runfiles}/* {new_runfiles}".format(
-        old_runfiles = old_runfiles_path,
-        new_runfiles = new_runfiles.path,
-    ))
     ctx.actions.run_shell(
         progress_message = "Patching file content - %s" % old_runner.short_path,
         command = "sed $'s/*/*/g' '{old_runner}' {excld_pkgs_cmd} > '{new_runner}'".format(
