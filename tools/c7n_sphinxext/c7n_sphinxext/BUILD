@@ -2,11 +2,11 @@ load("@sphinx_py_deps//:requirements.bzl", "requirement")
 load(":sphinx.bzl", "docgen", "sphinx_generate_docs")
 load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
-EXCLUDED_PKGS = [
-    "azure_cosmosdb_nspkg",
-]
-
-SPHINX_BUILD_SCRIPT_FMT = requirement("Sphinx").split(":")[0] + ":%s"
+# it is main sphinx file to build html documentation
+SPHINX_BUILD_SCRIPT = "{repo_path}:{build_script}".format(
+    repo_path = requirement("Sphinx").split(":")[0],
+    build_script = "sphinx/cmd/build.py",
+)
 
 py_binary(
     name = "c7n_sphinxext_docgen",
@@ -30,14 +30,14 @@ py_binary(
 
 py_binary(
     name = "sphinx_build",
-    srcs = [SPHINX_BUILD_SCRIPT_FMT % "sphinx/cmd/build.py"],
+    srcs = [SPHINX_BUILD_SCRIPT],
     imports = [
         "..",
         "../../c7n_azure",
         "../../c7n_gcp",
         "../../c7n_kube",
     ],
-    main = SPHINX_BUILD_SCRIPT_FMT % "sphinx/cmd/build.py",
+    main = SPHINX_BUILD_SCRIPT,
     deps = [
         ":c7n_sphinxext",
         ":sphinxlib",
