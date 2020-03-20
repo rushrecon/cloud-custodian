@@ -114,7 +114,6 @@ filegroup(
     srcs = [
         "tools/c7n_guardian/readme.md",
         "tools/c7n_logexporter/README.md",
-        "tools/c7n_mailer:README.md",
         "tools/c7n_org/README.md",
         "tools/c7n_policystream/README.md",
         "tools/c7n_salactus/README.md",
@@ -122,5 +121,8 @@ filegroup(
         "tools/cask/readme.md",
         "tools/omnissm/README.md",
         "tools/omnissm/assets/omnissm.svg",
+        # tools/c7n_mailer/README.md' is invalid because 'tools/c7n_mailer' is a subpackage;
+        # that's why we have to put the colon here: '//tools/c7n_mailer:README.md
+        "//tools/c7n_mailer:README.md",
     ],
 )

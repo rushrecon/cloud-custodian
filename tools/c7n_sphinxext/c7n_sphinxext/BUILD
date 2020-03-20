@@ -1,4 +1,4 @@
-load("@my_sphinx_deps//:requirements.bzl", "requirement")
+load("@sphinx_py_deps//:requirements.bzl", "requirement")
 load(":sphinx.bzl", "docgen", "sphinx_generate_docs")
 load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
