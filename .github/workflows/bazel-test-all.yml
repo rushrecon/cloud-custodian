@@ -50,6 +50,6 @@ jobs:
       - name: Execute bazel build //:c7n_mailer_wheel
         if: matrix.worker == 'c7n_mailer_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
-      - name: Execute bazel build //:c7n_sphinx
+      - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         if: matrix.worker == 'c7n_sphinx'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
