@@ -76,7 +76,7 @@ pip_install()
 
 pip3_import(
     name = "sphinx_py_deps",
-    requirements = "//:requirements-docs-bzl.txt",
+    requirements = "//tools/c7n_sphinxext:requirements-bazel-dev.txt",
 )
 
 load("@sphinx_py_deps//:requirements.bzl", "pip_install")
