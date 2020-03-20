@@ -4,7 +4,7 @@ load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
 # it is main sphinx file to build html documentation
 SPHINX_BUILD_SCRIPT = "{repo_path}:{build_script}".format(
-    repo_path = requirement("Sphinx").split(":")[0],
+    repo_path = requirement("Sphinx"),
     build_script = "sphinx/cmd/build.py",
 )
 

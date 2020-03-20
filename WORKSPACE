@@ -74,14 +74,12 @@ load("@kube_py_deps//:requirements.bzl", "pip_install")
 
 pip_install()
 
-pip3_import(
+load("@rules_python_external//:defs.bzl", sphinx_pip_install = "pip_install")
+
+sphinx_pip_install(
     name = "sphinx_py_deps",
     requirements = "//tools/c7n_sphinxext:requirements-bazel-dev.txt",
 )
-
-load("@sphinx_py_deps//:requirements.bzl", "pip_install")
-
-pip_install()
 
 setup_versions_repository(
     name = "setup_versions",
