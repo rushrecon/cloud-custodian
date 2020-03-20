@@ -6,7 +6,7 @@ load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
 pip_deps = [i for i in all_requirements]
 
-ALL_KUBE_DEPS = [
+KUBE_PKG_DEPS = [
     "actions_core",
     "actions_labels",
     "actions_shared",
@@ -22,12 +22,12 @@ ALL_KUBE_DEPS = [
 
 py_package(
     name = "c7n_kube_pkg",
-    deps = ALL_KUBE_DEPS,
+    deps = KUBE_PKG_DEPS,
 )
 
 py_library(
     name = "kube_lib",
-    deps = ALL_KUBE_DEPS,
+    deps = KUBE_PKG_DEPS,
 )
 
 py_library(
