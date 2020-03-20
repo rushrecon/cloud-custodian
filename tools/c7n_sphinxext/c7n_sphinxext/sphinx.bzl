@@ -9,6 +9,9 @@ def add_exclude_pkgs_command(excluded_pkgs):
     #  e.g. azure_cosmosdb_nspkg-2.1.3  -> __azure_cosmosdb_nspkg_2_1_3
     excluded_pkgs = ["\"__%s\"" % i.replace("-", "_").replace(".", "_").strip() for i in excluded_pkgs]
     excluded_pkgs = "[%s]" % ",".join(excluded_pkgs)
+
+    #  it is last point in the chain of fetching deps from a sandbox.
+    #  So it's the best place to exclude pkgs
     exclude_pkgs_command = \
         "| sed $'s/" + \
         "  python_path_entries = \[GetWindowsPathWithUNCPrefix(d) for d in python_path_entries\]/" + \
