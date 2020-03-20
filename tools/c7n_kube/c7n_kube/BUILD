@@ -6,38 +6,28 @@ load("@rules_python//experimental/python:wheel.bzl", "py_package")
 
 pip_deps = [i for i in all_requirements]
 
+ALL_KUBE_DEPS = [
+    "actions_core",
+    "actions_labels",
+    "actions_shared",
+    "client",
+    "entry",
+    "filters",
+    "provider",
+    "query",
+    "resources_apps",
+    "resources_core",
+    "resources_crd",
+]
+
 py_package(
     name = "c7n_kube_pkg",
-    deps = [
-        "actions_core",
-        "actions_labels",
-        "actions_shared",
-        "client",
-        "entry",
-        "filters",
-        "provider",
-        "query",
-        "resources_apps",
-        "resources_core",
-        "resources_crd",
-    ],
+    deps = ALL_KUBE_DEPS,
 )
 
 py_library(
     name = "kube_lib",
-    deps = [
-        "actions_core",
-        "actions_labels",
-        "actions_shared",
-        "client",
-        "entry",
-        "filters",
-        "provider",
-        "query",
-        "resources_apps",
-        "resources_core",
-        "resources_crd",
-    ],
+    deps = ALL_KUBE_DEPS,
 )
 
 py_library(
