@@ -89,64 +89,6 @@ class CliTest(BaseTest):
         self.fail("Error: did not raise {}.".format(exception))
 
 
-class ValidateTest(CliTest):
-
-    def test_invalidate_structure_exit(self):
-        invalid_policies = {"policies": [{"name": "foo"}]}
-        yaml_file = self.write_policy_file(invalid_policies)
-        self.run_and_expect_failure(["custodian", "validate", yaml_file], 1)
-
-    def test_validate(self):
-        invalid_policies = {
-            "policies": [
-                {
-                    "name": "foo",
-                    "resource": "s3",
-                    "filters": [{"tag:custodian_tagging": "not-null"}],
-                    "actions": [
-                        {"type": "untag", "tags": {"custodian_cleanup": "yes"}}
-                    ],
-                }
-            ]
-        }
-        yaml_file = self.write_policy_file(invalid_policies)
-        json_file = self.write_policy_file(invalid_policies, format="json")
-
-        # YAML validation
-        self.run_and_expect_exception(["custodian", "validate", yaml_file], SystemExit)
-
-        # JSON validation
-        self.run_and_expect_failure(["custodian", "validate", json_file], 1)
-
-        # no config files given
-        self.run_and_expect_failure(["custodian", "validate"], 1)
-
-        # nonexistent file given
-        self.run_and_expect_exception(
-            ["custodian", "validate", "fake.yaml"], ValueError
-        )
-
-        valid_policies = {
-            "policies": [
-                {
-                    "name": "foo",
-                    "resource": "s3",
-                    "filters": [{"tag:custodian_tagging": "not-null"}],
-                    "actions": [{"type": "tag", "tags": {"custodian_cleanup": "yes"}}],
-                }
-            ]
-        }
-        yaml_file = self.write_policy_file(valid_policies)
-
-        self.run_and_expect_success(["custodian", "validate", yaml_file])
-
-        # legacy -c option
-        self.run_and_expect_success(["custodian", "validate", "-c", yaml_file])
-
-        # duplicate policy names
-        self.run_and_expect_failure(["custodian", "validate", yaml_file, yaml_file], 1)
-
-
 class SchemaTest(CliTest):
 
     def test_schema(self):
