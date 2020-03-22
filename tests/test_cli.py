@@ -399,6 +399,10 @@ class ReportTest(CliTest):
 
 class LogsTest(CliTest):
 
+    def setUp(self):
+        super(LogsTest, self).setUp()
+        self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
+
     def test_logs(self):
         temp_dir = self.get_temp_dir()
 
