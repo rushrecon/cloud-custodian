@@ -27,12 +27,15 @@ from c7n.config import Config
 from c7n.output import DirectoryOutput, LogFile, metrics_outputs
 from c7n.resources.aws import S3Output, MetricsOutput
 from c7n.testing import mock_datetime_now, TestUtils
-from c7n import handler
 
 from .common import Bag, BaseTest
 
 
 class S3OutputTest(TestUtils):
+
+    def setUp(self):
+        super(S3OutputTest, self).setUp()
+        logging.root.setLevel(logging.INFO)
 
     def test_join_leave_log(self):
         temp_dir = self.get_temp_dir()
