@@ -5,10 +5,6 @@ load("//:builddefs.bzl", "EXCLUDED_PKGS")
 
 package(default_visibility = ["//visibility:private"])
 
-# TODO: get rid of excluded tests; remember to update bazel-test-excluded.yml
-EXCLUDED_TESTS = [
-]
-
 py_library(
     name = "c7n_tests_common",
     testonly = True,
@@ -60,10 +56,7 @@ py_library(
     excluded_pkgs = EXCLUDED_PKGS,
     tags = ["first_chunk" if test_file[:-3] < "test_kafka" else "second_chunk"],
     deps = [":c7n_tests_common"],
-) for test_file in glob(
-    include = ["test_*.py"],
-    exclude = EXCLUDED_TESTS,
-)]
+) for test_file in glob(["test_*.py"])]
 
 # bazel test //tests
 test_suite(
