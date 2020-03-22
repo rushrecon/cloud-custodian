@@ -92,51 +92,9 @@ class CliTest(BaseTest):
 class SchemaTest(CliTest):
 
     def test_schema(self):
-
-        # no options
-        self.run_and_expect_success(["custodian", "schema"])
-
-        # summary option
-        self.run_and_expect_success(["custodian", "schema", "--summary"])
-
-        # json option
-        self.run_and_expect_success(["custodian", "schema", "--json"])
-
-        # with just a cloud
-        self.run_and_expect_success(["custodian", "schema", "aws"])
-
-        # with just a resource
-        self.run_and_expect_success(["custodian", "schema", "ec2"])
-
-        # with just a mode
-        self.run_and_expect_success(["custodian", "schema", "mode"])
-
-        # mode.type
-        self.run_and_expect_success(["custodian", "schema", "mode.phd"])
-
-        # resource.actions
-        self.run_and_expect_success(["custodian", "schema", "ec2.actions"])
-
-        # resource.filters
-        self.run_and_expect_success(["custodian", "schema", "ec2.filters"])
-
-        # specific item
-        self.run_and_expect_success(["custodian", "schema", "ec2.filters.tag-count"])
+        pass
 
     def test_invalid_options(self):
-
-        # invalid resource
-        self.run_and_expect_failure(["custodian", "schema", "fakeresource"], 1)
-
-        # invalid category
-        self.run_and_expect_failure(["custodian", "schema", "ec2.arglbargle"], 1)
-
-        # invalid item
-        self.run_and_expect_failure(
-            ["custodian", "schema", "ec2.filters.nonexistent"], 1
-        )
-
-        # invalid number of selectors
         self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
 
 
