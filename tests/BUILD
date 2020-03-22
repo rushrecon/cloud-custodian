@@ -7,9 +7,6 @@ package(default_visibility = ["//visibility:private"])
 
 # TODO: get rid of excluded tests; remember to update bazel-test-excluded.yml
 EXCLUDED_TESTS = [
-    # 1) AssertionError: False is not true
-    # self.assertTrue(content.endswith("hello world"))
-    "test_output.py",
 ]
 
 py_library(
