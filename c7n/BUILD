@@ -193,7 +193,6 @@ py_library(
     ],
     deps = [
         ":config",
-        ":ipaddress",
     ],
 )
 
@@ -201,13 +200,6 @@ py_library(
     name = "registry",
     srcs = [
         "registry.py",
-    ],
-)
-
-py_library(
-    name = "ipaddress",
-    srcs = [
-        "ipaddress.py",
     ],
 )
 
