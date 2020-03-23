@@ -23,7 +23,7 @@ py_library(
 [c7n_py_test(
     name = test_file[:-3],
     srcs = [test_file],
-    data = glob(["data/**"]),
+    data = glob(["data/**"]) + ["//:.bazel-coveragerc"],
     imports = ["."],
     deps = [":gcp_common"],
 ) for test_file in glob(["test_*.py"])]

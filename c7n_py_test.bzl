@@ -17,44 +17,36 @@ def _impl(ctx):
     old_runner = ctx.attr.test[DefaultInfo].files_to_run.executable
     new_runner = ctx.actions.declare_file(ctx.attr.name)
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
+    test_name = ctx.attr.name
+    test_pkg = ctx.label.package.replace("/", ".")
+    command = ""
 
-    test_name = ctx.attr.name  # '\",\"'.join(package.split("/"))
-    package_name = ctx.label.package.replace("/", ".")
-    module_name = "%s.%s" % (package_name, test_name)
-    cov_dir = "C7N-cov"
-
-    command = ("sed $'s/" +
-               # search string
-               "  args = \[python_program, main_filename\] + args/" +
-               # replacing strings
-               "  module_name = \"%s\"\\\n" % (module_name) +
-               "  os.chdir(os.path.join(module_space, \"%s\"))\\\n" % (ctx.workspace_name) +
-               "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"%s\"))\\\n" % (cov_dir) +
-               "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"%s\", \"%s\"))\\\n" % (cov_dir, package_name) +
-               "  os.environ[\"COVERAGE_FILE\"] = os.path.join(os.getenv(\"TMPDIR\"), \"%s\", \"%s\", \".coverage\")\\\n" % (cov_dir, package_name) +
-               "  args = \[python_program, \"-m\", \"coverage\", \"run\"," +
-               "  \"--source\", os.getenv(\"C7N\"), \"--omit\", \"*\/tests\/*,*\/.*\/*\", \"--parallel-mode\"," +
-               "  \"-m\", \"unittest\", module_name\] + args/g'" +
-               " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path))
     if ctx.configuration.coverage_enabled:
-        ctx.actions.run_shell(
-            command = command,
-            inputs = [old_runner],
-            outputs = [new_runner],
+        command = (
+            "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\"))\\\n" +
+            "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\"))\\\n" % (test_pkg) +
+            "  while len(os.path.basename(os.getcwd())) != 32:\\\n" +
+            "    os.chdir(\"..\")\\\n" +
+            "  os.chdir(os.path.join(\"execroot\", \"%s\"))\\\n" % (ctx.workspace_name) +
+            "  os.environ[\"COVERAGE_FILE\"] = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \".coverage\")\\\n" % (test_pkg) +
+            "  args = \[python_program, \"-m\", \"coverage\", \"run\", \"--rcfile\", \".bazel-coveragerc\", \"-m\", \"unittest\", \"%s.%s\"\] + args" % (test_pkg, test_name)
         )
     else:
-        ctx.actions.run_shell(
-            progress_message = "Patching file content - %s" % old_runner.short_path,
-            # TODO: replace all *.inner mentions in file_to_run
-            command = "sed $'s/" +
-                      "  args = \[python_program, main_filename\] + args/" +  # search string
-                      "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +  # replacing strings
-                      "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +
-                      "  args = \[python_program, \"-m\", \"unittest\", module_name\] + args/g'" +
-                      " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
-            inputs = [old_runner],
-            outputs = [new_runner],
+        command = (
+            "  os.chdir(os.path.join(module_space, \"%s\"))\\\n" % (ctx.workspace_name) +
+            "  args = \[python_program, \"-m\", \"unittest\", \"%s.%s\"\] + args" % (test_pkg, test_name)
         )
+
+    ctx.actions.run_shell(
+        progress_message = "Patching file content - %s" % old_runner.short_path,
+        # TODO: replace all *.inner mentions in file_to_run
+        command =
+            "sed $'s/" +
+            "  args = \[python_program, main_filename\] + args/" + command +
+            " /g' '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+        inputs = [old_runner],
+        outputs = [new_runner],
+    )
 
     return [DefaultInfo(
         runfiles = ctx.attr.test.default_runfiles,

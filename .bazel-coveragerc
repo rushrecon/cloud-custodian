@@ -1,0 +1,7 @@
+[run]
+source =
+    c7n
+    tools/c7n_azure/c7n_azure
+    tools/c7n_gcp/c7n_gcp
+    tools/c7n_kube/c7n_kube
+parallel = True

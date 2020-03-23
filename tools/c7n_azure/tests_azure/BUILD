@@ -42,7 +42,7 @@ py_library(
         "cassettes/**",
         "data/**",
         "templates/**",
-    ]),
+    ]) + ["//:.bazel-coveragerc"],
     excluded_pkgs = EXCLUDED_PKGS,
     imports = ["."],
     srcs_version = "PY2AND3",
