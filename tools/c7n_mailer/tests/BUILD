@@ -11,7 +11,7 @@ py_library(
 py_library(
     name = "test_deps",
     srcs = ["common.py"],
-    data = ["example.jinja"],
+    data = ["example.jinja"] + ["//:.bazel-coveragerc"],
     deps = [
         ":test_data",
         "//c7n",

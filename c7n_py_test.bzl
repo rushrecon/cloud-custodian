@@ -19,16 +19,20 @@ def _impl(ctx):
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
     test_name = ctx.attr.name
     test_pkg = ctx.label.package.replace("/", ".")
+    cov_dir = "C7N-cov"
+    tmp_dir = "\/tmp"
     command = ""
 
     if ctx.configuration.coverage_enabled:
         command = (
-            "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\"))\\\n" +
-            "  os.system(\"mkdir \" + os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\"))\\\n" % (test_pkg) +
-            "  while len(os.path.basename(os.getcwd())) != 32:\\\n" +
+            #  save coverage data to /tmp/C7N-cov/[test.module]/
+            "  cov_path = os.path.join(\"%s\", \"%s\", \"%s\")\\\n" % (tmp_dir, cov_dir, test_pkg) +
+            "  os.system(\"mkdir -p \" + cov_path)\\\n" +
+            #  target dir: /home/user/.cache/bazel/_bazel_user/hash of the workspace dir/execroot/__main__
+            "  while not re.match(\"[a-zA-Z0-9]{32}\", os.path.basename(os.getcwd())):\\\n" +
             "    os.chdir(\"..\")\\\n" +
             "  os.chdir(os.path.join(\"execroot\", \"%s\"))\\\n" % (ctx.workspace_name) +
-            "  os.environ[\"COVERAGE_FILE\"] = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\", \".coverage\")\\\n" % (test_pkg) +
+            "  os.environ[\"COVERAGE_FILE\"] = os.path.join(cov_path, \".coverage\")\\\n" +
             "  args = \[python_program, \"-m\", \"coverage\", \"run\", \"--rcfile\", \".bazel-coveragerc\", \"-m\", \"unittest\", \"%s.%s\"\] + args" % (test_pkg, test_name)
         )
     else:
