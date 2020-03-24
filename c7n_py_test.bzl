@@ -19,14 +19,12 @@ def _impl(ctx):
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
     test_name = ctx.attr.name
     test_pkg = ctx.label.package.replace("/", ".")
-    cov_dir = "C7N-cov"
-    tmp_dir = "\/tmp"
     command = ""
 
     if ctx.configuration.coverage_enabled:
         command = (
             #  save coverage data to /tmp/C7N-cov/[test.module]/
-            "  cov_path = os.path.join(\"%s\", \"%s\", \"%s\")\\\n" % (tmp_dir, cov_dir, test_pkg) +
+            "  cov_path = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\")\\\n" % (test_pkg) +
             "  os.system(\"mkdir -p \" + cov_path)\\\n" +
             #  target dir: /home/user/.cache/bazel/_bazel_user/hash of the workspace dir/execroot/__main__
             "  while not re.match(\"[a-zA-Z0-9]{32}\", os.path.basename(os.getcwd())):\\\n" +
