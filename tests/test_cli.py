@@ -399,7 +399,6 @@ class ReportTest(CliTest):
 
 class LogsTest(CliTest):
 
-
     def test_logs(self):
         temp_dir = self.get_temp_dir()
 
