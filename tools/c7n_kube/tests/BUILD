@@ -47,7 +47,7 @@ py_library(
 [c7n_py_test(
     name = test_file[:-3],
     srcs = [test_file],
-    data = glob(["data/**"]),
+    data = glob(["data/**"]) + ["//:.bazel-coveragerc"],
     excluded_pkgs = EXCLUDED_PKGS,
     imports = ["."],
     legacy_create_init = 0,

@@ -17,15 +17,35 @@ def _impl(ctx):
     old_runner = ctx.attr.test[DefaultInfo].files_to_run.executable
     new_runner = ctx.actions.declare_file(ctx.attr.name)
     excluded_pkgs_command = add_exclude_pkgs_command(ctx.attr.excluded_pkgs)
+    test_name = ctx.attr.name
+    test_pkg = ctx.label.package.replace("/", ".")
+    command = ""
+
+    if ctx.configuration.coverage_enabled:
+        command = (
+            #  save coverage data to /tmp/C7N-cov/[test.module]/
+            "  cov_path = os.path.join(os.getenv(\"TMPDIR\"), \"C7N-cov\", \"%s\")\\\n" % (test_pkg) +
+            "  os.system(\"mkdir -p \" + cov_path)\\\n" +
+            #  target dir: /home/user/.cache/bazel/_bazel_user/hash of the workspace dir/execroot/__main__
+            "  while not re.match(\"[a-zA-Z0-9]{32}\", os.path.basename(os.getcwd())):\\\n" +
+            "    os.chdir(\"..\")\\\n" +
+            "  os.chdir(os.path.join(\"execroot\", \"%s\"))\\\n" % (ctx.workspace_name) +
+            "  os.environ[\"COVERAGE_FILE\"] = os.path.join(cov_path, \".coverage\")\\\n" +
+            "  args = \[python_program, \"-m\", \"coverage\", \"run\", \"--rcfile\", \".bazel-coveragerc\", \"-m\", \"unittest\", \"%s.%s\"\] + args" % (test_pkg, test_name)
+        )
+    else:
+        command = (
+            "  os.chdir(os.path.join(module_space, \"%s\"))\\\n" % (ctx.workspace_name) +
+            "  args = \[python_program, \"-m\", \"unittest\", \"%s.%s\"\] + args" % (test_pkg, test_name)
+        )
+
     ctx.actions.run_shell(
         progress_message = "Patching file content - %s" % old_runner.short_path,
         # TODO: replace all *.inner mentions in file_to_run
-        command = "sed $'s/" +
-                  "  args = \[python_program, main_filename\] + args/" +  # search string
-                  "  os.chdir(os.path.join(module_space, \"__main__\"))\\\n" +  # replacing strings
-                  "  module_name = \"'%s'.'%s'\"\\\n" % (ctx.label.package.replace("/", "."), ctx.attr.name) +
-                  "  args = \[python_program, \"-m\", \"unittest\", module_name\] + args/g'" +
-                  " '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
+        command =
+            "sed $'s/" +
+            "  args = \[python_program, main_filename\] + args/" + command +
+            " /g' '%s' %s > '%s'" % (old_runner.path, excluded_pkgs_command, new_runner.path),
         inputs = [old_runner],
         outputs = [new_runner],
     )

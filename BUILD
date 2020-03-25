@@ -5,6 +5,10 @@ load("//:py_wheel_extension.bzl", "py_wheel_entry_points_ext")
 load("@rules_python//experimental/python:wheel.bzl", "py_package", "py_wheel")
 load("@setup_versions//:versions.bzl", "setup_version")
 
+exports_files([
+    ".bazel-coveragerc",
+])
+
 sh_binary(
     name = "run-add-ep-script",
     srcs = ["add-entry-points-to-wheel.sh"],

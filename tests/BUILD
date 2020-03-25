@@ -25,7 +25,7 @@ py_library(
         "test_offhours.py",
         "test_s3.py",
     ]),
-    data = glob(["data/**/*"]) + [":placebo_data.zip"],
+    data = glob(["data/**/*"]) + [":placebo_data.zip"] + ["//:.bazel-coveragerc"],
     imports = [
         "../tools/c7n_azure/.",
         "../tools/c7n_gcp/.",
