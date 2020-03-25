@@ -5,3 +5,4 @@ google-api-python-client
 ratelimiter
 retrying
 vcrpy
+coverage==5.0.3
