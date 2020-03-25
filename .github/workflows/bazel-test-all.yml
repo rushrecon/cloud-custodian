@@ -6,7 +6,7 @@ jobs:
     name: Run checks in bazel
     strategy:
       matrix:
-        worker: [c7n_tests_first, c7n_tests_first_cov, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests]
+        worker: [c7n_tests_first, c7n_first_cov, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -34,5 +34,5 @@ jobs:
         if: matrix.worker == 'c7n_mailer_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
       - name: Execute bazel coverage //tests:first_chunk
-        if: matrix.worker == 'c7n_tests_first_cov'
+        if: matrix.worker == 'c7n_first_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
