@@ -405,7 +405,8 @@ class LogsTest(CliTest):
 
         # If we run Test 1 from test_log first it throws an unexpected exception.
         # However if another  self.run_and_expect_failure runs before Test 1 from test_log it runs correctly.
-        self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
+        # E.g. you can uncomment the line bellow
+        # self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
 
         # Test 1 - empty file
         empty_policies = {"policies": []}
