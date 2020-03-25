@@ -35,7 +35,7 @@ jobs:
         if: matrix.worker == 'c7n_mailer_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
       - name: Execute bazel coverage //tests:first_chunk
-        if: matrix.worker == 'c7n_tests_first'
+        if: matrix.worker == 'c7n_tests_first_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
       - name: Execute bazel build //:c7n_wheel
         if: matrix.worker == 'c7n_wheel'
