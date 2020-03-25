@@ -6,7 +6,7 @@ jobs:
     name: Run checks in bazel
     strategy:
       matrix:
-        worker: [c7n_tests_first, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests,
+        worker: [c7n_tests_first, c7n_tests_first_cov, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests,
                  c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
     runs-on: ubuntu-18.04
     steps:
