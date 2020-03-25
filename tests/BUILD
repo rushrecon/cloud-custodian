@@ -8,11 +8,13 @@ package(default_visibility = ["//visibility:private"])
 # TODO: get rid of excluded tests; remember to update bazel-test-excluded.yml
 EXCLUDED_TESTS = [
     # 1) jsonschema.exceptions.SchemaError: {'anyOf': []} is not valid under any of the given schemas
-    `
+
     # If we run Test 1 from LogsTest.test_log first it throws an unexpected exception.
     # However if another  self.run_and_expect_failure runs before Test 1 from LogsTest.test_log it runs correctly.
-    # E.g. you can uncomment the line bellow
-    # self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
+    # E.g. you can add the lines bellow into LogsTest
+    #def setUp(self):
+    #   super().setup()
+    #   self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
     "test_cli.py",
 ]
 
