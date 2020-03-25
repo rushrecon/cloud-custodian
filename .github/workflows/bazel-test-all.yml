@@ -1,13 +1,12 @@
 name: Run checks in bazel
-on: [push]
+on: [pull_request]
 
 jobs:
   build:
     name: Run checks in bazel
     strategy:
       matrix:
-        worker: [c7n_tests_first, c7n_tests_first_cov, c7n_tests_second,
-                 c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests,
+        worker: [c7n_tests_first, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests,
                  c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
     runs-on: ubuntu-18.04
     steps:
@@ -16,7 +15,7 @@ jobs:
       - name: Build a docker image with bazel
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
-        run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
+        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel test //tests:first_chunk
         if: matrix.worker == 'c7n_tests_first'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:first_chunk
@@ -35,9 +34,27 @@ jobs:
       - name: Execute bazel test //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_tests'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
+
       - name: Execute bazel coverage //tests:first_chunk
-        if: matrix.worker == 'c7n_tests_first_cov'
+        if: matrix.worker == 'c7n_tests_first'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
+      - name: Execute bazel coverage //tests:second_chunk
+        if: matrix.worker == 'c7n_tests_second'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:second_chunk
+      - name: Execute bazel coverage //tools/c7n_azure/tests_azure
+        if: matrix.worker == 'c7n_azure_tests'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
+      - name: Execute bazel coverage //tools/c7n_gcp/tests
+        if: matrix.worker == 'c7n_gcp_tests'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
+      - name: Execute bazel coverage //tools/c7n_kube/tests
+        if: matrix.worker == 'c7n_kube_tests'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
+      - name: Execute bazel coverage //tools/c7n_mailer/tests
+        if: matrix.worker == 'c7n_mailer_tests'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
+
+
       - name: Execute bazel build //:c7n_wheel
         if: matrix.worker == 'c7n_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
