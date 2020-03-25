@@ -399,12 +399,13 @@ class ReportTest(CliTest):
 
 class LogsTest(CliTest):
 
-    def setUp(self):
-        super(LogsTest, self).setUp()
-        self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
 
     def test_logs(self):
         temp_dir = self.get_temp_dir()
+
+        # If we run Test 1 from test_log first it throws an unexpected exception.
+        # However if another  self.run_and_expect_failure runs before Test 1 from test_log it runs correctly.
+        self.run_and_expect_failure(["custodian", "schema", "ec2.filters.and.foo"], 1)
 
         # Test 1 - empty file
         empty_policies = {"policies": []}
