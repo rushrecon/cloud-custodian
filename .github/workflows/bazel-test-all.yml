@@ -1,5 +1,5 @@
 name: Run checks in bazel
-on: [pull_request]
+on: [push]
 
 jobs:
   build:
