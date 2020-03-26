@@ -48,9 +48,9 @@ jobs:
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
-#      - name: Execute bazel coverage //tools/c7n_kube/tests
-#        if: matrix.worker == 'c7n_kube_cov'
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
+      - name: Execute bazel coverage //tools/c7n_kube/tests
+        if: matrix.worker == 'c7n_kube_cov'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
       - name: Execute bazel build //:c7n_wheel
         if: matrix.worker == 'c7n_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
