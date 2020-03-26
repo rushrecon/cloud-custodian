@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         worker: [c7n_tests_first, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests,
-                 c7n_cov_first, c7n_cov_second, c7n_azure_cov, c7n_gcp_cov, c7n_kube_cov, c7n_mailer_cov,
+                 c7n_cov_first, c7n_cov_second, c7n_azure_cov, c7n_gcp_cov, c7n_kube_cov,
                  c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel,
                  c7n_sphinx]
     runs-on: ubuntu-18.04
@@ -51,9 +51,6 @@ jobs:
       - name: Execute bazel coverage //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
-      - name: Execute bazel coverage //tools/c7n_mailer/tests
-        if: matrix.worker == 'c7n_mailer_cov'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
       - name: Execute bazel build //:c7n_wheel
         if: matrix.worker == 'c7n_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
