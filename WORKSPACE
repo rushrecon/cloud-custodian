@@ -48,15 +48,6 @@ azure_pip_install(
 )
 
 pip3_import(
-    name = "azure_py_deps",
-    requirements = "//tools/c7n_azure:requirements-bazel-dev.txt",
-)
-
-load("@azure_py_deps//:requirements.bzl", "pip_install")
-
-pip_install()
-
-pip3_import(
     name = "gcp_py_deps",
     requirements = "//tools/c7n_gcp:requirements-bazel-dev.txt",
 )
