@@ -15,6 +15,7 @@ py_library(
     deps = [
         ":test_data",
         "//c7n",
+        requirement("coverage"),
         requirement("mock"),
         requirement("fakeredis"),
         requirement("attrs"),

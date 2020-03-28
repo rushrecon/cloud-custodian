@@ -20,6 +20,7 @@ py_library(
         "//c7n:testing",
         "//tools/c7n_azure/c7n_azure:c7n_azure_lib",
         requirement("vcrpy-unittest"),
+        requirement("coverage"),
     ],
 )
 

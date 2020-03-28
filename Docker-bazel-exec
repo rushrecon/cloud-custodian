@@ -2,3 +2,4 @@
 FROM johnybear/ubuntu_for_c7n_bazel:latest
 COPY . /workspace/
 RUN mkdir /tmp/output_build/
+RUN mkdir /tmp/C7N-cov/
