@@ -2,7 +2,7 @@ name: Run checks in bazel
 on: [pull_request]
 
 jobs:
-  first_chunk:
+  first_chunk_tests:
     runs-on: ubuntu-latest
     name: tests:first_chunk
     container:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Execute bazel test //tests:first_chunk
         run: bazel --output_user_root=/tmp/output_build test //tests:first_chunk
-  second_chunk:
+  second_chunk_tests:
     runs-on: ubuntu-latest
     name: tests:second_chunk
     container:
@@ -27,37 +27,227 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Execute bazel test //tests:second_chunk
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:second_chunk
+        run: bazel --output_user_root=/tmp/output_build test //tests:second_chunk
+  azure_tests:
+    runs-on: ubuntu-latest
+    name: tests:azure
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel test //tools/c7n_azure/tests_azure
+        run: bazel --output_user_root=/tmp/output_build test //tools/c7n_azure/tests_azure
 
-#      - name: Execute bazel test //tools/c7n_azure/tests_azure
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_azure/tests_azure
-#      - name: Execute bazel test //tools/c7n_gcp/tests
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
-#      - name: Execute bazel test //tools/c7n_kube/tests
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
-#      - name: Execute bazel test //tools/c7n_mailer/tests
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
-#      - name: Execute bazel coverage //tests:first_chunk
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
-#      - name: Execute bazel coverage //tests:second_chunk
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:second_chunk
-#      - name: Execute bazel coverage //tools/c7n_azure/tests_azure
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
-#      - name: Execute bazel coverage //tools/c7n_gcp/tests
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
-#      - name: Execute bazel coverage //tools/c7n_kube/tests
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
-#      - name: Execute bazel coverage //tools/c7n_mailer/tests
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
-#      - name: Execute bazel build //:c7n_wheel
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
-#      - name: Execute bazel build //:c7n_azure_wheel
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_azure_wheel
-#      - name: Execute bazel build //:c7n_gcp_wheel
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
-#      - name: Execute bazel build //:c7n_kube_wheel
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
-#      - name: Execute bazel build //:c7n_mailer_wheel
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
-#      - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-#        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
+  gcp_tests:
+    runs-on: ubuntu-latest
+    name: tests:gcp
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel test //tools/c7n_gcp/tests
+        run: bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
+
+  kube_tests:
+    runs-on: ubuntu-latest
+    name: tests:kube
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel test //tools/c7n_kube/tests
+        run: bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
+
+  mailer_tests:
+    runs-on: ubuntu-latest
+    name: tests:mailer
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel test //tools/c7n_mailer/tests
+        run: bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
+
+  first_chunk_coverage:
+    runs-on: ubuntu-latest
+    name: coverage:first_chunk
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel coverage //tests:first_chunk
+        run: bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
+
+  second_chunk_coverage:
+    runs-on: ubuntu-latest
+    name: coverage:second_chunk
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel coverage //tests:second_chunk
+        run: bazel --output_user_root=/tmp/output_build coverage //tests:second_chunk
+
+  azure_coverage:
+    runs-on: ubuntu-latest
+    name: coverage:azure
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel coverage //tools/c7n_azure/tests_azure
+        run: bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
+
+  gcp_coverage:
+    runs-on: ubuntu-latest
+    name: coverage:gcp
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel coverage //tools/c7n_gcp/tests
+        run: bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
+
+  kube_coverage:
+    runs-on: ubuntu-latest
+    name: coverage:kube
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel coverage //tools/c7n_kube/tests
+        run: bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
+
+  mailer_coverage:
+    runs-on: ubuntu-latest
+    name: coverage:mailer
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel coverage //tools/c7n_mailer/tests
+        run: bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
+
+  wheel_build:
+    runs-on: ubuntu-latest
+    name: build:wheel
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel build //:c7n_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_wheel
+
+  wheel_azure:
+    runs-on: ubuntu-latest
+    name: wheel:gcp
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel build //:c7n_azure_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_azure_wheel
+
+  wheel_gcp:
+    runs-on: ubuntu-latest
+    name: wheel:gcp
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel build //:c7n_gcp_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
+
+  kube_wheel:
+    runs-on: ubuntu-latest
+    name: wheel:kube
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel build //:c7n_kube_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
+
+  mailer_wheel:
+    runs-on: ubuntu-latest
+    name: wheel:mailer
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel build //:c7n_mailer_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
+
+  sphinxext_gen:
+    runs-on: ubuntu-latest
+    name: gen:sphinxext
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
+        run: bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
