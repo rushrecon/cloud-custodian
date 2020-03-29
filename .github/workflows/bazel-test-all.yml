@@ -3,7 +3,8 @@ on: [pull_request]
 
 jobs:
   first_chunk:
-    name: Run checks in bazel
+    runs-on: ubuntu-latest
+    name: tests:first_chunk
     container:
       image: johnybear/ubuntu_for_c7n_bazel:latest
       volumes:
@@ -14,10 +15,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Execute bazel test //tests:first_chunk
         run: bazel --output_user_root=/tmp/output_build test //tests:first_chunk
-
-jobs:
   second_chunk:
-    name: Run checks in bazel
+    runs-on: ubuntu-latest
+    name: tests:second_chunk
     container:
       image: johnybear/ubuntu_for_c7n_bazel:latest
       volumes:
