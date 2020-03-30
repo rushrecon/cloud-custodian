@@ -19,6 +19,7 @@ jobs:
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:test_cloudsearch
       - name: Generate coverage report
         run: |
+          docker exec -t baz pip install coverage
           docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
           docker exec -t baz coverage combine /tmp/C7N-cov/; \
           docker exec -t baz coverage xml
