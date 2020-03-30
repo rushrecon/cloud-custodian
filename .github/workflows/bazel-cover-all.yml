@@ -60,32 +60,25 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: c7n_azure_cov_result
-          path: /tmp
       - name: Download coverage results for //tools/c7n_gcp/tests
         uses: actions/download-artifact@v1
         with:
           name: c7n_gcp_cov_result
-          path: /tmp
       - name: Download coverage results for //tools/c7n_kube/tests
         uses: actions/download-artifact@v1
         with:
           name: c7n_kube_cov_result
-          path: /tmp
       - name: Download coverage results for //tools/c7n_mailer/tests
         uses: actions/download-artifact@v1
         with:
           name: c7n_mailer_cov_result
-          path: /tmp
       - name: Generate HTML coverage report
         run: |
-          ls /tmp
-          unzip /tmp/c7n_azure_cov_result
-          unzip /tmp/c7n_gcp_cov_result
-          unzip /tmp/c7n_kube_cov_result
-          unzip /tmp/c7n_mailer_cov_result
           ls
-          coverage combine
-          coverage html -d htmlcov
+          pwd
+          find -type f -name '.coverage*' -exec cp -at /tmp {} +
+          ls
+          ls /tmp
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v1
         with:
