@@ -3,7 +3,7 @@ on: [pull_request]
 
 jobs:
   build:
-    name: Run
+    name: Run checks in bazel
     strategy:
       matrix:
         worker: [c7n_cov_first]
@@ -25,10 +25,10 @@ jobs:
     steps:
       - name: Generate coverage report
         run: |
-        docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
-        docker exec -t baz cd /tmp/C7N-cov; \
-        docker exec -t baz coverage combine; \
-        docker exec -t baz coverage xml
+          docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
+          docker exec -t baz cd /tmp/C7N-cov; \
+          docker exec -t baz coverage combine; \
+          docker exec -t baz coverage xml
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
