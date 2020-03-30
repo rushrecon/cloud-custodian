@@ -3,6 +3,7 @@ on: [pull_request]
 
 jobs:
   build:
+    name: Run
     strategy:
       matrix:
         worker: ['coverage tests-first']
