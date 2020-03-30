@@ -3,7 +3,7 @@ on: [pull_request]
 
 jobs:
   coverage:
-    name: Coverage
+    name: Run
     strategy:
       matrix:
         worker: [c7n_cov_first, c7n_cov_second, c7n_azure_cov, c7n_gcp_cov, c7n_kube_cov, c7n_mailer_cov]
@@ -33,3 +33,15 @@ jobs:
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
+      - name: Generate coverage report
+        run: |
+          docker exec -t baz pip3 install coverage
+          docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
+          docker exec -t baz coverage combine /tmp/C7N-cov/; \
+          docker exec -t baz coverage xml -o /tmp/C7N-cov/coverage.xml
+          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
+      - name: Upload coverage results for //tests:first_chunk
+        uses: actions/upload-artifact@v1
+        with:
+          name: HTML coverage report
+          path: /tmp/C7N-cov/htmlcov
