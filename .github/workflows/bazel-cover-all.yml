@@ -56,12 +56,6 @@ jobs:
     needs: coverage
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build a docker image with bazel
-        run: docker build -f Docker-bazel-exec -t my-baz .
-      - name: Run a container with the image
-        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Download coverage results for //tools/c7n_azure/tests_azure
         uses: actions/download-artifact@v1
         with:
@@ -80,16 +74,16 @@ jobs:
           name: c7n_mailer_cov_result
       - name: Generate HTML coverage report
         run: |
-          docker exec -t baz pip3 install coverage
-          docker exec -t baz ls
-          docker exec -t baz unzip c7n_azure_cov_result
-          docker exec -t baz unzip c7n_gcp_cov_result
-          docker exec -t baz unzip c7n_kube_cov_result
-          docker exec -t baz unzip c7n_mailer_cov_result
-          docker exec -t baz coverage combine
-          docker exec -t baz coverage html -d /tmp/htmlcov
+          ls
+          pwd
+          unzip c7n_azure_cov_result
+          unzip c7n_gcp_cov_result
+          unzip c7n_kube_cov_result
+          unzip c7n_mailer_cov_result
+          coverage combine
+          coverage html -d htmlcov
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v1
         with:
           name: HTML coverage report
-          path: /tmp/htmlcov
+          path: htmlcov
