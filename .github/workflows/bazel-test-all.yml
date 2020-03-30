@@ -78,14 +78,8 @@ jobs:
           docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
           docker exec -t baz coverage combine /tmp/C7N-cov/; \
           docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
-          docker exec -t baz coverage xml -o /tmp/C7N-cov/coverage.xml
       - name: Generate artifact for HTML coverage report
         uses: actions/upload-artifact@v1
         with:
           name: HTML coverage report
           path: /tmp/C7N-cov/htmlcov
-      - name: Generate artifact for XML coverage report
-        uses: actions/upload-artifact@v1
-        with:
-          name: XML coverage report
-          path: /tmp/C7N-cov/coverage.xml
