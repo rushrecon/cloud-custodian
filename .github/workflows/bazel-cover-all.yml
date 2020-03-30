@@ -15,11 +15,6 @@ jobs:
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
-      - name: Upload coverage results for //tests:first_chunk
-          uses: actions/upload-artifact@v1
-          with:
-            name: HTML coverage report
-            path: /tmp/C7N-cov/htmlcov
       - name: Execute bazel coverage //tests:first_chunk
         if: matrix.worker == 'c7n_cov_first'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
@@ -38,15 +33,40 @@ jobs:
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
-      - name: Generate coverage report
-        run: |
-          docker exec -t baz pip3 install coverage
-          docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
-          docker exec -t baz coverage combine /tmp/C7N-cov/; \
-          docker exec -t baz coverage xml -o /tmp/C7N-cov/coverage.xml
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
+
       - name: Upload coverage results for //tests:first_chunk
+        if: matrix.worker == 'c7n_cov_first'
         uses: actions/upload-artifact@v1
         with:
-          name: HTML coverage report
-          path: /tmp/C7N-cov/htmlcov
+          name: coverage results for c7n_cov_first
+          path: /tmp/C7N-cov/tests/
+      - name: Upload coverage results for //tests:second_chunk
+        if: matrix.worker == 'c7n_cov_second'
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage results for c7n_cov_second
+          path: /tmp/C7N-cov/tests/
+      - name: Upload coverage results for //tools/c7n_azure/tests_azure
+        if: matrix.worker == 'c7n_azure_cov'
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage results for c7n_azure_cov
+          path: /tmp/C7N-cov/tools.c7n_azure.tests_azure/
+      - name: Upload coverage results for //tools/c7n_gcp/tests
+        if: matrix.worker == 'c7n_gcp_cov'
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage results for c7n_gcp_cov
+          path: /tmp/C7N-cov/tools.c7n_gcp.tests/
+      - name: Upload coverage results for //tools/c7n_kube/tests
+        if: matrix.worker == 'c7n_kube_cov'
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage results for c7n_kube_cov
+          path: /tmp/C7N-cov/tools.c7n_kube.tests/
+      - name: Upload coverage results for //tools/c7n_mailer/tests
+        if: matrix.worker == 'c7n_mailer_cov'
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage results for c7n_mailer_cov
+          path: /tmp/C7N-cov/tools.c7n_mailer.tests/
