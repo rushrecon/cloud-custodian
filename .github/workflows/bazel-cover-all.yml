@@ -37,37 +37,37 @@ jobs:
         if: matrix.worker == 'c7n_cov_first'
         uses: actions/upload-artifact@v1
         with:
-          name: coverage results for c7n_cov_first
+          name: c7n_cov_first_result
           path: /tmp/C7N-cov/tests/
       - name: Upload coverage results for //tests:second_chunk
         if: matrix.worker == 'c7n_cov_second'
         uses: actions/upload-artifact@v1
         with:
-          name: coverage results for c7n_cov_second
+          name: c7n_cov_second_result
           path: /tmp/C7N-cov/tests/
       - name: Upload coverage results for //tools/c7n_azure/tests_azure
         if: matrix.worker == 'c7n_azure_cov'
         uses: actions/upload-artifact@v1
         with:
-          name: coverage results for c7n_azure_cov
+          name: c7n_azure_cov_result
           path: /tmp/C7N-cov/tools.c7n_azure.tests_azure/
       - name: Upload coverage results for //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp_cov'
         uses: actions/upload-artifact@v1
         with:
-          name: coverage results for c7n_gcp_cov
+          name: c7n_gcp_cov_result
           path: /tmp/C7N-cov/tools.c7n_gcp.tests/
       - name: Upload coverage results for //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube_cov'
         uses: actions/upload-artifact@v1
         with:
-          name: coverage results for c7n_kube_cov
+          name: c7n_kube_cov_result
           path: /tmp/C7N-cov/tools.c7n_kube.tests/
       - name: Upload coverage results for //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_cov'
         uses: actions/upload-artifact@v1
         with:
-          name: coverage results for c7n_mailer_cov
+          name: c7n_mailer_cov_result
           path: /tmp/C7N-cov/tools.c7n_mailer.tests/
   report:
     name: Generate coverage report
@@ -80,40 +80,47 @@ jobs:
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
-      - name: Download coverage results for //tests:first_chunk
+      - name: Download coverage results for //tests:test_cloudsearch
         uses: actions/download-artifact@v1
         with:
-          name: coverage results for c7n_cov_first
+          name: c7n_cov_first_result
           path: /tmp
-      - name: Download coverage results for //tests:second_chunk
+      - name: Download coverage results for //tests:test_cloudfront
         uses: actions/download-artifact@v1
         with:
-          name: coverage results for c7n_cov_second
+          name: c7n_cov_second_result
           path: /tmp
-      - name: Download coverage results for //tools/c7n_azure/tests_azure
+      - name: Download coverage results for //tools/c7n_azure/tests_azure:test_azure_utils
         uses: actions/download-artifact@v1
         with:
-          name: coverage results for c7n_azure_cov
+          name: c7n_azure_cov_result
           path: /tmp
-      - name: Download coverage results for //tools/c7n_gcp/tests
+      - name: Download coverage results for //tools/c7n_gcp/tests:test_dns
         uses: actions/download-artifact@v1
         with:
-          name: coverage results for c7n_gcp_cov
+          name: c7n_gcp_cov_result
           path: /tmp
-      - name: Download coverage results for //tools/c7n_kube/tests
+      - name: Download coverage results for //tools/c7n_kube/tests:test_labels
         uses: actions/download-artifact@v1
         with:
-          name: coverage results for c7n_kube_cov
+          name: c7n_kube_cov_result
           path: /tmp
-      - name: Download coverage results for //tools/c7n_mailer/tests
+      - name: Download coverage results for //tools/c7n_mailer/tests:test_utils
         uses: actions/download-artifact@v1
         with:
-          name: coverage results for c7n_mailer_cov
+          name: c7n_mailer_cov_result
           path: /tmp
       - name: Generate HTML coverage report
         run: |
           docker exec -t baz pip3 install coverage
-          docker exec -t baz find /tmp -type f -name '.coverage*' -exec cp -at /tmp {} +
+          docker exec -t baz apt-get install unzip
+          docker exec -t baz unzip /tmp/c7n_cov_first_result.zip -d /tmp
+          docker exec -t baz unzip /tmp/c7n_cov_second_result.zip -d /tmp
+          docker exec -t baz unzip /tmp/c7n_azure_cov_result.zip -d /tmp
+          docker exec -t baz unzip /tmp/c7n_gcp_cov_result.zip -d /tmp
+          docker exec -t baz unzip /tmp/c7n_kube_cov_result.zip -d /tmp
+          docker exec -t baz unzip /tmp/c7n_kube_cov_result.zip -d /tmp
+          docker exec -t baz unzip /tmp/c7n_mailer_cov_result.zip -d /tmp
           docker exec -t baz coverage combine /tmp
           docker exec -t baz coverage html -d /tmp/htmlcov
       - name: Upload HTML coverage report
