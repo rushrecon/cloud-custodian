@@ -113,6 +113,7 @@ jobs:
       - name: Generate HTML coverage report
         run: |
           docker exec -t baz pip3 install coverage
+          docker exec -t baz find /tmp -type f -name '.coverage*' -exec cp -at /tmp {} +
           docker exec -t baz coverage combine /tmp
           docker exec -t baz coverage html -d /tmp/htmlcov
       - name: Upload HTML coverage report
