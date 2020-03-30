@@ -33,7 +33,6 @@ jobs:
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
-
       - name: Upload coverage results for //tests:first_chunk
         if: matrix.worker == 'c7n_cov_first'
         uses: actions/upload-artifact@v1
@@ -70,19 +69,15 @@ jobs:
         with:
           name: coverage results for c7n_mailer_cov
           path: /tmp/C7N-cov/tools.c7n_mailer.tests/
-
   report:
     name: Generate coverage report
     needs: coverage
     runs-on: ubuntu-18.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Build a docker image with bazel
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
-
       - name: Download coverage results for //tests:first_chunk
         uses: actions/download-artifact@v1
         with:
