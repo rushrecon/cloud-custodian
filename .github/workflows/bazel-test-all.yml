@@ -72,3 +72,19 @@ jobs:
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         if: matrix.worker == 'c7n_sphinx'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
+  upload:
+    name: Upload coverage results into artifacts
+    needs: build
+    runs-on: ubuntu-18.04
+    steps:
+      - shell: bash
+        run: |
+          find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +;\
+          cd /tmp/C7N-cov;\
+          coverage combine;\
+          coverage xml
+      - name: Upload XML coverage report
+        uses: actions/upload-artifact@v1
+        with:
+          name: coverage XML
+          path: /tmp/C7N-cov/coverage.xml
