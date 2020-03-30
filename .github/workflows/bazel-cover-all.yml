@@ -74,6 +74,8 @@ jobs:
     needs: coverage
     runs-on: ubuntu-18.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Build a docker image with bazel
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
@@ -116,6 +118,6 @@ jobs:
           docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
       - name: Upload HTML coverage report
         uses: actions/upload-artifact@v1
-          with:
-            name: HTML coverage report
-            path: /tmp/C7N-cov/htmlcov
+        with:
+          name: HTML coverage report
+          path: /tmp/C7N-cov/htmlcov
