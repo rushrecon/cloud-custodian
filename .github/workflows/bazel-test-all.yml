@@ -54,6 +54,17 @@ jobs:
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer_cov'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
+      - name: Generate coverage report
+        run: |
+          docker exec -t baz pip3 install coverage
+          docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
+          docker exec -t baz coverage combine /tmp/C7N-cov/; \
+          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
+      - name: Generate artifact for HTML coverage report
+        uses: actions/upload-artifact@v1
+        with:
+          name: HTML coverage report
+          path: /tmp/C7N-cov/htmlcov
       - name: Execute bazel build //:c7n_wheel
         if: matrix.worker == 'c7n_wheel'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
@@ -72,14 +83,3 @@ jobs:
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         if: matrix.worker == 'c7n_sphinx'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-      - name: Generate coverage report
-        run: |
-          docker exec -t baz pip3 install coverage
-          docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
-          docker exec -t baz coverage combine /tmp/C7N-cov/; \
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
-      - name: Generate artifact for HTML coverage report
-        uses: actions/upload-artifact@v1
-        with:
-          name: HTML coverage report
-          path: /tmp/C7N-cov/htmlcov
