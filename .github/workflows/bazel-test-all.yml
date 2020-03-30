@@ -3,10 +3,9 @@ on: [pull_request]
 
 jobs:
   build:
-    name: Run checks in bazel
     strategy:
       matrix:
-        worker: [c7n_cov_first]
+        worker: ['coverage tests-first']
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -16,16 +15,15 @@ jobs:
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
       - name: Execute bazel coverage //tests:first_chunk
-        if: matrix.worker == 'c7n_cov_first'
+        if: matrix.worker == 'coverage tests-first'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:test_cloudsearch
       - name: Generate coverage report
         run: |
           docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
-          docker exec -t baz cd /tmp/C7N-cov; \
-          docker exec -t baz coverage combine; \
+          docker exec -t baz coverage combine /tmp/C7N-cov/; \
           docker exec -t baz coverage xml
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
           name: Coverage report XML
-          path: /tmp/C7N-cov/coverage.xml
+          path: coverage.xml
