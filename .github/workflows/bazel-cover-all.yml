@@ -85,7 +85,7 @@ jobs:
       - name: Generate HTML coverage report
         run: |
           docker exec -t baz pip3 install coverage
-          docker exec -t baz apt-get install unzip
+          docker exec -t baz ls /tmp
           docker exec -t baz unzip /tmp/c7n_azure_cov_result.zip -d /tmp
           docker exec -t baz unzip /tmp/c7n_gcp_cov_result.zip -d /tmp
           docker exec -t baz unzip /tmp/c7n_kube_cov_result.zip -d /tmp
