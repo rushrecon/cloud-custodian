@@ -38,5 +38,5 @@ jobs:
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
-          name: HTML coverage report
+          name: HTML coverage report for ${{ matrix.worker }}
           path: /tmp/C7N-cov/htmlcov
