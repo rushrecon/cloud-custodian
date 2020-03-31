@@ -34,7 +34,7 @@ jobs:
         run: |
           docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
           docker exec -t baz coverage combine /tmp/C7N-cov/; \
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
+          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include */${{ matrix.worker }}/*
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
