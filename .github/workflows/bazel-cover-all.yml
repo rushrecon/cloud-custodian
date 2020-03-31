@@ -23,24 +23,28 @@ jobs:
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
           docker exec -t baz coverage combine /tmp/C7N-cov/tools.c7n_azure.tests_azure
+          docker exec -t baz cp .coverage /tmp/C7N-cov/tools.c7n_azure.tests_azure
           docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_azure/* --skip-empty
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp'
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
           docker exec -t baz coverage combine /tmp/C7N-cov/tools.c7n_gcp.tests
+          docker exec -t baz cp .coverage /tmp/C7N-cov/tools.c7n_gcp.tests
           docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_gcp/* --skip-empty
       - name: Execute bazel coverage //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube'
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
           docker exec -t baz coverage combine /tmp/C7N-cov/tools.c7n_kube.tests
+          docker exec -t baz cp .coverage /tmp/C7N-cov/tools.c7n_kube.tests
           docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_kube/* --skip-empty
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer'
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
           docker exec -t baz coverage combine /tmp/C7N-cov/tools.c7n_mailer.tests
+          docker exec -t baz cp .coverage /tmp/C7N-cov/tools.c7n_mailer.tests
           docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_mailer/* --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
