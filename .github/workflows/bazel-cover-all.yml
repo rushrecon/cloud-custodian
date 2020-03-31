@@ -20,34 +20,23 @@ jobs:
 
       - name: Execute bazel coverage //tools/c7n_azure/tests_azure
         if: matrix.worker == 'c7n_azure'
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
-          docker exec -t baz cd /tmp/C7N-cov/tools.c7n_azure.tests_azure
-          docker exec -t baz coverage combine
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_azure/* --skip-empty
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp'
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
-          docker exec -t baz cd /tmp/C7N-cov/tools.c7n_gcp.tests
-          docker exec -t baz coverage combine
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_gcp/* --skip-empty
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
       - name: Execute bazel coverage //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube'
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
-          docker exec -t baz cd /tmp/C7N-cov/tools.c7n_kube.tests
-          docker exec -t baz coverage combine
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_kube/* --skip-empty
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
+      - name: Generate coverage report
         run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
-          docker exec -t baz cd /tmp/C7N-cov/tools.c7n_mailer.tests
-          docker exec -t baz coverage combine
-          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --include */c7n_mailer/* --skip-empty
+          docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
+          docker exec -t baz coverage combine /tmp/C7N-cov/; \
+          docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
-          name: Coverage report for ${{ matrix.worker }}
+          name: HTML coverage report
           path: /tmp/C7N-cov/htmlcov
