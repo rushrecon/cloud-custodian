@@ -3,7 +3,7 @@ on: [pull_request]
 
 jobs:
   coverage:
-    name: Run
+    name: Coverage
     strategy:
       matrix:
         worker: [c7n, c7n_azure, c7n_gcp, c7n_kube, c7n_mailer]
@@ -17,12 +17,11 @@ jobs:
         run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
       - name: Install coverage
         run: docker exec -t baz pip3 install coverage
-      - name: Execute bazel coverage //tests:first_chunk
+      - name: Execute bazel coverage //tests
         if: matrix.worker == 'c7n'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
-      - name: Execute bazel coverage //tests:second_chunk
-        if: matrix.worker == 'c7n'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:second_chunk
+        run: |
+          docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
+          docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:second_chunk
       - name: Execute bazel coverage //tools/c7n_azure/tests_azure
         if: matrix.worker == 'c7n_azure'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
