@@ -34,18 +34,18 @@ jobs:
         run: |
           docker exec -t baz find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +; \
           docker exec -t baz coverage combine /tmp/C7N-cov/; \
-      - name: Generate coverage report
+      - name: Generate coverage report for c7n_azure
         if: matrix.worker == 'c7n_azure'
-        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include */c7n_azure/*
-      - name: Generate coverage report
+        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include "*/c7n_azure/*"
+      - name: Generate coverage report for c7n_gcp
         if: matrix.worker == 'c7n_gcp'
-        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include */c7n_gcp/*
-      - name: Generate coverage report
+        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include "*/c7n_gcp/*"
+      - name: Generate coverage report for c7n_kube
         if: matrix.worker == 'c7n_kube'
-        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include */c7n_kube/*
-      - name: Generate coverage report
+        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include "*/c7n_kube/*"
+      - name: Generate coverage report for c7n_mailer
         if: matrix.worker == 'c7n_mailer'
-        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include */c7n_mailer/*
+        run: docker exec -t baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty --include "*/c7n_mailer/*"
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
