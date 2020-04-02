@@ -79,6 +79,7 @@ jobs:
           unzip c7n_kube_cov_data/c7n_kube.zip
           unzip c7n_mailer_cov_data/c7n_mailer.zip
           ls tmp/C7N-cov
+          ls tmp/C7N-cov/tests
           find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
           ls tmp/C7N-cov
           cd tmp/C7N-cov
