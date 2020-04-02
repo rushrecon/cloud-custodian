@@ -91,9 +91,9 @@ jobs:
         run: |
           cd tmp/C7N-cov
           coverage combine
-          coverage html -d htmlcov --skip-empty
+          coverage xml -o /coverage.xml -i
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
           name: HTML coverage report
-          path: htmlcov
+          path: /coverage.xml
