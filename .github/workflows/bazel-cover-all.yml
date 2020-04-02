@@ -97,4 +97,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: HTML coverage report
-          path: htmlcov
+          path: tmp/C7N-cov/htmlcov
