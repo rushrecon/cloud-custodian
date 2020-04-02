@@ -72,7 +72,7 @@ jobs:
       - name: Unzip coverage data files
         run: |
           ls c7n_second_cov_data/
-          unzip c7n_first_cov_data/c7n_first.zip -d
+          unzip c7n_first_cov_data/c7n_first.zip
           unzip c7n_second_cov_data/c7n_second.zip
           unzip c7n_azure_cov_data/c7n_azure.zip
           unzip c7n_gcp_cov_data/c7n_gcp.zip
