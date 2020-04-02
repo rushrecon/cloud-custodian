@@ -40,3 +40,55 @@ jobs:
         with:
           name: ${{ matrix.worker }}_cov_data
           path: ${{ matrix.worker }}.zip
+  report:
+    name: Generate coverage report
+    needs: coverage
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build a docker image with bazel
+        run: docker build -f Docker-bazel-exec -t my-baz .
+      - name: Run a container with the image
+        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
+      - name: Download zip coverage data for c7n_first
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_first_cov_data
+      - name: Download zip coverage data for c7n_second
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_second_cov_data
+      - name: Download zip coverage data for c7n_azure
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_azure_cov_data
+      - name: Download zip coverage data for c7n_gcp
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_gcp_cov_data
+      - name: Download zip coverage data for c7n_kube
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_kube_cov_data
+      - name: Download zip coverage data for c7n_mailer
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_mailer_cov_data
+      - name: Unzip coverage data files
+        run: |
+          ls c7n_second_cov_data/
+          unzip c7n_first_cov_data/c7n_first.zip
+          unzip c7n_second_cov_data/c7n_second.zip
+          unzip c7n_azure_cov_data/c7n_azure.zip
+          unzip c7n_gcp_cov_data/c7n_gcp.zip
+          unzip c7n_kube_cov_data/c7n_kube.zip
+          unzip c7n_mailer_cov_data/c7n_mailer.zip
+          pip3 install coverage
+          coverage combine
+          coverage html -d htmlcov --skip-empty
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v1
+        with:
+          name: HTML coverage report
+          path: htmlcov
