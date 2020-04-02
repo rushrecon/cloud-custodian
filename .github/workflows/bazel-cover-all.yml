@@ -77,16 +77,17 @@ jobs:
           name: c7n_mailer_cov_data
       - name: Unzip coverage data files
         run: |
-          ls c7n_second_cov_data/
-          unzip c7n_first_cov_data/c7n_first.zip
-          unzip c7n_second_cov_data/c7n_second.zip
-          unzip c7n_azure_cov_data/c7n_azure.zip
-          unzip c7n_gcp_cov_data/c7n_gcp.zip
-          unzip c7n_kube_cov_data/c7n_kube.zip
-          unzip c7n_mailer_cov_data/c7n_mailer.zip
-          pip3 install coverage
-          coverage combine
-          coverage html -d htmlcov --skip-empty
+          docker exec -t baz ls c7n_second_cov_data/
+          docker exec -t baz unzip c7n_first_cov_data/c7n_first.zip
+          docker exec -t baz unzip c7n_second_cov_data/c7n_second.zip
+          docker exec -t baz unzip c7n_azure_cov_data/c7n_azure.zip
+          docker exec -t baz unzip c7n_gcp_cov_data/c7n_gcp.zip
+          docker exec -t baz unzip c7n_kube_cov_data/c7n_kube.zip
+          docker exec -t baz unzip c7n_mailer_cov_data/c7n_mailer.zip
+          docker exec -t baz ls
+          docker exec -t baz pip3 install coverage
+          docker exec -t baz coverage combine
+          docker exec -t baz coverage html -d htmlcov --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
