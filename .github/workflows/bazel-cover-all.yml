@@ -12,7 +12,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install bazel
-        run: apt-get install bazel
+        run: sudo apt-get install bazel
       - name: Execute bazel coverage //tests:first_chunk
         if: matrix.worker == 'c7n_first'
         run: bazel coverage //tests:test_cloudsearch
