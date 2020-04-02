@@ -72,12 +72,13 @@ jobs:
       - name: Unzip coverage data files
         run: |
           ls c7n_second_cov_data/
-          unzip c7n_first_cov_data/c7n_first.zip -d /tmp/C7N-cov
-          unzip c7n_second_cov_data/c7n_second.zip -d /tmp/C7N-cov
-          unzip c7n_azure_cov_data/c7n_azure.zip -d /tmp/C7N-cov
-          unzip c7n_gcp_cov_data/c7n_gcp.zip -d /tmp/C7N-cov
-          unzip c7n_kube_cov_data/c7n_kube.zip -d /tmp/C7N-cov
-          unzip c7n_mailer_cov_data/c7n_mailer.zip -d /tmp/C7N-cov
+          unzip c7n_first_cov_data/c7n_first.zip -d
+          unzip c7n_second_cov_data/c7n_second.zip
+          unzip c7n_azure_cov_data/c7n_azure.zip
+          unzip c7n_gcp_cov_data/c7n_gcp.zip
+          unzip c7n_kube_cov_data/c7n_kube.zip
+          unzip c7n_mailer_cov_data/c7n_mailer.zip
+          find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
           ls /tmp/C7N-cov
           cd /tmp/C7N-cov
           ls
