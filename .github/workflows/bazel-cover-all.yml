@@ -11,30 +11,28 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build a docker image with bazel
-        run: docker build -f Docker-bazel-exec -t my-baz .
-      - name: Run a container with the image
-        run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
+      - name: Install bazel
+        run: apt-get install bazel
       - name: Execute bazel coverage //tests:first_chunk
         if: matrix.worker == 'c7n_first'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:test_cloudsearch
+        run: bazel coverage //tests:test_cloudsearch
       - name: Execute bazel coverage //tests:second_chunk
         if: matrix.worker == 'c7n_second'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:test_cloudfront
+        run: bazel coverage //tests:test_cloudfront
       - name: Execute bazel coverage //tools/c7n_azure/tests_azure
         if: matrix.worker == 'c7n_azure'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure:test_tags
+        run: bazel coverage //tools/c7n_azure/tests_azure:test_tags
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests:test_dns
+        run: bazel coverage //tools/c7n_gcp/tests:test_dns
       - name: Execute bazel coverage //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests:test_actions
+        run: bazel coverage //tools/c7n_kube/tests:test_actions
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests:test_utils
+        run: bazel coverage //tools/c7n_mailer/tests:test_utils
       - name: Add coverage data files to zip archive
-        run: docker exec -t baz find /tmp/C7N-cov/ -type f -name '.coverage*' -print | zip ${{ matrix.worker }} -@
+        run: find /tmp/C7N-cov/ -type f -name '.coverage*' -print | zip ${{ matrix.worker }} -@
       - name: Upload zip archive
         uses: actions/upload-artifact@v1
         with:
@@ -85,6 +83,9 @@ jobs:
           unzip c7n_gcp_cov_data/c7n_gcp.zip
           unzip c7n_kube_cov_data/c7n_kube.zip
           unzip c7n_mailer_cov_data/c7n_mailer.zip
+          pwd
+          ls -a
+          ls -a tmp/C7N-cov
       - name: Copy coverage data files
         run: find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
       - name: Generate coverage report
