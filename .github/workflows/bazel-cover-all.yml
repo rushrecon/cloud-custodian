@@ -83,9 +83,10 @@ jobs:
           unzip c7n_gcp_cov_data/c7n_gcp.zip
           unzip c7n_kube_cov_data/c7n_kube.zip
           unzip c7n_mailer_cov_data/c7n_mailer.zip
+      - name: Copy coverage data files
+        run: find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
       - name: Generate coverage report
         run: |
-          find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
           cd tmp/C7N-cov
           coverage combine
           coverage html -d htmlcov --skip-empty
