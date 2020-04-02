@@ -69,22 +69,24 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: c7n_mailer_cov_data
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install coverage
+        run: pip install coverage
       - name: Unzip coverage data files
         run: |
-          ls c7n_second_cov_data/
           unzip c7n_first_cov_data/c7n_first.zip
           unzip c7n_second_cov_data/c7n_second.zip
           unzip c7n_azure_cov_data/c7n_azure.zip
           unzip c7n_gcp_cov_data/c7n_gcp.zip
           unzip c7n_kube_cov_data/c7n_kube.zip
           unzip c7n_mailer_cov_data/c7n_mailer.zip
-          ls tmp/C7N-cov
-          ls tmp/C7N-cov/tests
+      - name: Generate coverage report
+        run: |
           find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
-          ls tmp/C7N-cov
           cd tmp/C7N-cov
-          ls
-          pip install coverage
           coverage combine
           coverage html -d htmlcov --skip-empty
       - name: Upload coverage report
