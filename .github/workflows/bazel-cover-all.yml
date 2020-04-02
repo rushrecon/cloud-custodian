@@ -45,6 +45,8 @@ jobs:
     needs: coverage
     runs-on: ubuntu-18.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Download zip coverage data for c7n_first
         uses: actions/download-artifact@v1
         with:
