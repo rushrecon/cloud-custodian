@@ -15,25 +15,25 @@ jobs:
         run: sudo apt-get install bazel
       - name: Execute bazel coverage //tests:first_chunk
         if: matrix.worker == 'c7n_first'
-        run: bazel coverage //tests:test_cloudsearch
+        run: bazel coverage //tests:first_chunk
       - name: Execute bazel coverage //tests:second_chunk
         if: matrix.worker == 'c7n_second'
-        run: bazel coverage //tests:test_cloudfront
+        run: bazel coverage //tests:second_chunk
       - name: Execute bazel coverage //tools/c7n_azure/tests_azure
         if: matrix.worker == 'c7n_azure'
-        run: bazel coverage //tools/c7n_azure/tests_azure:test_tags
+        run: bazel coverage //tools/c7n_azure/tests_azure
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp'
-        run: bazel coverage //tools/c7n_gcp/tests:test_dns
+        run: bazel coverage //tools/c7n_gcp/tests
       - name: Execute bazel coverage //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube'
-        run: bazel coverage //tools/c7n_kube/tests:test_actions
+        run: bazel coverage //tools/c7n_kube/tests
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer'
-        run: bazel coverage //tools/c7n_mailer/tests:test_utils
+        run: bazel coverage //tools/c7n_mailer/tests
       - name: Add coverage data files to zip archive
         run: find /tmp/C7N-cov/ -type f -name '.coverage*' -print | zip ${{ matrix.worker }} -@
-      - name: Upload zip archive
+      - name: Upload zip archive into artifact
         uses: actions/upload-artifact@v1
         with:
           name: ${{ matrix.worker }}_cov_data
@@ -45,6 +45,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.6
+      - name: Install coverage
+        run: pip install coverage
       - name: Download zip coverage data for c7n_first
         uses: actions/download-artifact@v1
         with:
@@ -69,12 +75,6 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: c7n_mailer_cov_data
-      - name: Setup Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.6
-      - name: Install coverage
-        run: pip install coverage
       - name: Unzip coverage data files
         run: |
           unzip c7n_first_cov_data/c7n_first.zip
@@ -83,13 +83,9 @@ jobs:
           unzip c7n_gcp_cov_data/c7n_gcp.zip
           unzip c7n_kube_cov_data/c7n_kube.zip
           unzip c7n_mailer_cov_data/c7n_mailer.zip
-          pwd
-          ls -a
-          ls -a tmp/C7N-cov
-      - name: Copy coverage data files
-        run: find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
       - name: Generate coverage report
         run: |
+          find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
           cd tmp/C7N-cov
           coverage combine
           coverage html -d htmlcov --skip-empty
