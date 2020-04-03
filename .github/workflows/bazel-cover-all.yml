@@ -6,7 +6,7 @@ jobs:
     name: Coverage
     strategy:
       matrix:
-        worker: [c7n_first, c7n_second, c7n_azure, c7n_gcp, c7n_kube, c7n_mailer]
+        worker: [c7n_first, c7n_second, c7n_gcp, c7n_kube, c7n_mailer]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -19,9 +19,6 @@ jobs:
       - name: Execute bazel coverage //tests:second_chunk
         if: matrix.worker == 'c7n_second'
         run: bazel coverage //tests:second_chunk
-      - name: Execute bazel coverage //tools/c7n_azure/tests_azure
-        if: matrix.worker == 'c7n_azure'
-        run: bazel coverage //tools/c7n_azure/tests_azure
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp'
         run: bazel coverage //tools/c7n_gcp/tests
