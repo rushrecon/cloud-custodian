@@ -95,3 +95,5 @@ jobs:
         with:
           name: HTML coverage report
           path: /tmp/C7N-cov/htmlcov
+      - name: Coverage results
+        run: docker exec -t -e COVERAGE_FILE=/tmp/C7N-cov/.coverage baz coverage report --skip-empty
