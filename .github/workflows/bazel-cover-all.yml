@@ -96,7 +96,15 @@ jobs:
           find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
           cd tmp/C7N-cov
           coverage combine
-          coverage html -d htmlcov --skip-empty
+          pwd
+          ls -a
+          pwd
+          ls /workspace -a
+          pwd
+          ls /workspace/c7n -a
+          pwd
+          cat /workspace/c7n/__init__.py
+          coverage html -i -d htmlcov --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
