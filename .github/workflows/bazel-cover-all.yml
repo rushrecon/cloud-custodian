@@ -50,15 +50,9 @@ jobs:
       - name: Build a docker image with bazel
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
-        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
-      - name: Execute bazel build //:c7n_wheel
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build c7n_wheel
-      - name: Setup Python
-        uses: actions/setup-python@v1
-        with:
-          python-version: 3.6
+        run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
       - name: Install coverage
-        run: pip install coverage
+        run: docker exec -t baz pip3 install coverage
       - name: Download zip coverage data for c7n_first
         uses: actions/download-artifact@v1
         with:
@@ -93,18 +87,9 @@ jobs:
           unzip c7n_mailer_cov_data/c7n_mailer.zip
       - name: Generate coverage report
         run: |
-          find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at tmp/C7N-cov {} +
-          cd tmp/C7N-cov
-          coverage combine
-          pwd
-          ls -a
-          pwd
-          ls /workspace -a
-          pwd
-          ls /workspace/c7n -a
-          pwd
-          cat /workspace/c7n/__init__.py
-          coverage html -i -d htmlcov --skip-empty
+          sudo find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
+          docker exec -t baz export COVERAGE_FILE="/tmp/C7N-cov"
+          docker exec -t baz coverage html -i -d htmlcov --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
