@@ -88,6 +88,7 @@ jobs:
       - name: Generate coverage report
         run: |
           sudo find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
+          docker exec -t baz sudo apt-get install export
           docker exec -t baz export COVERAGE_FILE="/tmp/C7N-cov"
           docker exec -t baz coverage html -i -d htmlcov --skip-empty
       - name: Upload coverage report
