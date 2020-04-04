@@ -17,22 +17,22 @@ jobs:
         run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
       - name: Execute bazel coverage //tests:first_chunk
         if: matrix.worker == 'c7n_first'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:test_cloudsearch
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:first_chunk
       - name: Execute bazel coverage //tests:second_chunk
         if: matrix.worker == 'c7n_second'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:test_cloudfront
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tests:second_chunk
       - name: Execute bazel coverage //tools/c7n_azure/tests_azure
         if: matrix.worker == 'c7n_azure'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure:test_tags
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_azure/tests_azure
       - name: Execute bazel coverage //tools/c7n_gcp/tests
         if: matrix.worker == 'c7n_gcp'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests:test_dns
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_gcp/tests
       - name: Execute bazel coverage //tools/c7n_kube/tests
         if: matrix.worker == 'c7n_kube'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests:test_labels
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_kube/tests
       - name: Execute bazel coverage //tools/c7n_mailer/tests
         if: matrix.worker == 'c7n_mailer'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests:test_utils
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //tools/c7n_mailer/tests
       - name: Add coverage data files to zip archive
         run: find /tmp/C7N-cov/ -type f -name '.coverage*' -print | zip ${{ matrix.worker }} -@
       - name: Upload zip archive into artifact
@@ -41,7 +41,7 @@ jobs:
           name: ${{ matrix.worker }}_cov_data
           path: ${{ matrix.worker }}.zip
   report:
-    name: Generate coverage report
+    name: Coverage report
     needs: coverage
     runs-on: ubuntu-18.04
     steps:
@@ -77,7 +77,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: c7n_mailer_cov_data
-      - name: Unzip coverage data files
+      - name: Unzip coverage data
         run: |
           unzip c7n_first_cov_data/c7n_first.zip
           unzip c7n_second_cov_data/c7n_second.zip
