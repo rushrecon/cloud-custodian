@@ -88,12 +88,10 @@ jobs:
       - name: Generate coverage report
         run: |
           sudo find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
-          docker exec -t -e COVERAGE_FILE=/tmp/C7N-cov/.coverage baz ls -a /tmp/C7N-cov
-          docker exec -t -e COVERAGE_FILE=/tmp/C7N-cov/.coverage baz ls -a /tmp
           docker exec -t -e COVERAGE_FILE=/tmp/C7N-cov/.coverage baz coverage combine /tmp/C7N-cov
-          docker exec -t -e COVERAGE_FILE=/tmp/C7N-cov/.coverage baz coverage html -i -d htmlcov --skip-empty
+          docker exec -t -e COVERAGE_FILE=/tmp/C7N-cov/.coverage baz coverage html -d /tmp/C7N-cov/htmlcov --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
           name: HTML coverage report
-          path: tmp/C7N-cov/htmlcov
+          path: /tmp/C7N-cov/htmlcov
