@@ -3,10 +3,10 @@ on: [pull_request]
 
 jobs:
   test:
-    name: Run
+    name: Test
     strategy:
       matrix:
-        worker: [c7n_tests_first, c7n_tests_second, c7n_azure_tests, c7n_gcp_tests, c7n_kube_tests, c7n_mailer_tests]
+        worker: [c7n_first, c7n_second, c7n_azure, c7n_gcp, c7n_kube, c7n_mailer]
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -16,20 +16,20 @@ jobs:
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel test //tests:first_chunk
-        if: matrix.worker == 'c7n_tests_first'
+        if: matrix.worker == 'c7n_first'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:first_chunk
       - name: Execute bazel test //tests:second_chunk
-        if: matrix.worker == 'c7n_tests_second'
+        if: matrix.worker == 'c7n_second'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:second_chunk
       - name: Execute bazel test //tools/c7n_azure/tests_azure
-        if: matrix.worker == 'c7n_azure_tests'
+        if: matrix.worker == 'c7n_azure'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_azure/tests_azure
       - name: Execute bazel test //tools/c7n_gcp/tests
-        if: matrix.worker == 'c7n_gcp_tests'
+        if: matrix.worker == 'c7n_gcp'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
       - name: Execute bazel test //tools/c7n_kube/tests
-        if: matrix.worker == 'c7n_kube_tests'
+        if: matrix.worker == 'c7n_kube'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
       - name: Execute bazel test //tools/c7n_mailer/tests
-        if: matrix.worker == 'c7n_mailer_tests'
+        if: matrix.worker == 'c7n_mailer'
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests

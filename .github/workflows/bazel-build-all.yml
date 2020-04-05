@@ -1,4 +1,4 @@
-name: Bazel build wheels
+name: Bazel build wheels and docs
 on: [pull_request]
 
 jobs:
