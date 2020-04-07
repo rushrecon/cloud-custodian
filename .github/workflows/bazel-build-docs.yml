@@ -13,7 +13,6 @@ jobs:
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-        if: matrix.worker == 'c7n_sphinx'
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
           sudo find /tmp/output_build/ -name 'html' -exec cp -n -at /tmp {} +
