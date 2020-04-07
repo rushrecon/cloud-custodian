@@ -1,0 +1,17 @@
+name: Bazel build docs
+on: [pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build a docker image with bazel
+        run: docker build -f Docker-bazel-exec -t my-baz .
+      - name: Run a container with the image
+        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
+      - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
+        if: matrix.worker == 'c7n_sphinx'
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
