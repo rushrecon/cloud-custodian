@@ -19,7 +19,7 @@ jobs:
         run: |
           docker exec -t baz bazel --output_user_root=/tmp/output_build build ${{ matrix.worker }}
           mkdir /tmp/wheel
-          find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -at /tmp/wheel {} +
+          sudo find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -at /tmp/wheel {} +
       - name: Upload wheel into artifacts
         uses: actions/upload-artifact@v1
         with:
