@@ -1,7 +1,7 @@
 -r requirements.txt
 
 futures>=3.1.1
-uritemplate
+uritemplate==3.0.1
 
 # requirements-dev.txt
 vcrpy-unittest==0.1.7
