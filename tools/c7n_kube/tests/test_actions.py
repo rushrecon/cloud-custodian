@@ -58,7 +58,7 @@ class TestDeleteAction(KubeTest):
         client = factory().client('Core', 'V1')
         namespaces = client.list_service_for_all_namespaces().to_dict()['items']
         hello_node_service = [n for n in namespaces if n['metadata']['name'] == 'hello-node']
-        self.assertFalse(hello_node_service)
+        self.assertTrue(hello_node_service)
 
 
 class TestPatchAction(KubeTest):
