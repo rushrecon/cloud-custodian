@@ -2,26 +2,144 @@ name: Bazel build wheels
 on: [pull_request]
 
 jobs:
-  build:
-    name: Build
-    strategy:
-      matrix:
-        worker: [c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
+  wheel_build:
     runs-on: ubuntu-18.04
+    name: build:wheel
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+        - /tmp/wheel:/tmp/wheel
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Build a docker image with bazel
-        run: docker build -f Docker-bazel-exec -t my-baz .
-      - name: Run a container with the image
-        run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
-      - name: Execute bazel build //:${{ matrix.worker }}
-        run: |
-          docker exec -t baz bazel --output_user_root=/tmp/output_build build ${{ matrix.worker }}
-          mkdir /tmp/wheel
-          sudo find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -n -at /tmp/wheel {} +
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: /tmp/output_build
+          key: output_build
+      - name: Execute bazel build //:c7n_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_wheel
+      - name: Getting generated whl files
+        run: find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -n -at /tmp/wheel {} +
       - name: Upload wheel into artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ matrix.worker }}
+          name: c7n_wheel
+          path: /tmp/wheel
+  wheel_azure:
+    runs-on: ubuntu-18.04
+    name: wheel:gcp
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+        - /tmp/wheel:/tmp/wheel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: /tmp/output_build
+          key: output_build
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: /tmp/output_build
+          key: output_build
+      - name: Execute bazel build //:c7n_azure_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_azure_wheel
+      - name: Getting generated whl files
+        run: find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -n -at /tmp/wheel {} +
+      - name: Upload wheel into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_azure_wheel
+          path: /tmp/wheel
+  wheel_gcp:
+    runs-on: ubuntu-18.04
+    name: wheel:gcp
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+        - /tmp/wheel:/tmp/wheel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: /tmp/output_build
+          key: output_build
+      - name: Execute bazel build //:c7n_gcp_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
+      - name: Getting generated whl files
+        run: find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -n -at /tmp/wheel {} +
+      - name: Upload wheel into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_gcp_wheel
+          path: /tmp/wheel
+  kube_wheel:
+    runs-on: ubuntu-18.04
+    name: wheel:kube
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+        - /tmp/wheel:/tmp/wheel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: /tmp/output_build
+          key: output_build
+      - name: Execute bazel build //:c7n_kube_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
+      - name: Getting generated whl files
+        run: find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -n -at /tmp/wheel {} +
+      - name: Upload wheel into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_kube_wheel
+          path: /tmp/wheel
+  mailer_wheel:
+    runs-on: ubuntu-18.04
+    name: wheel:mailer
+    container:
+      image: johnybear/ubuntu_for_c7n_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+        - /tmp/wheel:/tmp/wheel
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v1
+        with:
+          path: /tmp/output_build
+          key: output_build
+      - name: Execute bazel build //:c7n_mailer_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
+      - name: Getting generated whl files
+        run: find /tmp/output_build/ -type f -name 'c7n*.whl' -exec cp -n -at /tmp/wheel {} +
+      - name: Upload wheel into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_mailer_wheel
           path: /tmp/wheel
