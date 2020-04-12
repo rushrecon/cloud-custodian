@@ -15,6 +15,7 @@ jobs:
       image: johnybear/ubuntu_c7n_cov_bazel:latest
       volumes:
         - /tmp/output_build:/tmp/output_build
+        - /home/runner/.cache:/root/.cache
     steps:
       - name: Checkout
         uses: actions/checkout@v2
