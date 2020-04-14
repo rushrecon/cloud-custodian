@@ -32,4 +32,4 @@ jobs:
           name: ${{ matrix.worker }}
           path: /tmp/wheel
       - name: Install ${{ matrix.worker }}
-        run: find /tmp/output_build/ -type f -name 'c7n*.whl' -exec docker exec -t baz pip3 install {} +
+        run: sudo find /tmp/output_build/ -type f -name 'c7n*.whl' -exec docker exec -t baz pip3 install {} +
