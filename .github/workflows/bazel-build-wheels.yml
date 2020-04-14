@@ -25,3 +25,5 @@ jobs:
         with:
           name: ${{ matrix.worker }}
           path: /tmp/wheel
+      - name: Install ${{ matrix.worker }}
+        run: sudo find /tmp/wheel -type f -name 'c7n*.whl' -exec pip install {} +

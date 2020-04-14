@@ -17,4 +17,4 @@ jobs:
       - name: Expect failing bazel test //tests:test_cli
         run: docker exec -t baz bazel --output_user_root=/tmp/output_build test --test_output=errors //tests:test_cli && exit 1 || exit 0
       - name: Expect failing bazel test //tests:test_output
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test --test_output=errors //tests:test_output && exit 1 || exit 0
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:test_output && exit 1 || exit 0

@@ -17,4 +17,4 @@ jobs:
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
       - name: Execute bazel test //${{ matrix.worker }}
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test --test_output=errors //${{ matrix.worker }}
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //${{ matrix.worker }}

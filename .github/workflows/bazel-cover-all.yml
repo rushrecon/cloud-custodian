@@ -23,7 +23,7 @@ jobs:
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build -v /tmp/C7N-cov:/tmp/C7N-cov --name baz my-baz
       - name: Execute bazel coverage //${{ matrix.worker.path }}
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage --test_output=errors //${{ matrix.worker.path }}
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build coverage //${{ matrix.worker.path }}
       - name: Add coverage data files to zip archive
         run: find /tmp/C7N-cov/ -type f -name '.coverage*' -print | zip ${{ matrix.worker.name }} -@
       - name: Upload zip archive into artifact
