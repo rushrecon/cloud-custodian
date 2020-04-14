@@ -32,4 +32,4 @@ jobs:
           name: ${{ matrix.worker }}
           path: /tmp/wheel
       - name: Install ${{ matrix.worker }}
-        run: find /tmp/wheel/ -type f -name 'c7n*.whl' -exec pip install {} +
+        run: find /tmp/wheel/ -type f -name 'c7n*.whl' -exec pip3 install {} +
