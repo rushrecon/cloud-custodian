@@ -6,7 +6,8 @@ jobs:
     name: Test
     strategy:
       matrix:
-        worker: [c7n_first, c7n_second, c7n_azure, c7n_gcp, c7n_kube, c7n_mailer]
+        worker: ['tests:first_chunk', 'tests:second_chunk', 'tools/c7n_azure/tests_azure',
+                 'tools/c7n_gcp/tests', 'tools/c7n_kube/tests', 'tools/c7n_mailer/tests']
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout
@@ -15,21 +16,5 @@ jobs:
         run: docker build -f Docker-bazel-exec -t my-baz .
       - name: Run a container with the image
         run: docker run -dit -v /tmp/output_build:/tmp/output_build --name baz my-baz
-      - name: Execute bazel test //tests:first_chunk
-        if: matrix.worker == 'c7n_first'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:first_chunk
-      - name: Execute bazel test //tests:second_chunk
-        if: matrix.worker == 'c7n_second'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tests:second_chunk
-      - name: Execute bazel test //tools/c7n_azure/tests_azure
-        if: matrix.worker == 'c7n_azure'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_azure/tests_azure
-      - name: Execute bazel test //tools/c7n_gcp/tests
-        if: matrix.worker == 'c7n_gcp'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_gcp/tests
-      - name: Execute bazel test //tools/c7n_kube/tests
-        if: matrix.worker == 'c7n_kube'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_kube/tests
-      - name: Execute bazel test //tools/c7n_mailer/tests
-        if: matrix.worker == 'c7n_mailer'
-        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //tools/c7n_mailer/tests
+      - name: Execute bazel test //${{ matrix.worker }}
+        run: docker exec -t baz bazel --output_user_root=/tmp/output_build test //${{ matrix.worker }}

@@ -12,3 +12,5 @@ test --test_env=CLOUDSDK_CORE_PROJECT=whatever
 
 test --test_env=AZURE_ACCESS_TOKEN=fake_token
 test --test_env=AZURE_SUBSCRIPTION_ID=ea42f556-5106-4743-99b0-c129bfa71a47
+
+test --test_output=all
