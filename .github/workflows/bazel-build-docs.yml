@@ -16,7 +16,7 @@ jobs:
       volumes:
         - /tmp/output_build:/tmp/output_build
         - /tmp/out:/tmp/out
-        - /tmp/external:/tmp/eab0d61a99b6696edb3d2aff87b585e8/external
+        - /tmp/external:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/external
     steps:
       - name: Checkout
         uses: actions/checkout@v2
