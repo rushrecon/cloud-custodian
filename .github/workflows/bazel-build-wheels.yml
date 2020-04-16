@@ -1,8 +1,8 @@
-name: Bazel build docs
+name: Bazel build wheels
 on: [pull_request]
 
 jobs:
-  sphinxext_gen:
+  c7n_wheel:
     runs-on: ubuntu-18.04
     name: Build (c7n_sphinxext)
     container:
@@ -11,25 +11,28 @@ jobs:
         - /tmp/output_build:/tmp/output_build
         - /tmp/out:/tmp/out
         - /tmp/external:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/execroot:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/execroot
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Mount pip cache
+      - name: Mount python cache
         uses: actions/cache@v1
         with:
           path: "/tmp/external"
           key: bazel-python
-      - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-        run: bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-      - name: Debug
-        run: pwd
-      - name: Debug
-        run: ls -l /tmp/output_build
+      - name: Mount build cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/execroot"
+          key: bazel-cache
+      - name: Execute bazel build c7n_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_wheel
       - name: Collect HTML docs
-        run: find /tmp/output_build/ -name 'html' -exec cp -n -at /tmp/out {} +
+        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
+      - name: Testing builded wheel
+        run: pip3 install /tmp/out/*.whl
       - name: Upload docs into artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: Html docs
-          path: /tmp/out/html
-
+          name: c7n_wheel
+          path: /tmp/out
