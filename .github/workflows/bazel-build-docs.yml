@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build (c7n_sphinxext)
     container:
-      image: docker.pkg.github.com/rushrecon/cloud-custodian/claudian:sst
+      image: johnybear/ubuntu_c7n_cov_bazel:latest
       volumes:
         - /tmp/output_build:/tmp/output_build
         - /tmp/out:/tmp/out
