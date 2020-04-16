@@ -19,15 +19,9 @@ jobs:
           path: "/tmp/output_build"
           key: bazel-cache
       - name: Debug
-        run: pwd
-      - name: Debug
-        run: ls -l /tmp/output_build
-      - name: Debug
         run: ls -l /tmp
       - name: Execute bazel build c7n_wheel
         run: bazel --output_user_root=/tmp/output_build build c7n_wheel
-      - name: Debug
-        run: pwd
       - name: Debug
         run: ls -l /tmp/output_build
       - name: Debug
