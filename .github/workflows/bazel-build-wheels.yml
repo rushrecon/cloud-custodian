@@ -4,7 +4,7 @@ on: [pull_request]
 jobs:
   c7n_wheel:
     runs-on: ubuntu-18.04
-    name: Build (c7n_sphinxext)
+    name: Build (c7n_wheel)
     container:
       image: johnybear/ubuntu_c7n_cov_bazel:latest
       volumes:
