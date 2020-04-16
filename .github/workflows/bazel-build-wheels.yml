@@ -19,12 +19,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: "/tmp/external"
-          key: bazel-python
+          key: bazel-python-deps
       - name: Mount build cache
         uses: actions/cache@v1
         with:
           path: "/tmp/execroot"
-          key: bazel-cache
+          key: bazel-cache-exec
       - name: Execute bazel build c7n_wheel
         run: bazel --output_user_root=/tmp/output_build build c7n_wheel
       - name: Collect HTML docs
