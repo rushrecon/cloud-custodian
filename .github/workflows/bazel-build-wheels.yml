@@ -23,8 +23,6 @@ jobs:
       - name: Debug
         run: ls -l /tmp/output_build
       - name: Debug
-        run: ls -l /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37
-      - name: Debug
         run: ls -l /tmp
       - name: Execute bazel build c7n_wheel
         run: bazel --output_user_root=/tmp/output_build build c7n_wheel
