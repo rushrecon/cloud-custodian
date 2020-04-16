@@ -19,12 +19,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: "/tmp/external"
-          key: bazel-python-deps
+          key: bazel-python-docs
       - name: Mount build cache
         uses: actions/cache@v1
         with:
           path: "/tmp/execroot"
-          key: bazel-cache-exec
+          key: bazel-cache-docs
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         run: bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
       - name: Debug
