@@ -36,3 +36,139 @@ jobs:
         with:
           name: c7n_wheel
           path: /tmp/out
+  c7n_azure_wheel:
+    runs-on: ubuntu-18.04
+    name: Build (c7n_azure_wheel)
+    container:
+      image: johnybear/ubuntu_c7n_cov_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/out:/tmp/out
+        - /tmp/external:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/execroot:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/execroot
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount python cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/external"
+          key: bazel-python-deps
+      - name: Mount build cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/execroot"
+          key: bazel-cache-exec
+      - name: Execute bazel build c7n_azure_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_azure_wheel
+      - name: Collect HTML docs
+        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
+      - name: Testing builded wheel
+        run: pip3 install /tmp/out/*.whl
+      - name: Upload docs into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_azure_wheel
+          path: /tmp/out
+  c7n_gcp_wheel:
+    runs-on: ubuntu-18.04
+    name: Build (c7n_gcp_wheel)
+    container:
+      image: johnybear/ubuntu_c7n_cov_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/out:/tmp/out
+        - /tmp/external:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/execroot:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/execroot
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount python cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/external"
+          key: bazel-python-deps
+      - name: Mount build cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/execroot"
+          key: bazel-cache-exec
+      - name: Execute bazel build c7n_gcp_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
+      - name: Collect HTML docs
+        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
+      - name: Testing builded wheel
+        run: pip3 install /tmp/out/*.whl
+      - name: Upload docs into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_gcp_wheel
+          path: /tmp/out
+  c7n_kube_wheel:
+    runs-on: ubuntu-18.04
+    name: Build (c7n_kube_wheel)
+    container:
+      image: johnybear/ubuntu_c7n_cov_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/out:/tmp/out
+        - /tmp/external:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/execroot:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/execroot
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount python cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/external"
+          key: bazel-python-deps
+      - name: Mount build cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/execroot"
+          key: bazel-cache-exec
+      - name: Execute bazel build c7n_kube_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
+      - name: Collect HTML docs
+        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
+      - name: Testing builded wheel
+        run: pip3 install /tmp/out/*.whl
+      - name: Upload docs into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_kube_wheel
+          path: /tmp/out
+  c7n_mailer_wheel:
+    runs-on: ubuntu-18.04
+    name: Build (c7n_mailer_wheel)
+    container:
+      image: johnybear/ubuntu_c7n_cov_bazel:latest
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/out:/tmp/out
+        - /tmp/external:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/execroot:/tmp/2ea0736f19907bdbf0b696f1c9b02a37/execroot
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount python cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/external"
+          key: bazel-python-deps
+      - name: Mount build cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/execroot"
+          key: bazel-cache-exec
+      - name: Execute bazel build c7n_mailer_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
+      - name: Collect HTML docs
+        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
+      - name: Testing builded wheel
+        run: pip3 install /tmp/out/*.whl
+      - name: Upload docs into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_mailer_wheel
+          path: /tmp/out
