@@ -15,27 +15,27 @@ jobs:
       image: johnybear/ubuntu_c7n_cov_bazel:latest
       volumes:
         - /tmp/output_build:/tmp/output_build
-        - /home/runner/.cache:/root/.cache
+        - /tmp/out:/tmp/out
+        - /tmp/external:/tmp/eab0d61a99b6696edb3d2aff87b585e8/external
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Mount pip cache
         uses: actions/cache@v1
         with:
-          path: "/home/runner/.cache/pip"
-          key: pip
-      - name: Mount bazel cache
-        uses: actions/cache@v1
-        with:
-          path: "/home/runner/.cache/bazel"
-          key: bazel
+          path: "/tmp/external"
+          key: bazel-python
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         run: bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
+      - name: Debug
+        run: pwd
+      - name: Debug
+        run: ls -l /tmp/output_build
       - name: Collect HTML docs
-        run: find /tmp/output_build/ -name 'html' -exec cp -n -at /tmp {} +
+        run: find /tmp/output_build/ -name 'html' -exec cp -n -at /tmp/out {} +
       - name: Upload docs into artifacts
         uses: actions/upload-artifact@v1
         with:
           name: Html docs
-          path: /tmp/html
+          path: /tmp/out/html
 
