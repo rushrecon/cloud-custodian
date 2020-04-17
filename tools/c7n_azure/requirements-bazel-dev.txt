@@ -1,5 +1,5 @@
 -r requirements.txt
 
-azure
+azure==4.0.0
 vcrpy-unittest
 coverage==5.0.3
