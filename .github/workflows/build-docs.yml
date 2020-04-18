@@ -8,16 +8,22 @@ jobs:
     container:
       image: rushrecon/bazel2py:3.0.0
       volumes:
-        - /tmp/output_build:/tmp/output_build
+        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot
         - /tmp/out:/tmp/out
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Mount python cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external"
+          key: bazel-external
       - name: Mount cache
         uses: actions/cache@v1
         with:
-          path: "/tmp/output_build"
-          key: bazel-cache
+          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
+          key: bazel-execroot
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         run: bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
       - name: Collect HTML docs
@@ -27,4 +33,3 @@ jobs:
         with:
           name: Html docs
           path: /tmp/out/html
-
