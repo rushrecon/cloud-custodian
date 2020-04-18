@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-18.04
     name: Build (c7n_sphinxext)
     container:
-      image: johnybear/ubuntu_c7n_cov_bazel:latest
+      image: rushrecon/bazel2py:3.0.0
       volumes:
         - /tmp/output_build:/tmp/output_build
         - /tmp/out:/tmp/out
@@ -17,15 +17,9 @@ jobs:
         uses: actions/cache@v1
         with:
           path: "/tmp/output_build"
-          key: bazel-python-docs
+          key: bazel-cache
       - name: Execute bazel build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
         run: bazel --output_user_root=/tmp/output_build build //tools/c7n_sphinxext/c7n_sphinxext:sphinx_gen
-      - name: Debug
-        run: pwd
-      - name: Debug
-        run: ls -l /tmp/output_build
-      - name: Debug
-        run: ls -l /tmp
       - name: Collect HTML docs
         run: find /tmp/output_build/ -name 'html' -exec cp -n -at /tmp/out {} +
       - name: Upload docs into artifacts

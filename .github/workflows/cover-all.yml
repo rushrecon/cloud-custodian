@@ -1,0 +1,106 @@
+name: Bazel coverage
+on: [pull_request]
+
+jobs:
+  coverage:
+    strategy:
+      matrix:
+        worker: [
+          { name: 'c7n_first', path: 'tests:first_chunk' },
+          { name: 'c7n_second', path: 'tests:second_chunk'},
+          { name: 'c7n_azure', path: 'tools/c7n_azure/tests_azure' },
+          { name: 'c7n_gcp', path: 'tools/c7n_gcp/tests' },
+          { name: 'c7n_kube', path: 'tools/c7n_kube/tests' },
+          { name: 'c7n_mailer', path: 'tools/c7n_mailer/tests' },
+        ]
+    runs-on: ubuntu-18.04
+    name: Coverage
+    container:
+      image: rushrecon/bazel2py:3.0.0
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/output_build"
+          key: bazel-cache
+      - name: Execute bazel coverage //${{ matrix.worker.path }}
+        run: bazel --output_user_root=/tmp/output_build coverage //${{ matrix.worker.path }}
+      - name: Add coverage data files to zip archive
+        run: find /tmp/C7N-cov/ -type f -name '.coverage*' -print | zip ${{ matrix.worker.name }} -@
+      - name: Upload zip archive into artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.worker.name }}_cov_data
+          path: ${{ matrix.worker.name }}.zip
+  report:
+    name: Coverage report
+    needs: coverage
+    runs-on: ubuntu-18.04
+    container:
+      image: rushrecon/bazel2py:3.0.0
+      volumes:
+        - /tmp/output_build:/tmp/output_build
+        - /tmp/C7N-cov:/tmp/C7N-cov
+      env:
+        NODE_ENV: development
+        COVERAGE_FILE: /tmp/C7N-cov/.coverage
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/output_build"
+          key: bazel-cache
+      - name: Download zip coverage data for c7n_first
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_first_cov_data
+      - name: Download zip coverage data for c7n_second
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_second_cov_data
+      - name: Download zip coverage data for c7n_azure
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_azure_cov_data
+      - name: Download zip coverage data for c7n_gcp
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_gcp_cov_data
+      - name: Download zip coverage data for c7n_kube
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_kube_cov_data
+      - name: Download zip coverage data for c7n_mailer
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_mailer_cov_data
+      - name: Unzip coverage data
+        run: |
+          unzip c7n_first_cov_data/c7n_first.zip -d /
+          unzip c7n_second_cov_data/c7n_second.zip -d /
+          unzip c7n_azure_cov_data/c7n_azure.zip -d /
+          unzip c7n_gcp_cov_data/c7n_gcp.zip -d /
+          unzip c7n_kube_cov_data/c7n_kube.zip -d /
+          unzip c7n_mailer_cov_data/c7n_mailer.zip -d /
+      # - name: Moving files
+      #   run:  find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
+      # - name: Install coverage
+      #   run: docker exec -t baz pip3 install coverage
+      - name: Generate coverage report
+        run:  coverage combine /tmp/C7N-cov
+      - name: Generate coverage report HTML
+        run:  coverage html -d /tmp/C7N-cov/htmlcov --skip-empty
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v1
+        with:
+          name: HTML coverage report
+          path: /tmp/C7N-cov/htmlcov
+      - name: Show coverage results
+        run: coverage report --skip-empty
