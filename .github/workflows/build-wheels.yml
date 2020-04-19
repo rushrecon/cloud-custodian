@@ -1,0 +1,40 @@
+name: Bazel build wheels
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        worker: [c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
+    name: Build
+    container:
+      image: rushrecon/bazel2py:3.0.0
+      volumes:
+        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external
+        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot
+        - /tmp/out:/tmp/out
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Mount python cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external"
+          key: bazel-external
+      - name: Mount cache
+        uses: actions/cache@v1
+        with:
+          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
+          key: bazel-execroot
+      - name: Execute bazel build //:${{ matrix.worker }}
+        run: bazel --output_user_root=/tmp/output_build build ${{ matrix.worker }}
+      - name: Collect HTML docs
+        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
+      - name: Install ${{ matrix.worker }}
+        run: pip3 install /tmp/out/*.whl
+      - name: Upload docs into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.worker }}
+          path: /tmp/out
