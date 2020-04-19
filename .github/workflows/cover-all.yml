@@ -44,7 +44,6 @@ jobs:
     container:
       image: rushrecon/bazel2py:3.0.0
       env:
-        NODE_ENV: development
         COVERAGE_FILE: /tmp/C7N-cov/.coverage
       volumes:
         - /tmp/output_build:/tmp/output_build
@@ -89,8 +88,8 @@ jobs:
           unzip c7n_gcp_cov_data/c7n_gcp.zip -d /
           unzip c7n_kube_cov_data/c7n_kube.zip -d /
           unzip c7n_mailer_cov_data/c7n_mailer.zip -d /
-      # - name: Moving files
-      #   run:  find tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
+      - name: Moving files
+        run:  find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
       # - name: Install coverage
       #   run: docker exec -t baz pip3 install coverage
       - name: Generate coverage report
