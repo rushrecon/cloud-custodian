@@ -5,8 +5,16 @@ jobs:
   test:
     strategy:
       matrix:
-        worker: ['tests:first_chunk', 'tests:second_chunk', 'tools/c7n_azure/tests_azure',
-                 'tools/c7n_gcp/tests', 'tools/c7n_kube/tests', 'tools/c7n_mailer/tests']
+        worker: [
+                 'tests:first_chunk',
+                 'tests:second_chunk',
+                 'tests:third_chunk',
+                 'tests:fourth_chunk',
+                 'tools/c7n_azure/tests_azure',
+                 'tools/c7n_gcp/tests',
+                 'tools/c7n_kube/tests',
+                 'tools/c7n_mailer/tests',
+        ]
     runs-on: ubuntu-18.04
     name: Test
     container:

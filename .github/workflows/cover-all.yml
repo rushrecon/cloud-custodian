@@ -8,6 +8,8 @@ jobs:
         worker: [
           { name: 'c7n_first', path: 'tests:first_chunk' },
           { name: 'c7n_second', path: 'tests:second_chunk'},
+          { name: 'c7n_third', path: 'tests:third_chunk'},
+          { name: 'c7n_fourth', path: 'tests:fourth_chunk'},
           { name: 'c7n_azure', path: 'tools/c7n_azure/tests_azure' },
           { name: 'c7n_gcp', path: 'tools/c7n_gcp/tests' },
           { name: 'c7n_kube', path: 'tools/c7n_kube/tests' },
@@ -64,6 +66,14 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: c7n_second_cov_data
+      - name: Download zip coverage data for c7n_third
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_third_cov_data
+      - name: Download zip coverage data for c7n_fourth
+        uses: actions/download-artifact@v1
+        with:
+          name: c7n_fourth_cov_data
       - name: Download zip coverage data for c7n_azure
         uses: actions/download-artifact@v1
         with:
@@ -84,6 +94,8 @@ jobs:
         run: |
           unzip c7n_first_cov_data/c7n_first.zip -d /
           unzip c7n_second_cov_data/c7n_second.zip -d /
+          unzip c7n_third_cov_data/c7n_third.zip -d /
+          unzip c7n_fourth_cov_data/c7n_fourth.zip -d /
           unzip c7n_azure_cov_data/c7n_azure.zip -d /
           unzip c7n_gcp_cov_data/c7n_gcp.zip -d /
           unzip c7n_kube_cov_data/c7n_kube.zip -d /

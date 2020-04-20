@@ -2,6 +2,7 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
 load("//:builddefs.bzl", "EXCLUDED_PKGS")
+load("//:c7n_py_test.bzl", "get_chunk")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -65,7 +66,7 @@ py_library(
     name = test_file[:-3],
     srcs = [test_file],
     excluded_pkgs = EXCLUDED_PKGS,
-    tags = ["first_chunk" if test_file[:-3] < "test_kafka" else "second_chunk"],
+    tags = [get_chunk(test_file[:-3])],
     deps = [":c7n_tests_common"],
 ) for test_file in glob(
     include = ["test_*.py"],
@@ -78,6 +79,8 @@ test_suite(
     tests = [
         "first_chunk",
         "second_chunk",
+        "third_chunk",
+        "fourth_chunk",
     ],
 )
 
@@ -91,4 +94,16 @@ test_suite(
 test_suite(
     name = "second_chunk",
     tags = ["second_chunk"],
+)
+
+# bazel test //tests:third_chunk
+test_suite(
+    name = "third_chunk",
+    tags = ["third_chunk"],
+)
+
+# bazel test //tests:third_chunk
+test_suite(
+    name = "fourth_chunk",
+    tags = ["fourth_chunk"],
 )

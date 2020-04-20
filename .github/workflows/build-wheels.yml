@@ -5,6 +5,7 @@ jobs:
   build:
     runs-on: ubuntu-18.04
     strategy:
+      max-parallel: 2
       matrix:
         worker: [c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
     name: Build
