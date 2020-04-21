@@ -76,16 +76,11 @@ py_library(
 # bazel test //tests
 test_suite(
     name = "tests",
-    tests = [
-        "first_chunk",
-        "second_chunk",
-        "third_chunk",
-        "fourth_chunk",
-    ],
+    tests = [c7n_chunk_name for c7n_chunk_name in C7N_TESTS_CHUNKS.keys()],
 )
 
-# bazel test //tests:{C7N_TESTS_CHUNK_#}
+# bazel test //tests:{c7n_chunk_name}
 [test_suite(
-    name = c7n_test_chunk,
-    tags = [c7n_test_chunk],
-) for c7n_test_chunk in C7N_TESTS_CHUNKS]
+    name = c7n_chunk_name,
+    tags = [c7n_chunk_name],
+) for c7n_chunk_name in C7N_TESTS_CHUNKS.keys()]
