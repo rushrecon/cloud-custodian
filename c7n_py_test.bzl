@@ -74,6 +74,11 @@ def c7n_py_test(name, **kwargs):
     py_test(name = inner_test_name, **kwargs)
     _py_test(name = name, tags = tags, test = inner_test_name, excluded_pkgs = excluded_pkgs)
 
+C7N_TESTS_CHUNK_1 = "first_chunk"
+C7N_TESTS_CHUNK_2 = "second_chunk"
+C7N_TESTS_CHUNK_3 = "third_chunk"
+C7N_TESTS_CHUNK_4 = "fourth_chunk"
+C7N_TESTS_CHUNKS = [C7N_TESTS_CHUNK_1, C7N_TESTS_CHUNK_2, C7N_TESTS_CHUNK_3, C7N_TESTS_CHUNK_4]
 
 """
 We have a lot of tests of AWS, and to fit GitHub Actions worker limits,
@@ -83,10 +88,10 @@ This function just goes through the list and divide it by test name.
 """
 def get_chunk(test_file_name):
     if test_file_name < "test_dynamodb":
-        return "first_chunk"
+        return C7N_TESTS_CHUNK_1
     elif test_file_name < "test_iam":
-        return "second_chunk"
+        return C7N_TESTS_CHUNK_2
     elif test_file_name < "test_redshift":
-        return "third_chunk"
+        return C7N_TESTS_CHUNK_3
     else:
-        return "fourth_chunk"
+        return C7N_TESTS_CHUNK_4
