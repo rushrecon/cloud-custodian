@@ -79,7 +79,7 @@ test_suite(
     tests = [c7n_chunk_name for c7n_chunk_name in C7N_TESTS_CHUNKS.keys()],
 )
 
-# bazel test //tests:{C7N_TESTS_CHUNK_#}
+# bazel test //tests:{c7n_chunk_name}
 [test_suite(
     name = c7n_chunk_name,
     tags = [c7n_chunk_name],
