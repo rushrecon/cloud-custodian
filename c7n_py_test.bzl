@@ -73,3 +73,20 @@ def c7n_py_test(name, **kwargs):
     kwargs.update(main = main_name, tags = tags + ["manual"])
     py_test(name = inner_test_name, **kwargs)
     _py_test(name = name, tags = tags, test = inner_test_name, excluded_pkgs = excluded_pkgs)
+
+
+"""
+We have a lot of tests of AWS, and to fit GitHub Actions worker limits,
+it's splitted for chunks, which is rougly equal in processing time and
+resource consumption.
+This function just goes through the list and divide it by test name.
+"""
+def get_chunk(test_file_name):
+    if test_file_name < "test_dynamodb":
+        return "first_chunk"
+    elif test_file_name < "test_iam":
+        return "second_chunk"
+    elif test_file_name < "test_redshift":
+        return "third_chunk"
+    else:
+        return "fourth_chunk"
