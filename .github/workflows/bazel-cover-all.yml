@@ -6,14 +6,14 @@ jobs:
     strategy:
       matrix:
         worker: [
-          { name: 'c7n_first', path: 'tests:first_chunk' },
-          { name: 'c7n_second', path: 'tests:second_chunk'},
-          { name: 'c7n_third', path: 'tests:third_chunk'},
-          { name: 'c7n_fourth', path: 'tests:fourth_chunk'},
-          { name: 'c7n_azure', path: 'tools/c7n_azure/tests_azure' },
-          { name: 'c7n_gcp', path: 'tools/c7n_gcp/tests' },
-          { name: 'c7n_kube', path: 'tools/c7n_kube/tests' },
-          { name: 'c7n_mailer', path: 'tools/c7n_mailer/tests' },
+          { name: 'c7n_first', path: 'tests:first_chunk', cache: 'aws'},
+          { name: 'c7n_second', path: 'tests:second_chunk', cache: 'aws'},
+          { name: 'c7n_third', path: 'tests:third_chunk', cache: 'aws'},
+          { name: 'c7n_fourth', path: 'tests:fourth_chunk', cache: 'aws'},
+          { name: 'c7n_azure', path: 'tools/c7n_azure/tests_azure', cache: 'azure' },
+          { name: 'c7n_gcp', path: 'tools/c7n_gcp/tests', cache: 'gcp'},
+          { name: 'c7n_kube', path: 'tools/c7n_kube/tests', cache: 'kube'},
+          { name: 'c7n_mailer', path: 'tools/c7n_mailer/tests', cache: 'mailer'},
         ]
     runs-on: ubuntu-18.04
     name: Coverage
@@ -35,12 +35,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external"
-          key: bazel-ext-${{matrix.worker.name}}
-      # - name: Mount execroot cache
-      #   uses: actions/cache@v1
-      #   with:
-      #     path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
-      #     key: bazel-exec-${{matrix.worker.name}}
+          key: bazel-ext-${{matrix.worker.cache}}
       - name: Execute bazel coverage //${{ matrix.worker.path }}
         run: bazel --output_user_root=/tmp/output_build coverage //${{ matrix.worker.path }}
       - name: Add coverage data files to zip archive
@@ -66,11 +61,8 @@ jobs:
       volumes:
         - /tmp/C7N-cov:/tmp/C7N-cov
     steps:
-      # Looks like we do not need repo content here - just artifacts.
-      #
-      # - name: Checkout
-      #   uses: actions/checkout@v2
-      #
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Download zip coverage data for c7n_first
         uses: actions/download-artifact@v1
         with:
@@ -118,7 +110,7 @@ jobs:
       - name: Generate coverage report
         run:  coverage combine /tmp/C7N-cov
       - name: Generate coverage report HTML
-        run:  coverage html -i -d /tmp/C7N-cov/htmlcov --skip-empty
+        run:  coverage html -debug -i -d /tmp/C7N-cov/htmlcov --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
