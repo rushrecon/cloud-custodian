@@ -4,10 +4,6 @@ on: [pull_request]
 jobs:
   build:
     runs-on: ubuntu-18.04
-    strategy:
-      max-parallel: 2
-      matrix:
-        worker: [c7n_wheel, c7n_azure_wheel, c7n_gcp_wheel, c7n_kube_wheel, c7n_mailer_wheel]
     name: Build
     container:
       image: rushrecon/bazel2py:3.0.0
@@ -32,15 +28,48 @@ jobs:
         uses: actions/cache@v1
         with:
           path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
-          key: bazel-exec-${{ matrix.worker }}
-      - name: Execute bazel build //:${{ matrix.worker }}
-        run: bazel --output_user_root=/tmp/output_build build ${{ matrix.worker }}
+          key: bazel-exec-wheel
+      - name: Execute bazel build //:c7n_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_wheel
+      - name: Execute bazel build //:c7n_azure_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_azure_wheel
+      - name: Execute bazel build //:c7n_gcp_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_gcp_wheel
+      - name: Execute bazel build //:c7n_kube_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
+      - name: Execute bazel build //:c7n_mailer_wheel
+        run: bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
       - name: Collect HTML docs
-        run: find /tmp/output_build/ -name 'c7n*.whl' -exec cp -n -at /tmp/out {} +
-      - name: Install ${{ matrix.worker }}
+        run: |
+          for f in `find ./ -name "c7n*.whl"`; do
+            whl=`echo $f | awk -F"-|_" '{ if ($2 ~ /[0-9\.]/) print "wheel"; else print $2; }'`;
+            mkdir -p /tmp/out/$whl;
+            mv $f /tmp/out/$whl/;
+          done
+      - name: Install wheels
         run: pip3 install /tmp/out/*.whl
-      - name: Upload docs into artifacts
+      - name: Upload wheels into artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: ${{ matrix.worker }}
-          path: /tmp/out
+          name: c7n_wheel
+          path: /tmp/out/wheel
+      - name: Upload wheels into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_azure_wheel
+          path: /tmp/out/azure
+      - name: Upload wheels into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_gcp_wheel
+          path: /tmp/out/gcp
+      - name: Upload wheels into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_kube_wheel
+          path: /tmp/out/kube
+      - name: Upload wheels into artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: c7n_mailer_wheel
+          path: /tmp/out/mailer

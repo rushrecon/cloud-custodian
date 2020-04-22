@@ -6,14 +6,14 @@ jobs:
     strategy:
       matrix:
         worker: [
-          { name: 'c7n_first', path: 'tests:first_chunk', cache: 'aws'},
-          { name: 'c7n_second', path: 'tests:second_chunk', cache: 'aws'},
-          { name: 'c7n_third', path: 'tests:third_chunk', cache: 'aws'},
-          { name: 'c7n_fourth', path: 'tests:fourth_chunk', cache: 'aws'},
-          { name: 'c7n_azure', path: 'tools/c7n_azure/tests_azure', cache: 'azure' },
-          { name: 'c7n_gcp', path: 'tools/c7n_gcp/tests', cache: 'gcp'},
-          { name: 'c7n_kube', path: 'tools/c7n_kube/tests', cache: 'kube'},
-          { name: 'c7n_mailer', path: 'tools/c7n_mailer/tests', cache: 'mailer'},
+          { name: 'c7n_first_test', path: 'tests:first_chunk', cache: 'aws'},
+          { name: 'c7n_second_test', path: 'tests:second_chunk', cache: 'aws'},
+          { name: 'c7n_third_test', path: 'tests:third_chunk', cache: 'aws'},
+          { name: 'c7n_fourth_test', path: 'tests:fourth_chunk', cache: 'aws'},
+          { name: 'c7n_azure_test', path: 'tools/c7n_azure/tests_azure', cache: 'azure' },
+          { name: 'c7n_gcp_test', path: 'tools/c7n_gcp/tests', cache: 'gcp'},
+          { name: 'c7n_kube_test', path: 'tools/c7n_kube/tests', cache: 'kube'},
+          { name: 'c7n_mailer_test', path: 'tools/c7n_mailer/tests', cache: 'mailer'},
         ]
     runs-on: ubuntu-18.04
     name: Test
