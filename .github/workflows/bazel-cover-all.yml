@@ -64,22 +64,13 @@ jobs:
       # $ python3 -c "import hashlib;print(hashlib.md5(b'/__w/cloud-custodian/cloud-custodian').hexdigest())"
       #
       volumes:
-        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external
-        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot
         - /tmp/C7N-cov:/tmp/C7N-cov
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Mount external cache
-        uses: actions/cache@v1
-        with:
-          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external"
-          key: bazel-ext
-      - name: Mount execroot cache
-        uses: actions/cache@v1
-        with:
-          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
-          key: bazel-exec-cover
+      # Looks like we do not need repo content here - just artifacts.
+      #
+      # - name: Checkout
+      #   uses: actions/checkout@v2
+      #
       - name: Download zip coverage data for c7n_first
         uses: actions/download-artifact@v1
         with:
@@ -124,8 +115,6 @@ jobs:
           unzip c7n_mailer_cov_data/c7n_mailer.zip -d /
       - name: Moving files
         run:  find /tmp/C7N-cov -type f -name '.coverage*' -exec cp -at /tmp/C7N-cov {} +
-      # - name: Install coverage
-      #   run: docker exec -t baz pip3 install coverage
       - name: Generate coverage report
         run:  coverage combine /tmp/C7N-cov
       - name: Generate coverage report HTML
