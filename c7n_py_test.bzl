@@ -74,6 +74,12 @@ def c7n_py_test(name, **kwargs):
     py_test(name = inner_test_name, **kwargs)
     _py_test(name = name, tags = tags, test = inner_test_name, excluded_pkgs = excluded_pkgs)
 
+C7N_TESTS_CHUNKS = {
+    "first_chunk": "test_doc_examples",
+    "second_chunk": "test_hsm",
+    "third_chunk": "test_report",
+    "fourth_chunk": "test_workspaces",
+}
 
 """
 We have a lot of tests of AWS, and to fit GitHub Actions worker limits,
@@ -82,11 +88,7 @@ resource consumption.
 This function just goes through the list and divide it by test name.
 """
 def get_chunk(test_file_name):
-    if test_file_name < "test_dynamodb":
-        return "first_chunk"
-    elif test_file_name < "test_iam":
-        return "second_chunk"
-    elif test_file_name < "test_redshift":
-        return "third_chunk"
-    else:
-        return "fourth_chunk"
+    for chunk_name, last_test_in_chunk in C7N_TESTS_CHUNKS.items():
+        if test_file_name <= last_test_in_chunk:
+            return chunk_name
+    return C7N_TESTS_CHUNKS.keys()[-1]

@@ -2,7 +2,7 @@ load("@rules_python//python:defs.bzl", "py_library")
 load("@pip_deps//:requirements.bzl", "requirement")
 load("//:c7n_py_test.bzl", "c7n_py_test")
 load("//:builddefs.bzl", "EXCLUDED_PKGS")
-load("//:c7n_py_test.bzl", "get_chunk")
+load("//:c7n_py_test.bzl", "get_chunk", "C7N_TESTS_CHUNKS")
 
 package(default_visibility = ["//visibility:private"])
 
@@ -76,34 +76,11 @@ py_library(
 # bazel test //tests
 test_suite(
     name = "tests",
-    tests = [
-        "first_chunk",
-        "second_chunk",
-        "third_chunk",
-        "fourth_chunk",
-    ],
+    tests = [c7n_chunk_name for c7n_chunk_name in C7N_TESTS_CHUNKS.keys()],
 )
 
-# bazel test //tests:first_chunk
-test_suite(
-    name = "first_chunk",
-    tags = ["first_chunk"],
-)
-
-# bazel test //tests:second_chunk
-test_suite(
-    name = "second_chunk",
-    tags = ["second_chunk"],
-)
-
-# bazel test //tests:third_chunk
-test_suite(
-    name = "third_chunk",
-    tags = ["third_chunk"],
-)
-
-# bazel test //tests:third_chunk
-test_suite(
-    name = "fourth_chunk",
-    tags = ["fourth_chunk"],
-)
+# bazel test //tests:{c7n_chunk_name}
+[test_suite(
+    name = c7n_chunk_name,
+    tags = [c7n_chunk_name],
+) for c7n_chunk_name in C7N_TESTS_CHUNKS.keys()]

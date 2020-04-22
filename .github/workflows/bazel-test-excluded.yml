@@ -7,10 +7,14 @@ jobs:
     name: Expect failures for excluded tests in bazel
     container:
       image: rushrecon/bazel2py:3.0.0
+      #
+      # Paths for cached directories described in https://docs.bazel.build/versions/master/output_directories.html#current-layout
+      # MD5 hash of repo directory(i.e. '/__w/cloud-custodian/cloud-custodian') is gotten by using the next one-liner:
+      # $ python3 -c "import hashlib;print(hashlib.md5(b'/__w/cloud-custodian/cloud-custodian').hexdigest())"
+      #
       volumes:
         - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external
         - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot
-        # - /tmp/output_build:/tmp/output_build
     steps:
       - name: Checkout
         uses: actions/checkout@v2
