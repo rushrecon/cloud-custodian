@@ -118,7 +118,7 @@ jobs:
       - name: Generate coverage report
         run:  coverage combine /tmp/C7N-cov
       - name: Generate coverage report HTML
-        run:  coverage html -d /tmp/C7N-cov/htmlcov --skip-empty
+        run:  coverage html -i -d /tmp/C7N-cov/htmlcov --skip-empty
       - name: Upload coverage report
         uses: actions/upload-artifact@v1
         with:
