@@ -41,7 +41,7 @@ jobs:
         run: bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
       - name: Collect wheels
         run: |
-          for f in `find ./ -name "c7n*.whl"`; do
+          for f in `find /tmp/output_build/ -name "c7n*.whl"`; do
             whl=`echo $f | awk -F"-|_" '{ if ($2 ~ /[0-9\.]/) print "wheel"; else print $2; }'`;
             mkdir -p /tmp/out/$whl;
             mv $f /tmp/out/$whl/;
