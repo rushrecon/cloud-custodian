@@ -39,7 +39,7 @@ jobs:
         run: bazel --output_user_root=/tmp/output_build build c7n_kube_wheel
       - name: Execute bazel build //:c7n_mailer_wheel
         run: bazel --output_user_root=/tmp/output_build build c7n_mailer_wheel
-      - name: Collect HTML docs
+      - name: Collect wheels
         run: |
           for f in `find ./ -name "c7n*.whl"`; do
             whl=`echo $f | awk -F"-|_" '{ if ($2 ~ /[0-9\.]/) print "wheel"; else print $2; }'`;
@@ -47,7 +47,7 @@ jobs:
             mv $f /tmp/out/$whl/;
           done
       - name: Install wheels
-        run: pip3 install /tmp/out/*.whl
+        run: pip3 install /tmp/out/*/*.whl
       - name: Upload wheels into artifacts
         uses: actions/upload-artifact@v1
         with:
