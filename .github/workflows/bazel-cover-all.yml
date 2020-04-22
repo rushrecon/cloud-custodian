@@ -26,7 +26,7 @@ jobs:
       #
       volumes:
         - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external
-        - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot
+        # - /tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot:/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot
         - /tmp/C7N-cov:/tmp/C7N-cov
     steps:
       - name: Checkout
@@ -35,12 +35,12 @@ jobs:
         uses: actions/cache@v1
         with:
           path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/external"
-          key: bazel-ext
-      - name: Mount execroot cache
-        uses: actions/cache@v1
-        with:
-          path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
-          key: bazel-exec-${{matrix.worker.name}}
+          key: bazel-ext-${{matrix.worker.name}}
+      # - name: Mount execroot cache
+      #   uses: actions/cache@v1
+      #   with:
+      #     path: "/tmp/output_build/2ea0736f19907bdbf0b696f1c9b02a37/execroot"
+      #     key: bazel-exec-${{matrix.worker.name}}
       - name: Execute bazel coverage //${{ matrix.worker.path }}
         run: bazel --output_user_root=/tmp/output_build coverage //${{ matrix.worker.path }}
       - name: Add coverage data files to zip archive
